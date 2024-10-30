@@ -17,7 +17,7 @@ export default function AuthButton({ loading = false, children }: CustomButtonPr
     <Button
       type="submit"
       className={`
-        relative overflow-hidden transition-all duration-300 ease-in-out w-full h-12 px-4 text-white font-medium bg-brand-400 hover:bg-brand-500
+        overflow-hidden transition-all duration-300 ease-in-out w-full h-12 px-4 text-white font-medium bg-brand-400 hover:bg-brand-500
         ${isHovered && !loading ? 'rounded-none' : 'rounded-md'}
         ${loading ? 'cursor-not-allowed opacity-75' : ''}
       `}
@@ -29,7 +29,7 @@ export default function AuthButton({ loading = false, children }: CustomButtonPr
           <ArrowRight
             className={`
             transition-all duration-300 ease-in-out
-            ${isHovered ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-full'}
+            ${isHovered ? 'flex opacity-100 translate-x-0' : 'hidden opacity-0 -translate-x-full'}
             `}
             size={16}
           />

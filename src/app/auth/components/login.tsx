@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
 import React, { useState } from 'react';
@@ -66,6 +65,10 @@ export default function LoginAuthForm({
     setIsLoading(true);
     try {
       const { code, user } = await login(inputs);
+      if (code === 'DEFAULTPASS') {
+        router.push('/auth/change-password');
+        return;
+      }
       console.log(code, user);
     } catch (error) {
       console.log(error);

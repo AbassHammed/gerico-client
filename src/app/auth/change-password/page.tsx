@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
@@ -14,6 +15,7 @@ import {
   FormMessage,
 } from '@/components/shared/form';
 import { Input } from '@/components/shared/input';
+import useChangeDefaultPassword from '@/hooks/useChangePassword';
 import useLogin from '@/hooks/useLogin';
 import { cn } from '@/lib/utils';
 import { IChangePasswordInput, ILoginInputs } from '@/types';
@@ -57,7 +59,7 @@ export default function ChangeDefaultPasswordForm() {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const router = useRouter();
   const [isPasswordHidden, setPasswordHidden] = useState(true);
-  const { login, loading } = useLogin();
+  const { change, loading } = useChangeDefaultPassword();
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -77,10 +79,15 @@ export default function ChangeDefaultPasswordForm() {
 
   const handleChangePassword = async (inputs: IChangePasswordInput) => {
     setIsLoading(true);
+    try {
+      const user = await change(inputs);
 
-    setTimeout(() => {
+      console.log(user);
+    } catch (error) {
+      console.log(error);
+    } finally {
       setIsLoading(false);
-    }, 3000);
+    }
   };
 
   return (
