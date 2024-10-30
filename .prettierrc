@@ -7,5 +7,20 @@
   "trailingComma": "all",
   "bracketSpacing": true,
   "bracketSameLine": true,
-  "arrowParens": "avoid"
+  "arrowParens": "avoid",
+  "plugins": ["@ianvs/prettier-plugin-sort-imports"],
+  "importOrder": [
+    "^(react/(.*)$)|^(react$)",
+    "",
+    "^(next/(.*)$)|^(next$)",
+    "",
+    "<THIRD_PARTY_MODULES>",
+    "",
+    "^@uploadthing/(.*)$",
+    "^uploadthing/(.*)$",
+    "",
+    "^~/(.*)$",
+    "",
+    "^[./]"
+  ]
 }

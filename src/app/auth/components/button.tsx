@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 
-import { ArrowRight, Loader2 } from 'lucide-react';
 import { Button } from '@/components/shared/button';
+import { ArrowRight, Loader2 } from 'lucide-react';
 
 interface CustomButtonProps {
   loading: boolean;
