@@ -1,87 +1,62 @@
-export default function LoginPage() {
+import { Metadata } from 'next';
+import Link from 'next/link';
+
+import { UserAuthForm } from '@/components/ui/auth/login';
+
+export const metadata: Metadata = {
+  title: 'Authentication',
+  description: 'Authentication forms built using the components.',
+};
+
+export default function AuthenticationPage() {
   return (
-    <div className="font-[sans-serif]">
-      <div className="grid lg:grid-cols-2 gap-4 max-lg:gap-12 bg-gradient-to-r from-blue-500 to-blue-700 px-8 py-12 h-full">
-        <div>
-          <a href="javascript:void(0)">
-            <img src="https://readymadeui.com/readymadeui-white.svg" alt="logo" className="w-40" />
-          </a>
-          <div className="max-w-lg mt-16 max-lg:hidden">
-            <h3 className="text-3xl font-bold text-white">Sign in</h3>
-            <p className="text-sm mt-4 text-white">
-              Embark on a seamless journey as you sign in to your account. Unlock a realm of
-              opportunities and possibilities that await you.
+    <div className="container relative hidden h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
+      <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
+        <div className="absolute inset-0 bg-zinc-900" />
+        <div className="relative z-20 flex items-center text-lg font-medium">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="mr-2 h-6 w-6">
+            <path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3" />
+          </svg>
+          Gerico
+        </div>
+        <div className="relative z-20 mt-auto">
+          <blockquote className="space-y-2">
+            <p className="text-lg">
+              &ldquo;This library has saved me countless hours of work and helped me deliver
+              stunning designs to my clients faster than ever before.&rdquo;
+            </p>
+            <footer className="text-sm">Sofia Davis</footer>
+          </blockquote>
+        </div>
+      </div>
+      <div className="lg:p-8">
+        <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+          <div className="flex flex-col space-y-2 text-center">
+            <h1 className="text-2xl font-semibold tracking-tight">Create an account</h1>
+            <p className="text-sm text-muted-foreground">
+              Enter your email below to create your account
             </p>
           </div>
-        </div>
-
-        <div className="bg-white rounded-xl sm:px-6 px-4 py-8 max-w-md w-full h-max shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] max-lg:mx-auto">
-          <form>
-            <div className="mb-8">
-              <h3 className="text-3xl font-extrabold text-gray-800">Sign in</h3>
-            </div>
-
-            <div>
-              <label className="text-gray-800 text-sm mb-2 block">User name</label>
-              <div className="relative flex items-center">
-                <input
-                  name="username"
-                  type="text"
-                  required
-                  className="w-full text-sm text-gray-800 border border-gray-300 px-4 py-3 rounded-md outline-blue-600"
-                  placeholder="Enter user name"
-                />
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="#bbb"
-                  stroke="#bbb"
-                  className="w-[18px] h-[18px] absolute right-4"
-                  viewBox="0 0 24 24">
-                  <circle cx="10" cy="7" r="6" data-original="#000000"></circle>
-                  <path
-                    d="M14 15H6a5 5 0 0 0-5 5 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 5 5 0 0 0-5-5zm8-4h-2.59l.3-.29a1 1 0 0 0-1.42-1.42l-2 2a1 1 0 0 0 0 1.42l2 2a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42l-.3-.29H22a1 1 0 0 0 0-2z"
-                    data-original="#000000"></path>
-                </svg>
-              </div>
-            </div>
-            <div className="mt-4">
-              <label className="text-gray-800 text-sm mb-2 block">Password</label>
-              <div className="relative flex items-center">
-                <input
-                  name="password"
-                  type="password"
-                  required
-                  className="w-full text-sm text-gray-800 border border-gray-300 px-4 py-3 rounded-md outline-blue-600"
-                  placeholder="Enter password"
-                />
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="#bbb"
-                  stroke="#bbb"
-                  className="w-[18px] h-[18px] absolute right-4 cursor-pointer"
-                  viewBox="0 0 128 128">
-                  <path
-                    d="M64 104C22.127 104 1.367 67.496.504 65.943a4 4 0 0 1 0-3.887C1.367 60.504 22.127 24 64 24s62.633 36.504 63.496 38.057a4 4 0 0 1 0 3.887C126.633 67.496 105.873 104 64 104zM8.707 63.994C13.465 71.205 32.146 96 64 96c31.955 0 50.553-24.775 55.293-31.994C114.535 56.795 95.854 32 64 32 32.045 32 13.447 56.775 8.707 63.994zM64 88c-13.234 0-24-10.766-24-24s10.766-24 24-24 24 10.766 24 24-10.766 24-24 24zm0-40c-8.822 0-16 7.178-16 16s7.178 16 16 16 16-7.178 16-16-7.178-16-16-16z"
-                    data-original="#000000"></path>
-                </svg>
-              </div>
-            </div>
-            <div className="mt-4 text-right">
-              <a
-                href="jajvascript:void(0);"
-                className="text-blue-600 text-sm font-semibold hover:underline">
-                Forgot your password?
-              </a>
-            </div>
-
-            <div className="mt-8">
-              <button
-                type="button"
-                className="w-full shadow-xl py-3 px-6 text-sm font-semibold rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none">
-                Log in
-              </button>
-            </div>
-          </form>
+          <UserAuthForm />
+          <p className="px-8 text-center text-sm text-muted-foreground">
+            By clicking continue, you agree to our{' '}
+            <Link href="/terms" className="underline underline-offset-4 hover:text-primary">
+              Terms of Service
+            </Link>{' '}
+            and{' '}
+            <Link href="/privacy" className="underline underline-offset-4 hover:text-primary">
+              Privacy Policy
+            </Link>
+            .
+          </p>
         </div>
       </div>
     </div>
