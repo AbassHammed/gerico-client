@@ -14,3 +14,8 @@ export type ISiteConfig = {
   }[];
   creator: string;
 };
+
+export type IChangePasswordInput = {
+  password: string;
+  confirmPassword: string;
+};

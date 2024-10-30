@@ -1,47 +1,36 @@
-import { Metadata } from 'next';
+'use client';
 
-import UserAuthForm from '@/app/auth/components';
-import { AuthIcon } from '@/components/shared/auth-icon';
+import { useState } from 'react';
 
-export const metadata: Metadata = {
-  title: 'Authentication',
-};
+import Link from 'next/link';
 
-export default function AuthenticationPage() {
+import LoginAuthForm from './components/login';
+
+export type AuthPage = 'login' | 'forgot';
+
+export default function UserPage() {
+  const [page, setPage] = useState<AuthPage>('login');
+
   return (
-    <div className="container relative h-screen flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0">
-      <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
-        <div className="absolute inset-0 bg-brand-400" />
-        <div className="relative z-20 flex items-center text-lg font-medium space-x-2">
-          <AuthIcon />
-          <span>Gerico</span>
+    <main className="w-full h-full flex flex-col items-center justify-center md:px-4">
+      <div className="w-full space-y-6 ">
+        <div className="text-center">
+          <div className="mt-5 space-y-2">
+            <h3 className="text-3xl sm:text-3xl">Se connecter</h3>
+          </div>
         </div>
-        <div className="relative z-20 mt-auto">
-          <blockquote className="space-y-2">
-            <p className="text-lg">
-              &ldquo;This library has saved me countless hours of work and helped me deliver
-              stunning designs to my clients faster than ever before.&rdquo;
-            </p>
-            <footer className="text-sm">Sofia Davis</footer>
-          </blockquote>
-        </div>
-      </div>
-      <div className="lg:p-8">
-        <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-          <UserAuthForm />
-          {/* <p className="px-8 text-center text-sm text-muted-foreground">
-            By clicking continue, you agree to our{' '}
-            <Link href="/terms" className="underline underline-offset-4 hover:text-primary">
-              Terms of Service
-            </Link>{' '}
-            and{' '}
-            <Link href="/privacy" className="underline underline-offset-4 hover:text-primary">
-              Privacy Policy
-            </Link>
-            .
-          </p> */}
+
+        {page === 'login' ? <LoginAuthForm /> : null}
+
+        <div className="flex flex-col items-center justify-center space-y-3">
+          <Link
+            href={page === 'login' ? '#forgot-password' : '#login'}
+            className="text-[14px] underline text-brand-purple"
+            onClick={() => setPage(page === 'forgot' ? 'login' : 'forgot')}>
+            {page === 'login' ? 'Mot de passe oublié ?' : 'Annuler'}
+          </Link>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

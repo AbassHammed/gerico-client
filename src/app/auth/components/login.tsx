@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
@@ -14,6 +15,7 @@ import {
   FormMessage,
 } from '@/components/shared/form';
 import { Input } from '@/components/shared/input';
+import useLogin from '@/hooks/useLogin';
 import { cn } from '@/lib/utils';
 import { ILoginInputs } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -26,19 +28,7 @@ import AuthButton from './button';
 const passwordSchema = z
   .string()
   .min(8, { message: 'Votre mot de passe doit contenir au moins 8 caractères.' })
-  .max(20, { message: 'Votre mot de passe ne peut pas dépasser 20 caractères' })
-  .refine(motDePasse => /[A-Z]/.test(motDePasse), {
-    message: 'Votre mot de passe doit contenir au moins une majuscule.',
-  })
-  .refine(motDePasse => /[a-z]/.test(motDePasse), {
-    message: 'Votre mot de passe doit également contenir au moins une minuscule.',
-  })
-  .refine(motDePasse => /[0-9]/.test(motDePasse), {
-    message: 'Votre mot de passe doit contenir au moins un caractère numérique.',
-  })
-  .refine(motDePasse => /[!@#$%^&*]/.test(motDePasse), {
-    message: 'Votre mot de passe doit contenir au moins un caractère spécial.',
-  });
+  .max(20, { message: 'Votre mot de passe ne peut pas dépasser 20 caractères' });
 
 const loginFormSchema = z.object({
   email: z.string({ required_error: 'Veuillez saisir votre adresse e-mail' }).email(),
@@ -47,10 +37,14 @@ const loginFormSchema = z.object({
 
 type LoginFormValues = z.infer<typeof loginFormSchema>;
 
-export function LoginAuthForm({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+export default function LoginAuthForm({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const router = useRouter();
   const [isPasswordHidden, setPasswordHidden] = useState(true);
+  const { login, loading } = useLogin();
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -70,10 +64,14 @@ export function LoginAuthForm({ className, ...props }: React.HTMLAttributes<HTML
 
   const handleLogin = async (inputs: ILoginInputs) => {
     setIsLoading(true);
-
-    setTimeout(() => {
+    try {
+      const { code, user } = await login(inputs);
+      console.log(code, user);
+    } catch (error) {
+      console.log(error);
+    } finally {
       setIsLoading(false);
-    }, 3000);
+    }
   };
 
   return (
@@ -93,7 +91,7 @@ export function LoginAuthForm({ className, ...props }: React.HTMLAttributes<HTML
                     {...field}
                     onKeyDown={handleKeyDown}
                     className="h-12"
-                    disabled={isLoading}
+                    disabled={isLoading || loading}
                   />
                 </FormControl>
                 <FormMessage />
@@ -123,7 +121,7 @@ export function LoginAuthForm({ className, ...props }: React.HTMLAttributes<HTML
                       {...field}
                       onKeyDown={handleKeyDown}
                       className="h-12"
-                      disabled={isLoading}
+                      disabled={isLoading || loading}
                     />
                   </div>
                 </FormControl>
@@ -132,42 +130,9 @@ export function LoginAuthForm({ className, ...props }: React.HTMLAttributes<HTML
             )}
           />
 
-          <AuthButton loading={isLoading}>Se connecter</AuthButton>
+          <AuthButton loading={isLoading || loading}>Se connecter</AuthButton>
         </form>
       </Form>
     </div>
   );
 }
-
-// export default function Login({ setAuthPage }: AuthProps) {
-//   return (
-//     <main className="w-full h-full flex flex-col items-center justify-center sm:px-4">
-//       <div className="w-full space-y-6 sm:max-w-lg">
-//         <div className="text-center">
-//           <div className="mt-5 space-y-2">
-//             <h3 className="text-3xl sm:text-3xl">Se connecter à Code Proctor</h3>
-//           </div>
-//         </div>
-//         <div className="p-4 py-6 sm:p-6 mx-4"></div>
-
-//         <div className="flex flex-col items-center justify-center space-y-3">
-//           <Link
-//             href={'#'}
-//             className="text-[14px] underline text-brand-purple"
-//             onClick={() => setAuthPage('reset')}>
-//             Mot de passe oublié ?
-//           </Link>
-//           <span className="text-[14px]">
-//             Pas de compte ?{' '}
-//             <Link
-//               href={'#'}
-//               className="text-[14px] underline text-brand-purple"
-//               onClick={() => setAuthPage('signup')}>
-//               Créer un compte
-//             </Link>
-//           </span>
-//         </div>
-//       </div>
-//     </main>
-//   );
-// }
