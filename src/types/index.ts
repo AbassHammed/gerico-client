@@ -19,3 +19,10 @@ export type IChangePasswordInput = {
   password: string;
   confirmPassword: string;
 };
+
+export type ResetPasswordType = {
+  uid: string;
+  reset_code: string;
+  password: string;
+  confirm_password: string;
+};

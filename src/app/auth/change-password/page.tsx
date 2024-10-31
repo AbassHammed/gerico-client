@@ -23,7 +23,7 @@ import { z } from 'zod';
 
 import AuthButton from '../components/button';
 
-const passwordSchema = z
+export const passwordSchema = z
   .string()
   .min(8, { message: 'Votre mot de passe doit contenir au moins 8 caractères.' })
   .max(16, { message: 'Votre mot de passe ne peut pas dépasser 16 caractères.' })

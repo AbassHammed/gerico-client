@@ -52,7 +52,7 @@ async function sendRequest(
     sessionStorage.setItem('token', token);
 
     // there are only three case where a `code` is being returned from the back
-    // 1&2. when the password is in incorrect or email not found in the db in which case the status code is 400 so `!response.ok` will pass and an error will be thrown
+    // 1&2. when the password is incorrect or email not found in the db in which case the status code is 400 so `!response.ok` will pass and an error will be thrown
     // 3. when the user used a default password
     if (code === 'DEFAULTPASS') {
       return { code, user: null };
