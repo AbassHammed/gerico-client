@@ -3,7 +3,39 @@
 import { ILoginInputs } from '@/types';
 import useSWRMutation from 'swr/mutation';
 
-async function sendRequest(url: string, { arg }: { arg: ILoginInputs }) {
+function parseUserAgent(ua: string) {
+  let browser = 'Unknown';
+  let os = 'Unknown';
+
+  if (ua.indexOf('Chrome') > -1) {
+    browser = 'Chrome';
+  } else if (ua.indexOf('Firefox') > -1) {
+    browser = 'Firefox';
+  } else if (ua.indexOf('Safari') > -1) {
+    browser = 'Safari';
+  } else if (ua.indexOf('MSIE') > -1 || ua.indexOf('Trident') > -1) {
+    browser = 'Internet Explorer';
+  }
+
+  if (ua.indexOf('Win') > -1) {
+    os = 'Windows';
+  } else if (ua.indexOf('Mac') > -1) {
+    os = 'Mac OS';
+  } else if (ua.indexOf('X11') > -1 || ua.indexOf('Linux') > -1) {
+    os = 'Linux';
+  } else if (ua.indexOf('Android') > -1) {
+    os = 'Android';
+  } else if (ua.indexOf('like Mac') > -1) {
+    os = 'iOS';
+  }
+
+  return { browser, os };
+}
+
+async function sendRequest(
+  url: string,
+  { arg }: { arg: ILoginInputs & { browser: string; os: string } },
+) {
   try {
     const response = await fetch(url, {
       method: 'POST',
@@ -40,7 +72,8 @@ export default function useLogin() {
 
   const login = async (inputs: ILoginInputs) => {
     try {
-      const res = await trigger(inputs);
+      const newInput = { ...inputs, ...parseUserAgent(window.navigator.userAgent) };
+      const res = await trigger(newInput);
       return res;
     } catch (error: any) {
       throw new Error(error.message);
