@@ -1,8 +1,7 @@
 /* eslint-disable no-console */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
@@ -16,9 +15,7 @@ import {
 } from '@/components/shared/form';
 import { Input } from '@/components/shared/input';
 import useChangeDefaultPassword from '@/hooks/useChangePassword';
-import useLogin from '@/hooks/useLogin';
-import { cn } from '@/lib/utils';
-import { IChangePasswordInput, ILoginInputs } from '@/types';
+import { IChangePasswordInput } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff } from 'lucide-react';
 import { useForm } from 'react-hook-form';
@@ -60,6 +57,13 @@ export default function ChangeDefaultPasswordForm() {
   const router = useRouter();
   const [isPasswordHidden, setPasswordHidden] = useState(true);
   const { change, loading } = useChangeDefaultPassword();
+
+  useEffect(() => {
+    const token = sessionStorage.getItem('token');
+    if (!token) {
+      router.push('/auth');
+    }
+  }, []);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {

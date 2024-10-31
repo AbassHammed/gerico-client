@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import Link from 'next/link';
 
+import ForgotPasswordAuthForm from './components/forgot-password';
 import LoginAuthForm from './components/login';
 
 export type AuthPage = 'login' | 'forgot';
@@ -16,11 +17,13 @@ export default function UserPage() {
       <div className="w-full space-y-6 ">
         <div className="text-center">
           <div className="mt-5 space-y-2">
-            <h3 className="text-3xl sm:text-3xl">Se connecter</h3>
+            <h3 className="text-3xl sm:text-3xl">
+              {page === 'login' ? 'Se connecter' : 'Réinitialiser votre mot de passe'}
+            </h3>
           </div>
         </div>
 
-        {page === 'login' ? <LoginAuthForm /> : null}
+        {page === 'login' ? <LoginAuthForm /> : <ForgotPasswordAuthForm />}
 
         <div className="flex flex-col items-center justify-center space-y-3">
           <Link

@@ -34,7 +34,7 @@ const loginFormSchema = z.object({
   password: passwordSchema,
 });
 
-type LoginFormValues = z.infer<typeof loginFormSchema>;
+type LoginFormType = z.infer<typeof loginFormSchema>;
 
 export default function LoginAuthForm({
   className,
@@ -51,12 +51,12 @@ export default function LoginAuthForm({
     }
   };
 
-  const defaultValues: Partial<LoginFormValues> = {
+  const defaultValues: Partial<LoginFormType> = {
     email: '',
     password: '',
   };
 
-  const form = useForm<LoginFormValues>({
+  const form = useForm<LoginFormType>({
     resolver: zodResolver(loginFormSchema),
     defaultValues,
   });
