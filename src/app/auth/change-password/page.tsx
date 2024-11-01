@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 'use client';
 
 import React, { useEffect, useState } from 'react';
@@ -19,6 +18,7 @@ import { IChangePasswordInput } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff } from 'lucide-react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
 import AuthButton from '../components/button';
@@ -84,11 +84,12 @@ export default function ChangeDefaultPasswordForm() {
   const handleChangePassword = async (inputs: IChangePasswordInput) => {
     setIsLoading(true);
     try {
-      const user = await change(inputs);
-
-      console.log(user);
-    } catch (error) {
-      console.log(error);
+      await change(inputs);
+      router.push('/dashboard');
+    } catch (error: any) {
+      toast.error('Unknown Error', {
+        description: error.message,
+      });
     } finally {
       setIsLoading(false);
     }

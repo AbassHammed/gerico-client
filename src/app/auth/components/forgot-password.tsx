@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-console */
 'use client';
 
 import React from 'react';
@@ -19,6 +17,7 @@ import { useForgotPassword } from '@/hooks/useForgotPassword';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
 import AuthButton from './button';
@@ -53,10 +52,12 @@ export default function ForgotPasswordAuthForm({
 
   const handleForgot = async (inputs: { email: string }) => {
     try {
-      const emailSent = await sendMail(inputs);
+      await sendMail(inputs);
       router.push('/auth/reset-password');
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      toast.error('Invalid operation', {
+        description: error.message,
+      });
     }
   };
 

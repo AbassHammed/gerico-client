@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 'use client';
 
 import React, { useState } from 'react';
@@ -20,6 +19,7 @@ import { ILoginInputs } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff } from 'lucide-react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
 import AuthButton from './button';
@@ -64,14 +64,16 @@ export default function LoginAuthForm({
   const handleLogin = async (inputs: ILoginInputs) => {
     setIsLoading(true);
     try {
-      const { code, user } = await login(inputs);
+      const { code } = await login(inputs);
       if (code === 'DEFAULTPASS') {
         router.push('/auth/change-password');
         return;
       }
-      console.log(code, user);
-    } catch (error) {
-      console.log(error);
+      router.push('/home');
+    } catch (error: any) {
+      toast.error('Invalid operation', {
+        description: error.message,
+      });
     } finally {
       setIsLoading(false);
     }

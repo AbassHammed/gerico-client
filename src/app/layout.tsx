@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 
+import { Toaster } from 'sonner';
+
 import './globals.css';
 
 import SWRLayout from '@/components/swr-layout';
@@ -47,9 +49,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="fr">
       <body className={`${inter.className}  antialiased`}>
         <SWRLayout>{children}</SWRLayout>
+        <Toaster richColors position="top-center" />
       </body>
     </html>
   );

@@ -16,6 +16,7 @@ import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/shared/input
 import { useResetPassword } from '@/hooks/useResetPassword';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { passwordSchema } from '../change-password/page';
@@ -69,12 +70,9 @@ const ResetPassword = () => {
         return;
       }
     } catch (error: any) {
-      console.error(error);
-      // toast({
-      //   variant: 'destructive',
-      //   title: 'Invalid operation',
-      //   description: err.message,
-      // });
+      toast.error('Invalid operation', {
+        description: error.message,
+      });
     }
   };
 
