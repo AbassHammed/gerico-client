@@ -54,10 +54,7 @@ export default function ForgotPasswordAuthForm({
   const handleForgot = async (inputs: { email: string }) => {
     try {
       const emailSent = await sendMail(inputs);
-      if (emailSent) {
-        console.log('email successfully sent');
-      }
-      console.log('email wasnt sent');
+      router.push('/auth/reset-password');
     } catch (error) {
       console.log(error);
     }

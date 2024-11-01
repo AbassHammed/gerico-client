@@ -20,6 +20,7 @@ import { z } from 'zod';
 
 import { passwordSchema } from '../change-password/page';
 import AuthButton from '../components/button';
+import ResendPasswordButton from '../components/resend-password-button';
 
 const ResetPasswordFormSchema = z
   .object({
@@ -27,7 +28,7 @@ const ResetPasswordFormSchema = z
       message: 'Your one-time code must be 6 characters.',
     }),
     password: passwordSchema,
-    confirm_password: z.string({ required_error: 'Password confirmation is required' }),
+    confirm_password: passwordSchema,
   })
   .refine(data => data.password === data.confirm_password, {
     message: 'Password do not match',
@@ -64,7 +65,7 @@ const ResetPassword = () => {
 
       const res = await resetPassword(inputs);
       if (res) {
-        router.push('/auth/login');
+        router.push('/auth');
         return;
       }
     } catch (error: any) {
@@ -87,7 +88,7 @@ const ResetPassword = () => {
         </div>
         <div className="grid gap-6">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(handlePasswordReset)} className="space-y-2">
+            <form onSubmit={form.handleSubmit(handlePasswordReset)} className="space-y-4">
               <FormField
                 control={form.control}
                 name="reset_code"
@@ -159,6 +160,9 @@ const ResetPassword = () => {
                   </FormItem>
                 )}
               />
+              <div className="flex items-center justify-end text-sm">
+                <ResendPasswordButton />
+              </div>
 
               <AuthButton loading={loading}>Soumettre</AuthButton>
             </form>
