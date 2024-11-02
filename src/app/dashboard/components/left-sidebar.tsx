@@ -2,16 +2,21 @@
 
 import React from 'react';
 
+import { useRouter } from 'next/navigation';
+
 import { AppIcon } from '@/components/shared/app-icon';
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
+  SidebarTrigger,
+  useSidebar,
 } from '@/components/shared/sidebar';
 import { CalendarFold, Plus, Users } from 'lucide-react';
 
@@ -34,21 +39,24 @@ const routes = [
 ];
 
 export default function Page() {
+  const router = useRouter();
+  const { state } = useSidebar();
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
-        <SidebarMenu>
+        <SidebarMenu className="flex flex-row items-center justify-between">
           <SidebarMenuItem>
             <SidebarMenuButton
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
-              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-brand-400 text-sidebar-primary-foreground">
+              <div className="flex aspect-square size-8 items-center justify-center rounded-lg text-sidebar-primary-foreground">
                 <AppIcon className="size-6" />
               </div>
-              <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">Gerico</span>
-                <span className="truncate text-xs">Transport</span>
-              </div>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild size="lg">
+              <SidebarTrigger className={`${state === 'collapsed' && 'hidden'} !size-8`} />
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -58,7 +66,7 @@ export default function Page() {
           <SidebarMenu>
             {routes.map((item, idx) => (
               <SidebarMenuItem key={idx}>
-                <SidebarMenuButton tooltip={item.title}>
+                <SidebarMenuButton tooltip={item.title} onClick={() => router.push(item.url)}>
                   {item.icon && <item.icon />}
                   <span>{item.title}</span>
                 </SidebarMenuButton>
@@ -67,6 +75,13 @@ export default function Page() {
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarTrigger className={`hidden ${state === 'collapsed' && 'flex'}`} />
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
   );
