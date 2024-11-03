@@ -26,3 +26,16 @@ export type ResetPasswordType = {
   password: string;
   confirm_password: string;
 };
+
+export interface IIssueInput {
+  type: 'auth' | 'leave' | 'payslip' | 'other';
+  priority: 'high' | 'average' | 'normal';
+  subject: string;
+  description: string;
+}
+
+export interface IIssue extends IIssueInput {
+  issue_id: string;
+  solved: boolean;
+  issue_date: string;
+}

@@ -26,7 +26,7 @@ async function resetPass(url: string, { arg }: { arg: ResetPasswordType }) {
 
 export function useResetPassword() {
   const { trigger, isMutating: loading } = useSWRMutation(
-    'http://localhost:5000/api/reset-password',
+    'http://localhost:5000/api/employee/reset-password',
     resetPass,
   );
 

@@ -1,9 +1,8 @@
-/* eslint-disable no-console */
 'use client';
 
 import Link from 'next/link';
 
-import { Button } from '@/components/shared/button';
+import AuthButton from '@/app/auth/components/button';
 import {
   Dialog,
   DialogContent,
@@ -30,8 +29,10 @@ import {
   SelectValue,
 } from '@/components/shared/select';
 import { Textarea } from '@/components/shared/textarea';
+import { useReportIssue } from '@/hooks/useIssues';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import * as z from 'zod';
 
 const formSchema = z.object({
@@ -46,6 +47,7 @@ const formSchema = z.object({
 });
 
 export default function IssueReporter() {
+  const { reportIssue, loading } = useReportIssue();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -56,10 +58,16 @@ export default function IssueReporter() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    // TODO: Implement submission logic
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      await reportIssue(values);
+    } catch (error: any) {
+      toast.error('An error occurred. Please try again.', {
+        description: error.message,
+      });
+    }
   }
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -155,10 +163,8 @@ export default function IssueReporter() {
                   )}
                 />
               </div>
-              <Button type="submit" className="w-full">
-                Submit
-              </Button>
             </div>
+            <AuthButton loading={loading}>submit</AuthButton>
           </form>
         </Form>
       </DialogContent>

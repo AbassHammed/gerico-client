@@ -30,7 +30,7 @@ async function sendReset_Code(url: string) {
 
 export function useResendCode() {
   const { trigger, isMutating: loading } = useSWRMutation(
-    'http://localhost:5000/api/resend-password-code',
+    'http://localhost:5000/api/employee/resend-password-code',
     sendReset_Code,
   );
 
