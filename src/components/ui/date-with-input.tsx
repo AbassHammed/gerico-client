@@ -8,6 +8,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/shared/pop
 import { cn } from '@/lib/utils';
 import { CalendarIcon } from '@radix-ui/react-icons';
 import { format, isValid, parse } from 'date-fns';
+import { fr } from 'date-fns/locale';
 
 import { Input } from '../shared/input';
 
@@ -53,11 +54,11 @@ export function DatePickerWithInput({ setSelectedDate, selectedDate }: DatePicke
         <Button
           variant={'outline'}
           className={cn(
-            'w-[240px] justify-start text-left font-normal',
+            'w-full pl-3 text-left font-normal',
             !selectedDate && 'text-muted-foreground',
           )}>
-          <CalendarIcon />
-          {selectedDate ? format(selectedDate, 'PPP') : <span>Pick a date</span>}
+          {selectedDate ? format(selectedDate, 'PPP', { locale: fr }) : <span>Pick a date</span>}
+          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent align="start" className="flex w-auto flex-col space-y-2 p-2">

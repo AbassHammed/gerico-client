@@ -4,6 +4,8 @@ import { useState } from 'react';
 
 import Link from 'next/link';
 
+import IssueReporter from '@/components/ui/report-issue';
+
 import ForgotPasswordAuthForm from './components/forgot-password';
 import LoginAuthForm from './components/login';
 
@@ -33,6 +35,7 @@ export default function UserPage() {
             {page === 'login' ? 'Mot de passe oublié ?' : 'Annuler'}
           </Link>
         </div>
+        <IssueReporter />
       </div>
     </main>
   );

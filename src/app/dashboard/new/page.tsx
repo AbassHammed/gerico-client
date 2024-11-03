@@ -1,7 +1,6 @@
 'use client';
 
 import { Button } from '@/components/shared/button';
-import { Calendar } from '@/components/shared/calendar';
 import {
   Form,
   FormControl,
@@ -11,7 +10,6 @@ import {
   FormMessage,
 } from '@/components/shared/form';
 import { Input } from '@/components/shared/input';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/shared/popover';
 import {
   Select,
   SelectContent,
@@ -19,8 +17,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/shared/select';
+import { DatePickerWithInput } from '@/components/ui/date-with-input';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { CalendarIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import * as z from 'zod';
@@ -205,32 +203,12 @@ export default function EmployeeForm() {
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Hire date</FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant={'outline'}
-                        className={`w-full pl-3 text-left font-normal ${
-                          !field.value && 'text-muted-foreground'
-                        }`}>
-                        {field.value ? field.value.toLocaleDateString() : <span>Pick a date</span>}
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={field.value}
-                      onSelect={field.onChange}
-                      disabled={date => date > new Date() || date < new Date('1900-01-01')}
-                      initialFocus
-                      captionLayout="dropdown"
-                      fromYear={2010}
-                      toYear={2024}
-                    />
-                  </PopoverContent>
-                </Popover>
+                <FormControl>
+                  <DatePickerWithInput
+                    setSelectedDate={field.onChange}
+                    selectedDate={field.value}
+                  />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}
@@ -241,29 +219,13 @@ export default function EmployeeForm() {
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Date of birth</FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant={'outline'}
-                        className={`w-full pl-3 text-left font-normal ${
-                          !field.value && 'text-muted-foreground'
-                        }`}>
-                        {field.value ? field.value.toLocaleDateString() : <span>Pick a date</span>}
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={field.value}
-                      onSelect={field.onChange}
-                      disabled={date => date > new Date() || date < new Date('1900-01-01')}
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
+                <FormControl>
+                  <DatePickerWithInput
+                    setSelectedDate={field.onChange}
+                    selectedDate={field.value}
+                  />
+                </FormControl>
+
                 <FormMessage />
               </FormItem>
             )}
