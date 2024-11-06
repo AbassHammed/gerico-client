@@ -11,8 +11,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui-patterns/shadcn/ui/form';
-import { Input } from '@/components/ui-patterns/shadcn/ui/input';
+} from '@/components/ui/shadcn/ui/form';
+import { Input } from '@/components/ui/shadcn/ui/input';
 import useChangeDefaultPassword from '@/hooks/useChangePassword';
 import { IChangePasswordInput } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';

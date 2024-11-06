@@ -4,7 +4,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-import { Button } from '@/components/ui-patterns/shadcn/ui/button';
+import { Button } from '@/components/ui/shadcn/ui/button';
 import { useResendCode } from '@/hooks/useResendCode';
 
 export default function ResendPasswordButton() {

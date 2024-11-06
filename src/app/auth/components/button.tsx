@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import { Button } from '@/components/ui-patterns/shadcn/ui/button';
+import { Button } from '@/components/ui/shadcn/ui/button';
 import { ArrowRight, Loader2 } from 'lucide-react';
 
 interface CustomButtonProps {
