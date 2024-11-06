@@ -27,6 +27,7 @@ import {
   SidebarTrigger,
   useSidebar,
 } from '@/components/shared/sidebar';
+import TestAvatar from '@/components/shared/test-avatar';
 import { IssueDialog } from '@/components/ui/issue-dialog';
 import { IIssue } from '@/types';
 import { CalendarFold, ChevronsUpDown, LogOut, Plus, Users } from 'lucide-react';
@@ -152,10 +153,11 @@ export default function Page() {
                 <SidebarMenuButton
                   size="lg"
                   className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
-                  <div className="relative flex h-8 w-8 shrink-0 overflow-hidden rounded-lg">
-                    <span className="flex h-full w-full items-center justify-center rounded-lg bg-brand-500 text-white">
+                  <div className="relative flex h-8 w-8 shrink-0 overflow-hidden rounded-lg items-center justify-center">
+                    <TestAvatar className="h-6 w-6" />
+                    {/* <span className="flex h-full w-full items-center justify-center rounded-lg bg-brand-500 text-white">
                       AH
-                    </span>
+                    </span> */}
                   </div>
                   <div className="grid flex-1 text-left text-sm leading-tight">
                     <span className="truncate font-semibold">Abass Hammed</span>
