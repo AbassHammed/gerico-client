@@ -38,9 +38,6 @@ export interface Props
   validation?: (x: any) => void;
 }
 
-/**
- * @deprecated Use ./Input_shadcn_ instead or ./ui-patterns/data-inputs/input
- */
 function Input({
   autoComplete,
   autoFocus,
