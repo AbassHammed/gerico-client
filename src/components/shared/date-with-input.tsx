@@ -2,15 +2,19 @@
 
 import * as React from 'react';
 
-import { Button } from '@/components/shared/button';
-import { Calendar } from '@/components/shared/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/shared/popover';
+import { Button } from '@/components/ui-patterns/shadcn/ui/button';
+import { Calendar } from '@/components/ui-patterns/shadcn/ui/calendar';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui-patterns/shadcn/ui/popover';
 import { cn } from '@/lib/utils';
 import { CalendarIcon } from '@radix-ui/react-icons';
 import { format, isValid, parse } from 'date-fns';
 import { fr } from 'date-fns/locale';
 
-import { Input } from '../shared/input';
+import { Input } from '../ui-patterns/shadcn/ui/input';
 
 interface DatePickerWithInputProps {
   setSelectedDate: (value: React.SetStateAction<Date | undefined>) => void;

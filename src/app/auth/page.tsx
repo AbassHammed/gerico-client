@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import Link from 'next/link';
 
-import IssueReporter from '@/components/ui/report-issue';
+import IssueReporter from '@/components/shared/report-issue';
 
 import ForgotPasswordAuthForm from './components/forgot-password';
 import LoginAuthForm from './components/login';

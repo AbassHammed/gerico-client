@@ -5,14 +5,7 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 
 import { AppIcon } from '@/components/shared/app-icon';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/shared/dropdown-menu';
+import { IssueDialog } from '@/components/shared/issue-dialog';
 import {
   Sidebar,
   SidebarContent,
@@ -26,10 +19,17 @@ import {
   SidebarRail,
   SidebarTrigger,
   useSidebar,
-} from '@/components/shared/sidebar';
-import TestAvatar from '@/components/shared/test-avatar';
-import { IssueDialog } from '@/components/ui/issue-dialog';
+} from '@/components/ui/shadcn/ui/sidebar';
+import TestAvatar from '@/components/ui/shadcn/ui/test-avatar';
 import { IIssue } from '@/types';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@ui';
 import { CalendarFold, ChevronsUpDown, LogOut, Plus, Users } from 'lucide-react';
 
 const routes = [

@@ -1,13 +1,13 @@
 'use client';
 
-import { Calendar } from '@/components/shared/calendar';
+import { Calendar } from '@/components/ui-patterns/shadcn/ui/calendar';
 import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
   SidebarSeparator,
-} from '@/components/shared/sidebar';
+} from '@/components/ui-patterns/shadcn/ui/sidebar';
 import { fr } from 'date-fns/locale';
 import Holidays from 'date-holidays';
 

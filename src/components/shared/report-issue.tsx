@@ -10,7 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/shared/dialog';
+} from '@/components/ui-patterns/shadcn/ui/dialog';
 import {
   Form,
   FormControl,
@@ -19,16 +19,16 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/shared/form';
-import { Input } from '@/components/shared/input';
+} from '@/components/ui-patterns/shadcn/ui/form';
+import { Input } from '@/components/ui-patterns/shadcn/ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/shared/select';
-import { Textarea } from '@/components/shared/textarea';
+} from '@/components/ui-patterns/shadcn/ui/select';
+import { Textarea } from '@/components/ui-patterns/shadcn/ui/textarea';
 import { useReportIssue } from '@/hooks/useIssues';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';

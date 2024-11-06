@@ -1,6 +1,7 @@
 'use client';
 
-import { Button } from '@/components/shared/button';
+import { DatePickerWithInput } from '@/components/shared/date-with-input';
+import { Button } from '@/components/ui-patterns/shadcn/ui/button';
 import {
   Form,
   FormControl,
@@ -8,16 +9,15 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/shared/form';
-import { Input } from '@/components/shared/input';
+} from '@/components/ui-patterns/shadcn/ui/form';
+import { Input } from '@/components/ui-patterns/shadcn/ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/shared/select';
-import { DatePickerWithInput } from '@/components/ui/date-with-input';
+} from '@/components/ui-patterns/shadcn/ui/select';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';

@@ -10,9 +10,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/shared/form';
-import { Input } from '@/components/shared/input';
-import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/shared/input-otp';
+} from '@/components/ui-patterns/shadcn/ui/form';
+import { Input } from '@/components/ui-patterns/shadcn/ui/input';
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+} from '@/components/ui-patterns/shadcn/ui/input-otp';
 import { useResetPassword } from '@/hooks/useResetPassword';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';

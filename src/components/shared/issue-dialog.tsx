@@ -5,8 +5,8 @@ import React from 'react';
 import { IIssue } from '@/types';
 import { AlertCircle, FileText, Key, User } from 'lucide-react';
 
-import { Badge } from '../shared/badge';
-import { Button } from '../shared/button';
+import { Badge } from '../ui-patterns/shadcn/ui/badge';
+import { Button } from '../ui-patterns/shadcn/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -14,7 +14,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '../shared/dialog';
+} from '../ui-patterns/shadcn/ui/dialog';
 
 function IssueIcon({ type }: { type: IIssue['type'] }) {
   switch (type) {
