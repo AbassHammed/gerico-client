@@ -17,15 +17,146 @@ module.exports = {
         '2xl': '1400px',
       },
     },
+    backgroundColor: ({ theme }: { theme: any }) => ({
+      ...theme('colors'),
+      DEFAULT: 'hsl(var(--background-default) / <alpha-value>)',
+      '200': 'hsl(var(--background-200) / <alpha-value>)',
+      alternative: {
+        DEFAULT: 'hsl(var(--background-alternative-default) / <alpha-value>)',
+        '200': 'hsl(var(--background-alternative-200) / <alpha-value>)',
+      },
+      selection: 'hsl(var(--background-selection) / <alpha-value>)',
+      control: 'hsl(var(--background-control) / <alpha-value>)',
+      surface: {
+        '75': 'hsl(var(--background-surface-75) / <alpha-value>)',
+        '100': 'hsl(var(--background-surface-100) / <alpha-value>)',
+        '200': 'hsl(var(--background-surface-200) / <alpha-value>)',
+        '300': 'hsl(var(--background-surface-300) / <alpha-value>)',
+        '400': 'hsl(var(--background-surface-400) / <alpha-value>)',
+      },
+      foreground: {
+        DEFAULT: 'hsl(var(--foreground-default) / <alpha-value>)',
+        light: 'hsl(var(--foreground-light) / <alpha-value>)',
+        lighter: 'hsl(var(--foreground-lighter) / <alpha-value>)',
+        muted: 'hsl(var(--foreground-muted) / <alpha-value>)',
+        contrast: 'hsl(var(--foreground-contrast) / <alpha-value>)',
+      },
+      overlay: {
+        DEFAULT: 'hsl(var(--background-overlay-default) / <alpha-value>)',
+        hover: 'hsl(var(--background-overlay-hover) / <alpha-value>)',
+      },
+      muted: 'hsl(var(--background-muted) / <alpha-value>)',
+      button: 'hsl(var(--background-button-default) / <alpha-value>)',
+      dialog: 'hsl(var(--background-dialog-default) / <alpha-value>)',
+      'dash-sidebar': 'hsl(var(--background-dash-sidebar) / <alpha-value>)',
+      'dash-canvas': 'hsl(var(--background-dash-canvas) / <alpha-value>)',
+    }),
+
+    borderColor: ({ theme }: { theme: any }) => ({
+      ...theme('colors'),
+      DEFAULT: 'hsl(var(--border-default) / <alpha-value>)',
+      muted: 'hsl(var(--border-muted) / <alpha-value>)',
+      secondary: 'hsl(var(--border-secondary) / <alpha-value>)',
+      overlay: 'hsl(var(--border-overlay) / <alpha-value>)',
+      control: 'hsl(var(--border-control) / <alpha-value>)',
+      alternative: 'hsl(var(--border-alternative) / <alpha-value>)',
+      strong: 'hsl(var(--border-strong) / <alpha-value>)',
+      stronger: 'hsl(var(--border-stronger) / <alpha-value>)',
+      button: {
+        DEFAULT: 'hsl(var(--border-button-default) / <alpha-value>)',
+        hover: 'hsl(var(--border-button-hover) / <alpha-value>)',
+      },
+    }),
+
+    textColor: ({ theme }: { theme: any }) => ({
+      ...theme('colors'),
+      foreground: {
+        DEFAULT: 'hsl(var(--foreground-default) / <alpha-value>)',
+        light: 'hsl(var(--foreground-light) / <alpha-value>)',
+        lighter: 'hsl(var(--foreground-lighter) / <alpha-value>)',
+        muted: 'hsl(var(--foreground-muted) / <alpha-value>)',
+        contrast: 'hsl(var(--foreground-contrast) / <alpha-value>)',
+      },
+    }),
     extend: {
       colors: {
+        border: {
+          DEFAULT: 'hsl(var(--border-default) / <alpha-value>)',
+          muted: 'hsl(var(--border-muted) / <alpha-value>)',
+          secondary: 'hsl(var(--border-secondary) / <alpha-value>)',
+          overlay: 'hsl(var(--border-overlay) / <alpha-value>)',
+          control: 'hsl(var(--border-control) / <alpha-value>)',
+          alternative: 'hsl(var(--border-alternative) / <alpha-value>)',
+          strong: 'hsl(var(--border-strong) / <alpha-value>)',
+          stronger: 'hsl(var(--border-stronger) / <alpha-value>)',
+          button: {
+            DEFAULT: 'hsl(var(--border-button-default) / <alpha-value>)',
+            hover: 'hsl(var(--border-button-hover) / <alpha-value>)',
+          },
+        },
+        // Brand colors
+        brand: {
+          DEFAULT: 'var(--brand-default) ',
+          button: 'hsl(var(--brand-button) / <alpha-value>)',
+          link: 'var(--brand-link)',
+          '200': 'var(--brand-200)',
+          '300': 'var(--brand-300)',
+          '400': 'var(--brand-400)',
+          '500': 'var(--brand-500)',
+          '600': 'var(--brand-600)',
+        },
+
+        // Other color variables
+        black: 'hsl(var(--colors-black) / <alpha-value>)',
+        white: 'hsl(var(--colors-white) / <alpha-value>)',
+        'gray-dark': {
+          '100': 'hsl(var(--colors-gray-dark-100) / <alpha-value>)',
+          '200': 'hsl(var(--colors-gray-dark-200) / <alpha-value>)',
+          // ...
+        },
+        'gray-light': {
+          '100': 'hsl(var(--colors-gray-light-100) / <alpha-value>)',
+          '200': 'hsl(var(--colors-gray-light-200) / <alpha-value>)',
+          // ...
+        },
+        'slate-dark': {
+          '100': 'hsl(var(--colors-slate-dark-100) / <alpha-value>)',
+          '200': 'hsl(var(--colors-slate-dark-200) / <alpha-value>)',
+          // ...
+        },
+        'slate-light': {
+          '100': 'hsl(var(--colors-slate-light-100) / <alpha-value>)',
+          '200': 'hsl(var(--colors-slate-light-200) / <alpha-value>)',
+          // ...
+        },
+        destructive: {
+          DEFAULT: 'hsl(var(--destructive-default) / <alpha-value>)',
+          '200': 'hsl(var(--destructive-200) / <alpha-value>)',
+          '300': 'hsl(var(--destructive-300) / <alpha-value>)',
+          '400': 'hsl(var(--destructive-400) / <alpha-value>)',
+          '500': 'hsl(var(--destructive-500) / <alpha-value>)',
+          '600': 'hsl(var(--destructive-600) / <alpha-value>)',
+        },
+        warning: {
+          DEFAULT: 'hsl(var(--warning-default) / <alpha-value>)',
+          '200': 'hsl(var(--warning-200) / <alpha-value>)',
+          '300': 'hsl(var(--warning-300) / <alpha-value>)',
+          '400': 'hsl(var(--warning-400) / <alpha-value>)',
+          '500': 'hsl(var(--warning-500) / <alpha-value>)',
+          '600': 'hsl(var(--warning-600) / <alpha-value>)',
+        },
+        _secondary: {
+          DEFAULT: 'hsl(var(--secondary-default) / <alpha-value>)',
+          '200': 'hsl(var(--secondary-200) / <alpha-value>)',
+          '400': 'hsl(var(--secondary-400) / <alpha-value>)',
+        },
         studio: 'hsl(var(--colors-gray-light-200))',
-        'brand-100': '#b3cde0',
-        'brand-200': '#6497b1',
-        'brand-300': '#005b96',
-        'brand-400': '#03396c',
-        'brand-500': '#011f4b',
-        border: 'hsl(var(--border))',
+        // 'brand-100': '#b3cde0',
+        // 'brand-200': '#6497b1',
+        // 'brand-300': '#005b96',
+        // 'brand-400': '#03396c',
+        // 'brand-500': '#011f4b',
+        // border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
         background: 'hsl(var(--background))',
@@ -37,14 +168,6 @@ module.exports = {
         secondary: {
           DEFAULT: 'hsl(var(--secondary))',
           foreground: 'hsl(var(--secondary-foreground))',
-        },
-        destructive: {
-          DEFAULT: 'hsl(var(--destructive))',
-          foreground: 'hsl(var(--destructive-foreground))',
-        },
-        muted: {
-          DEFAULT: 'hsl(var(--muted))',
-          foreground: 'hsl(var(--muted-foreground))',
         },
         accent: {
           DEFAULT: 'hsl(var(--accent))',

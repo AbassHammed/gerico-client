@@ -77,6 +77,75 @@ body,
   margin: 0;
 }
 
+.form-group .form-text,
+.Form .form-text {
+  @apply text-foreground-lighter;
+}
+
+.form-group input,
+.form-group input[type='text'],
+.form-group input[type='email'],
+.form-group input[type='url'],
+.form-group input[type='password'],
+.form-group input[type='number'],
+.form-group input[type='date'],
+.form-group input[type='datetime-local'],
+.form-group input[type='month'],
+.form-group input[type='search'],
+.form-group input[type='tel'],
+.form-group input[type='time'],
+.form-group input[type='week'],
+.form-group input[multiple],
+.form-group textarea,
+.form-group select,
+input.form-control,
+.form-control input,
+.form-control textarea {
+  @apply block;
+  @apply box-border;
+  @apply rounded-md;
+  @apply shadow-sm;
+  @apply transition-all;
+  @apply text-foreground;
+  @apply border;
+  @apply focus:shadow-md;
+
+  @apply focus:border-stronger;
+  @apply focus:ring-border-overlay;
+
+  @apply bg-studio;
+  @apply border-border-strong border;
+
+  @apply outline-none;
+  @apply focus:ring-2 focus:ring-current;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  @apply px-4 py-2;
+}
+
+.form-group input:focus,
+.form-group input[type='text']:focus,
+.form-group input[type='email']:focus,
+.form-group input[type='url']:focus,
+.form-group input[type='password']:focus,
+.form-group input[type='number']:focus,
+.form-group input[type='date']:focus,
+.form-group input[type='datetime-local']:focus,
+.form-group input[type='month']:focus,
+.form-group input[type='search']:focus,
+.form-group input[type='tel']:focus,
+.form-group input[type='time']:focus,
+.form-group input[type='week']:focus,
+.form-group input[multiple]:focus,
+.form-group textarea:focus,
+.form-group select:focus,
+.form-group input:focus .form-control:focus {
+  box-shadow: 0 0 0 2px rgba(62, 207, 142, 0.1);
+}
+
 @layer base {
   * {
     @apply border-border;
