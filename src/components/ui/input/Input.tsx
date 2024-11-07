@@ -122,10 +122,6 @@ function Input({
     }
   }, []);
 
-  // useEffect(() => {
-  //   error = touched && touched[id] ? error : undefined
-  // }, [errors, touched])
-
   function _onCopy(value: any) {
     navigator.clipboard.writeText(value)?.then(
       function () {

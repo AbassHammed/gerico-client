@@ -3,18 +3,19 @@
 import React from 'react';
 
 import { IIssue } from '@/types';
-import { AlertCircle, FileText, Key, User } from 'lucide-react';
-
-import { Badge } from '../ui-patterns/shadcn/ui/badge';
-import { Button } from '../ui-patterns/shadcn/ui/button';
 import {
+  Badge,
+  Button_Shadcn as Button,
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '../ui-patterns/shadcn/ui/dialog';
+} from '@ui';
+import { AlertCircle, FileText, Key, User } from 'lucide-react';
+
+import '../ui-patterns/shadcn/ui/dialog';
 
 function IssueIcon({ type }: { type: IIssue['type'] }) {
   switch (type) {

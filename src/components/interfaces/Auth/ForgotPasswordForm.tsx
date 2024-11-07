@@ -1,12 +1,14 @@
+'use client';
+
 import { useRouter } from 'next/navigation';
 
 import { useForgotPassword } from '@/hooks/useForgotPassword';
 import { Button, Form, Input } from '@ui';
 import { toast } from 'sonner';
-import { object, string } from 'zod';
+import { object, string } from 'yup';
 
 const forgotPasswordSchema = object({
-  email: string({ required_error: 'Email is required' }).email('Must be a valid email'),
+  email: string().email('Must be a valid email').required('Email is required'),
 });
 
 const ForgotPasswordForm = () => {
@@ -34,31 +36,29 @@ const ForgotPasswordForm = () => {
       initialValues={{ email: '' }}
       validationSchema={forgotPasswordSchema}
       onSubmit={onForgotPassword}>
-      {() => (
-        <div className="flex flex-col pt-4 space-y-4">
-          <Input
-            id="email"
-            name="email"
-            type="email"
-            label="Email"
-            placeholder="you@example.com"
-            disabled={loading}
-            autoComplete="email"
-          />
+      <div className="flex flex-col pt-4 space-y-4">
+        <Input
+          id="email"
+          name="email"
+          type="email"
+          label="Email"
+          placeholder="you@example.com"
+          disabled={loading}
+          autoComplete="email"
+        />
 
-          <div className="border-t border-overlay-border" />
+        <div className="border-t border-overlay-border" />
 
-          <Button
-            block
-            form="forgot-password-form"
-            htmlType="submit"
-            size="medium"
-            disabled={loading}
-            loading={loading}>
-            Send Reset Email
-          </Button>
-        </div>
-      )}
+        <Button
+          block
+          form="forgot-password-form"
+          htmlType="submit"
+          size="medium"
+          disabled={loading}
+          loading={loading}>
+          Send Reset Email
+        </Button>
+      </div>
     </Form>
   );
 };

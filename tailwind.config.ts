@@ -19,6 +19,7 @@ module.exports = {
     },
     extend: {
       colors: {
+        studio: 'hsl(var(--colors-gray-light-200))',
         'brand-100': '#b3cde0',
         'brand-200': '#6497b1',
         'brand-300': '#005b96',

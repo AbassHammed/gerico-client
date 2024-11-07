@@ -3,9 +3,9 @@ import { Inter } from 'next/font/google';
 
 import { Toaster } from 'sonner';
 
-import './globals.css';
+import './styles/globals.css';
 
-import SWRLayout from '@/components/swr-layout';
+import SWRLayout from '@/components/layouts/swr-layout';
 import { siteConfig } from '@/config/site';
 
 const inter = Inter({ subsets: ['latin'] });

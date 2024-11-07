@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -5,11 +7,11 @@ import useLogin from '@/hooks/useLogin';
 import { buildPathWithParams } from '@/lib/utils';
 import { Button, Form, Input } from '@ui';
 import { toast } from 'sonner';
-import { object, string } from 'zod';
+import { object, string } from 'yup';
 
 const signInSchema = object({
-  email: string({ required_error: 'Email is required' }).email('Must be a valid email'),
-  password: string({ required_error: 'Password is required' }),
+  email: string().email('Must be a valid email').required('Email is required'),
+  password: string().required('Password is required'),
 });
 
 const SignInForm = () => {
@@ -69,7 +71,7 @@ const SignInForm = () => {
 
           {/* positioned using absolute instead of labelOptional prop so tabbing between inputs works smoothly */}
           <Link
-            href="/forgot-password"
+            href="/auth-2/forgot-password"
             className="absolute top-0 right-0 text-sm text-foreground-lighter">
             Forgot Password?
           </Link>
