@@ -34,7 +34,7 @@ export {
 } from './shadcn/ui/popover';
 
 export {
-  Select as Select_Shadcn_,
+  Select as Select_Shadcn,
   SelectContent as SelectContent_Shadcn,
   SelectGroup as SelectGroup_Shadcn,
   SelectItem as SelectItem_Shadcn,
@@ -60,7 +60,7 @@ export {
   BreadcrumbSeparator as BreadcrumbSeparator_Shadcn,
 } from './shadcn/ui/breadcrumb';
 
-export { Textarea as TextArea_Shadcn } from './shadcn/ui/textarea';
+export { TextArea as TextArea_Shadcn } from './shadcn/ui/textarea';
 
 export { Label as Label_Shadcn } from './shadcn/ui/label';
 

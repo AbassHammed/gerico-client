@@ -1,7 +1,12 @@
+import { Metadata } from 'next';
 import Link from 'next/link';
 
 import ForgotPasswordForm from '@/components/interfaces/Auth/ForgotPasswordForm';
 import AuthLayout from '@/components/layouts/authLayout';
+
+export const metadata: Metadata = {
+  title: 'Mot de pass oublié',
+};
 
 const ForgotPasswordPage = () => (
   <AuthLayout
@@ -12,9 +17,8 @@ const ForgotPasswordPage = () => (
     </div>
 
     <div className="my-8 self-center text-sm">
-      <span className="text-foreground-light">Already have an account?</span>{' '}
-      <Link href="/sign-in" className="underline hover:text-foreground-light">
-        Sign In
+      <Link href="/auth-2/sign-in" className="underline hover:text-foreground-light">
+        Annuler
       </Link>
     </div>
   </AuthLayout>

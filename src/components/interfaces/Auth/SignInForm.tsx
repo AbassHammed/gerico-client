@@ -69,7 +69,6 @@ const SignInForm = () => {
             autoComplete="current-password"
           />
 
-          {/* positioned using absolute instead of labelOptional prop so tabbing between inputs works smoothly */}
           <Link
             href="/auth-2/forgot-password"
             className="absolute top-0 right-0 text-sm text-foreground-lighter">

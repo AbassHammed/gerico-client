@@ -47,8 +47,6 @@ const ForgotPasswordForm = () => {
           autoComplete="email"
         />
 
-        <div className="border-t border-overlay-border" />
-
         <Button
           block
           form="forgot-password-form"

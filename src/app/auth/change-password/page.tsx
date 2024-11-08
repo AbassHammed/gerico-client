@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
@@ -58,12 +58,12 @@ export default function ChangeDefaultPasswordForm() {
   const [isPasswordHidden, setPasswordHidden] = useState(true);
   const { change, loading } = useChangeDefaultPassword();
 
-  useEffect(() => {
-    const token = sessionStorage.getItem('token');
-    if (!token) {
-      router.push('/auth');
-    }
-  }, []);
+  // useEffect(() => {
+  //   const token = sessionStorage.getItem('token');
+  //   if (!token) {
+  //     router.push('/auth');
+  //   }
+  // }, []);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {

@@ -23,7 +23,14 @@ const AuthLayout = ({
         <div className="flex flex-shrink-0 flex-grow items-center lg:flex-grow-0">
           <div className="flex w-full items-center justify-between md:w-auto">
             <Link href={'/'}>
-              <Image src="/app/gerico-logo-wordmark.svg" alt="" height={24} width={120} />
+              <Image
+                src="/app/gerico-logo-wordmark.svg"
+                alt=""
+                height={24}
+                width={120}
+                quality={95}
+                priority
+              />
             </Link>
           </div>
         </div>
@@ -42,8 +49,8 @@ const AuthLayout = ({
         {children}
 
         {showDisclaimer && (
-          <div className="sm:text-center">
-            <p className="text-xs text-foreground-lighter sm:mx-auto sm:max-w-sm">
+          <div className="sm:text-center mt-8 flex items-center justify-center">
+            <p className="text-xs text-foreground-lighter sm:mx-auto sm:max-w-sm text-center">
               By continuing, you agree to Gérico's{' '}
               <Link href="#" className="underline hover:text-foreground-light">
                 Terms of Service
