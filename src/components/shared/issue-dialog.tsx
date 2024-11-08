@@ -15,8 +15,6 @@ import {
 } from '@ui';
 import { AlertCircle, FileText, Key, User } from 'lucide-react';
 
-import '../ui-patterns/shadcn/ui/dialog';
-
 function IssueIcon({ type }: { type: IIssue['type'] }) {
   switch (type) {
     case 'auth':

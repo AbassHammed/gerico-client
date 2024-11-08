@@ -1,11 +1,14 @@
 'use client';
 
+import { useState } from 'react';
+
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import useLogin from '@/hooks/useLogin';
 import { buildPathWithParams } from '@/lib/utils';
 import { Button, Form, Input } from '@ui';
+import { Eye, EyeOff } from 'lucide-react';
 import { toast } from 'sonner';
 import { object, string } from 'yup';
 
@@ -17,6 +20,7 @@ const signInSchema = object({
 const SignInForm = () => {
   const router = useRouter();
   const { login, loading } = useLogin();
+  const [passwordHidden, setPasswordHidden] = useState(true);
 
   const onSignIn = async ({ email, password }: { email: string; password: string }) => {
     const toastId = toast.loading('Signing in...');
@@ -62,11 +66,19 @@ const SignInForm = () => {
           <Input
             id="password"
             name="password"
-            type="password"
+            type={passwordHidden ? 'password' : 'text'}
             label="Password"
             placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
             disabled={loading}
             autoComplete="current-password"
+            actions={
+              <Button
+                icon={passwordHidden ? <Eye /> : <EyeOff />}
+                type="default"
+                className="!mr-1"
+                onClick={() => setPasswordHidden(prev => !prev)}
+              />
+            }
           />
 
           <Link

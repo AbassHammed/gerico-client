@@ -1,4 +1,4 @@
-import { SupportForm } from '@/components/layouts/support/supportForm';
+import { SupportForm } from '@/components/interfaces/support/supportForm';
 import SVG from 'react-inlinesvg';
 
 const SupportPage = () => (
