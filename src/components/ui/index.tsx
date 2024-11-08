@@ -2,6 +2,7 @@
 export { Button, buttonVariants } from './button';
 export { Form } from './form';
 export { Input } from './input';
+export { default as InformationBox } from './InformationBox';
 
 // Shadcn
 export * from './shadcn/ui/dropdown-menu';
@@ -25,6 +26,12 @@ export {
   FormMessage as FormMessage_Shadcn,
   FormField as FormField_Shadcn,
 } from './shadcn/ui/form';
+
+export {
+  Alert as Alert_Shadcn,
+  AlertTitle as AlertTitle_Shadcn,
+  AlertDescription as AlertDescription_Shadcn,
+} from './shadcn/ui/alert';
 
 export {
   Popover as Popover_Shadcn,

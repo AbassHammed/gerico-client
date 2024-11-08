@@ -11,6 +11,7 @@ import {
 } from '@/components/ui';
 import { FormItemLayout } from '@/components/ui/form/FormItemLayout';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { setCookie } from 'cookies-next';
 import { Eye, EyeOff } from 'lucide-react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -46,6 +47,7 @@ export const ChangeDefaultPasswordForm = () => {
   const { password, confirmPassword } = form.watch();
 
   const onSubmit: SubmitHandler<z.infer<typeof FormSchema>> = async values => {
+    setCookie('key', 'value');
     console.error(values);
   };
 
@@ -53,7 +55,7 @@ export const ChangeDefaultPasswordForm = () => {
     <Form_Shadcn {...form}>
       <form
         id="change-default-password-form"
-        className="flex flex-col gap-y-8"
+        className="flex flex-col gap-y-4"
         onSubmit={form.handleSubmit(onSubmit)}>
         <FormField_Shadcn
           name="password"

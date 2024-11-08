@@ -1,5 +1,11 @@
+import { Metadata } from 'next';
+import Image from 'next/legacy/image';
+
 import { SupportForm } from '@/components/interfaces/support/supportForm';
-import SVG from 'react-inlinesvg';
+
+export const metadata: Metadata = {
+  title: 'Support',
+};
 
 const SupportPage = () => (
   <div className="relative flex overflow-y-auto overflow-x-hidden">
@@ -7,7 +13,7 @@ const SupportPage = () => (
       <div className="space-y-12 py-8">
         <div className="flex flex-col  justify-start items-start sm:items-center gap-y-2">
           <div className="flex items-center space-x-3">
-            <SVG src={`/app/gerico-logo-icon.svg`} className="h-5 w-5" />
+            <Image src={`/app/gerico-logo-icon.svg`} width={20} height={20} priority />
             <h1 className="m-0 text-lg">Gérico support</h1>
           </div>
         </div>
