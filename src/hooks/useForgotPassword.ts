@@ -1,5 +1,6 @@
 'use client';
 
+import { setCookie } from 'cookies-next';
 import useSWRMutation from 'swr/mutation';
 
 async function forgotPassword(url: string, { arg }: { arg: { email: string } }) {
@@ -16,7 +17,7 @@ async function forgotPassword(url: string, { arg }: { arg: { email: string } }) 
     }
 
     const { uid, sent } = (await response.json()) as { uid: string; sent: boolean };
-    sessionStorage.setItem('t_uid', uid);
+    setCookie('t_uid', uid);
     return sent;
   } catch (error: any) {
     throw new Error(error.message);

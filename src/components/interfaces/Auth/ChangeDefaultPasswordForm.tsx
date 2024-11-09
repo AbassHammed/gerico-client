@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 
+import { useRouter } from 'next/navigation';
+
 import {
   Button,
   Form_Shadcn,
@@ -10,19 +12,22 @@ import {
   Input_Shadcn,
 } from '@/components/ui';
 import { FormItemLayout } from '@/components/ui/form/FormItemLayout';
+import useChangeDefaultPassword from '@/hooks/useChangePassword';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { setCookie } from 'cookies-next';
 import { Eye, EyeOff } from 'lucide-react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { passwordSchema } from './Auth.utils';
 import PasswordConditionsHelper from './PasswordConditionsHelper';
 
 export const ChangeDefaultPasswordForm = () => {
+  const { change, loading } = useChangeDefaultPassword();
   const [passwordHidden, setPasswordHidden] = useState(true);
   const [passwordHidden1, setPasswordHidden1] = useState(true);
   const [showConditions, setShowConditions] = useState<'password' | 'confirmPassword' | null>(null);
+  const router = useRouter();
 
   const FormSchema = z
     .object({
@@ -47,8 +52,14 @@ export const ChangeDefaultPasswordForm = () => {
   const { password, confirmPassword } = form.watch();
 
   const onSubmit: SubmitHandler<z.infer<typeof FormSchema>> = async values => {
-    setCookie('key', 'value');
-    console.error(values);
+    try {
+      await change(values);
+      router.push('/dashboard');
+    } catch (error: any) {
+      toast.error('Unknown Error', {
+        description: error.message,
+      });
+    }
   };
 
   return (
@@ -71,6 +82,7 @@ export const ChangeDefaultPasswordForm = () => {
                     type={passwordHidden ? 'password' : 'text'}
                     aria-label="Password"
                     autoComplete="new-password"
+                    disabled={loading}
                     onFocus={() => setShowConditions('password')}
                     onBlur={() => setShowConditions(null)}
                     placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
@@ -103,6 +115,7 @@ export const ChangeDefaultPasswordForm = () => {
                     type={passwordHidden1 ? 'password' : 'text'}
                     aria-label="Confirm Password"
                     autoComplete="new-password"
+                    disabled={loading}
                     onFocus={() => setShowConditions('confirmPassword')}
                     onBlur={() => setShowConditions(null)}
                     placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
@@ -134,7 +147,7 @@ export const ChangeDefaultPasswordForm = () => {
           form="change-default-password-form"
           htmlType="submit"
           size={'large'}
-          disabled={confirmPassword.length === 0 || password.length === 0}>
+          disabled={confirmPassword.length === 0 || password.length === 0 || loading}>
           Change password
         </Button>
       </form>

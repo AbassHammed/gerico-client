@@ -1,6 +1,7 @@
 'use client';
 
 import { ResetPasswordType } from '@/types';
+import { deleteCookie } from 'cookies-next';
 import useSWRMutation from 'swr/mutation';
 
 async function resetPass(url: string, { arg }: { arg: ResetPasswordType }) {
@@ -17,7 +18,7 @@ async function resetPass(url: string, { arg }: { arg: ResetPasswordType }) {
     }
 
     const { result } = (await response.json()) as { result: true };
-    sessionStorage.removeItem('t_uid');
+    deleteCookie('t_uid');
     return result;
   } catch (error: any) {
     throw new Error(error.message);

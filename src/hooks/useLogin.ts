@@ -1,6 +1,7 @@
 'use client';
 
 import { ILoginInputs } from '@/types';
+import { setCookie } from 'cookies-next';
 import useSWRMutation from 'swr/mutation';
 
 function parseUserAgent(ua: string) {
@@ -49,7 +50,7 @@ async function sendRequest(
     }
 
     const { token, code, user } = await response.json();
-    sessionStorage.setItem('token', token);
+    setCookie('auth_token', token);
 
     // there are only three case where a `code` is being returned from the back
     // 1&2. when the password is incorrect or email not found in the db in which case the status code is 400 so `!response.ok` will pass and an error will be thrown

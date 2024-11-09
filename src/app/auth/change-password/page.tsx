@@ -1,169 +1,27 @@
-'use client';
+import { Metadata } from 'next';
+import Link from 'next/link';
 
-import React, { useState } from 'react';
+import { ChangeDefaultPasswordForm } from '@/components/interfaces/Auth/ChangeDefaultPasswordForm';
+import AuthLayout from '@/components/layouts/authLayout';
 
-import { useRouter } from 'next/navigation';
+export const metadata: Metadata = {
+  title: 'Changer le mot de passe par default',
+};
 
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/shadcn/ui/form';
-import { Input } from '@/components/ui/shadcn/ui/input';
-import useChangeDefaultPassword from '@/hooks/useChangePassword';
-import { IChangePasswordInput } from '@/types';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Eye, EyeOff } from 'lucide-react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import { z } from 'zod';
+const ChangeDefaultPassword = () => (
+  <AuthLayout
+    heading="Reset Your Password"
+    subheading="Type in your email and we'll send you a link to reset your password">
+    <div className="flex flex-col gap-4">
+      <ChangeDefaultPasswordForm />
+    </div>
 
-import AuthButton from '../components/button';
+    <div className="my-8 self-center text-sm">
+      <Link href="/auth-2/sign-in" className="underline hover:text-foreground-light">
+        Annuler
+      </Link>
+    </div>
+  </AuthLayout>
+);
 
-export const passwordSchema = z
-  .string()
-  .min(8, { message: 'Votre mot de passe doit contenir au moins 8 caractères.' })
-  .max(16, { message: 'Votre mot de passe ne peut pas dépasser 16 caractères.' })
-  .refine(motDePasse => /[A-Z]/.test(motDePasse), {
-    message: 'Votre mot de passe doit contenir au moins une majuscule.',
-  })
-  .refine(motDePasse => /[a-z]/.test(motDePasse), {
-    message: 'Votre mot de passe doit contenir au moins une minuscule.',
-  })
-  .refine(motDePasse => /[0-9]/.test(motDePasse), {
-    message: 'Votre mot de passe doit contenir au moins un chiffre.',
-  })
-  .refine(motDePasse => /[!@#$%^&*]/.test(motDePasse), {
-    message: 'Votre mot de passe doit contenir au moins un caractère spécial.',
-  });
-
-const changeDefaultPasswordFormSchema = z
-  .object({
-    password: passwordSchema,
-    confirmPassword: passwordSchema,
-  })
-  .refine(mdp => mdp.confirmPassword === mdp.password, {
-    message: 'Les mots de passe ne correspondent pas.',
-    path: ['confirmPassword'],
-  });
-
-type IChangeDefaultPasswordFormValues = z.infer<typeof changeDefaultPasswordFormSchema>;
-
-export default function ChangeDefaultPasswordForm() {
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const router = useRouter();
-  const [isPasswordHidden, setPasswordHidden] = useState(true);
-  const { change, loading } = useChangeDefaultPassword();
-
-  // useEffect(() => {
-  //   const token = sessionStorage.getItem('token');
-  //   if (!token) {
-  //     router.push('/auth');
-  //   }
-  // }, []);
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-    }
-  };
-
-  const defaultValues: Partial<IChangeDefaultPasswordFormValues> = {
-    password: '',
-    confirmPassword: '',
-  };
-
-  const form = useForm<IChangeDefaultPasswordFormValues>({
-    resolver: zodResolver(changeDefaultPasswordFormSchema),
-    defaultValues,
-  });
-
-  const handleChangePassword = async (inputs: IChangePasswordInput) => {
-    setIsLoading(true);
-    try {
-      await change(inputs);
-      router.push('/dashboard');
-    } catch (error: any) {
-      toast.error('Unknown Error', {
-        description: error.message,
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  return (
-    <main className="w-full h-full flex flex-col items-center justify-center md:px-4">
-      <div className="w-full space-y-6 ">
-        <div className="text-center">
-          <div className="mt-5 space-y-2">
-            <h3 className="text-3xl sm:text-3xl">Changer mot de passe</h3>
-          </div>
-        </div>
-        <div className="grid gap-6">
-          <Form {...form}>
-            <form className="space-y-4" onSubmit={form.handleSubmit(handleChangePassword)}>
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="********"
-                        type={isPasswordHidden ? 'password' : 'text'}
-                        autoComplete="off"
-                        {...field}
-                        onKeyDown={handleKeyDown}
-                        className="h-12"
-                        disabled={isLoading || loading}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="confirmPassword"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Confirm password</FormLabel>
-                    <FormControl>
-                      <div className="relative mt-2">
-                        <button
-                          tabIndex={-1}
-                          type="button"
-                          className="text-gray-400 absolute right-3 inset-y-0 my-auto active:text-gray-600"
-                          onClick={() => setPasswordHidden(!isPasswordHidden)}>
-                          {isPasswordHidden ? <Eye /> : <EyeOff />}
-                        </button>
-                        <Input
-                          placeholder="********"
-                          type={isPasswordHidden ? 'password' : 'text'}
-                          autoComplete="off"
-                          {...field}
-                          onKeyDown={handleKeyDown}
-                          className="h-12"
-                          disabled={isLoading || loading}
-                        />
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <AuthButton loading={isLoading || loading}>Changer</AuthButton>
-            </form>
-          </Form>
-        </div>
-      </div>
-    </main>
-  );
-}
+export default ChangeDefaultPassword;

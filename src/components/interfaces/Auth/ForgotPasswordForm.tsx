@@ -19,7 +19,7 @@ const ForgotPasswordForm = () => {
     try {
       await sendMail({ email });
       toast.success(
-        `If you registered using your email and password, you will receive a password reset email. The password reset link expires in 10 minutes.`,
+        `If you registered using your email and password, you will receive a password reset email.`,
       );
       router.push('/auth/reset-password');
     } catch (error: any) {

@@ -1,11 +1,12 @@
 'use client';
 
 import { IChangePasswordInput } from '@/types';
+import { getCookie, setCookie } from 'cookies-next';
 import useSWRMutation from 'swr/mutation';
 
 async function changePassword(url: string, { arg }: { arg: IChangePasswordInput }) {
   try {
-    const s_token = sessionStorage.getItem('token');
+    const s_token = getCookie('auth_token');
 
     if (!s_token) {
       throw new Error('User is not connected');
@@ -28,7 +29,7 @@ async function changePassword(url: string, { arg }: { arg: IChangePasswordInput 
     }
 
     const { token, user } = await response.json();
-    sessionStorage.setItem('token', token);
+    setCookie('auth_token', token);
     return user;
   } catch (error: any) {
     throw new Error(error.message);

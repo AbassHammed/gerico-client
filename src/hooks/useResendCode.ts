@@ -1,13 +1,14 @@
 'use client';
 
+import { getCookie } from 'cookies-next';
 import useSWRMutation from 'swr/mutation';
 
 async function sendReset_Code(url: string) {
   try {
-    const uid = sessionStorage.getItem('t_uid');
+    const uid = getCookie('t_uid');
 
     if (!uid) {
-      throw new Error('An error occured while sending infor to the server, kindly retry the reset');
+      throw new Error('An error occured while sending info to the server, kindly retry the reset');
     }
 
     const response = await fetch(url, {
