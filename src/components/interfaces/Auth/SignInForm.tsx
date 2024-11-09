@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import useLogin from '@/hooks/useLogin';
-import { buildPathWithParams } from '@/lib/utils';
 import { Button, Form, Input } from '@ui';
 import { Eye, EyeOff } from 'lucide-react';
 import { toast } from 'sonner';
@@ -29,15 +28,13 @@ const SignInForm = () => {
       const { code } = await login({ email, password });
       if (code) {
         if (code !== 'DEFAULTPASS') {
-          toast.success(`You need to provide your second factor authentication`, { id: toastId });
-          const url = buildPathWithParams('/sign-in-mfa');
-          router.replace(url);
+          toast.success(`You used a default password, you have to change it `, { id: toastId });
+          router.replace('/auth/change-password');
           return;
         }
       }
 
       toast.success(`Signed in successfully!`, { id: toastId });
-      // since we're already on the /sign-in page, prevent redirect loops
       router.push('/home');
     } catch (error: any) {
       toast.error(`Failed to sign in: ${error.message}`, { id: toastId });

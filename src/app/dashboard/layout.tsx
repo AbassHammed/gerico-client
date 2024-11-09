@@ -3,12 +3,8 @@ import {
   BreadcrumbItem,
   BreadcrumbList,
   BreadcrumbPage,
-} from '@/components/ui-patterns/shadcn/ui/breadcrumb';
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from '@/components/ui-patterns/shadcn/ui/sidebar';
+} from '@/components/ui/shadcn/ui/breadcrumb';
+import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/shadcn/ui/sidebar';
 import { Separator } from '@radix-ui/react-separator';
 
 import SidebarLeft from './components/left-sidebar';

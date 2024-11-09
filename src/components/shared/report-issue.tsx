@@ -28,7 +28,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/shadcn/ui/select';
-import { Textarea } from '@/components/ui/shadcn/ui/textarea';
+import { TextArea } from '@/components/ui/shadcn/ui/textarea';
 import { useReportIssue } from '@/hooks/useIssues';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -152,7 +152,7 @@ export default function IssueReporter() {
                     <FormItem>
                       <FormLabel>Description</FormLabel>
                       <FormControl>
-                        <Textarea
+                        <TextArea
                           placeholder="Please include all information relevant to your issue."
                           className="resize-none"
                           {...field}
