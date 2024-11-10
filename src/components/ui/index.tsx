@@ -16,6 +16,8 @@ export * from './shadcn/ui/textarea';
 
 export * from './shadcn/ui/dialog';
 
+export { default as CalendarDateIcon } from './icons/CalendarDateIcon';
+
 export {
   useFormField as useFormField_Shadcn,
   Form as Form_Shadcn,

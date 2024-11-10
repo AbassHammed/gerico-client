@@ -1,8 +1,27 @@
+import { CalendarDateIcon } from '@/components/ui';
 import { IRoute } from '@/types';
 import { Plus, Settings, Users } from 'lucide-react';
 
 export const ICON_SIZE = 20;
 export const ICON_STROKE_WIDTH = 1.5;
+
+export const generateDateRoute = (): IRoute[] => {
+  const today = new Date();
+
+  return [
+    {
+      key: 'calendar',
+      label: today.toLocaleDateString(),
+      icon: (
+        <CalendarDateIcon
+          size={ICON_SIZE}
+          strokeWidth={ICON_STROKE_WIDTH}
+          date={today.getDate().toString()}
+        />
+      ),
+    },
+  ];
+};
 
 export const generateToolRoutes = (): IRoute[] => [
   {
