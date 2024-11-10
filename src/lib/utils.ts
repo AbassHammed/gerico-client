@@ -10,7 +10,7 @@ export const buildPathWithParams = (pathname: string) => {
   return `${pathname}?${searchParams.toString()}`;
 };
 
-export const getReturnToPath = (fallback = '/projects') => {
+export const getReturnToPath = (fallback = '/home') => {
   const searchParams = new URLSearchParams(location.search);
 
   let returnTo = searchParams.get('returnTo') ?? fallback;
@@ -25,7 +25,6 @@ export const getReturnToPath = (fallback = '/projects') => {
 
   let validReturnTo;
 
-  // only allow returning to internal pages. e.g. /projects
   try {
     // if returnTo is a relative path, this will throw an error
     new URL(returnTo);
@@ -42,3 +41,15 @@ export const getReturnToPath = (fallback = '/projects') => {
 
   return validReturnTo + (remainingSearchParams ? `?${remainingSearchParams}` : '');
 };
+
+/**
+ * Converts string to KebabCase
+ *
+ * @param {string} string
+ * @returns {string} A kebabized string
+ */
+export const toKebabCase = (string: string): string =>
+  string
+    .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+    .toLowerCase()
+    .trim();
