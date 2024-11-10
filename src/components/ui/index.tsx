@@ -3,6 +3,9 @@ export { Button, buttonVariants } from './button';
 export { Form } from './form';
 export { Input } from './input';
 export { default as InformationBox } from './InformationBox';
+export { default as CalendarDateIcon } from './icons/CalendarDateIcon';
+export { default as User } from './icons/user';
+export { default as Home } from './icons/home';
 
 // Shadcn
 export * from './shadcn/ui/dropdown-menu';
@@ -16,7 +19,17 @@ export * from './shadcn/ui/textarea';
 
 export * from './shadcn/ui/dialog';
 
-export { default as CalendarDateIcon } from './icons/CalendarDateIcon';
+export {
+  Command as Command_Shadcn,
+  CommandDialog as CommandDialog_Shadcn,
+  CommandEmpty as CommandEmpty_Shadcn,
+  CommandGroup as CommandGroup_Shadcn,
+  CommandInput as CommandInput_Shadcn,
+  CommandItem as CommandItem_Shadcn,
+  CommandList as CommandList_Shadcn,
+  CommandSeparator as CommandSeperator_Shadcn,
+  CommandShortcut as CommandShortcut_Shadcn,
+} from './shadcn/ui/command';
 
 export {
   useFormField as useFormField_Shadcn,

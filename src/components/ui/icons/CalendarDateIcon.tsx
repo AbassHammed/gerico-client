@@ -2,14 +2,12 @@ import { SVGProps } from 'react';
 
 interface CalendarDateIconProps extends SVGProps<SVGSVGElement> {
   date?: string;
-  month?: string;
   strokeWidth?: number;
   size?: number;
 }
 
 export default function CalendarDateIcon({
   date = '20',
-  month = 'AUG',
   strokeWidth = 1,
   size = 24,
   ...props
@@ -17,8 +15,7 @@ export default function CalendarDateIcon({
   const width = size;
   const height = size;
   const padding = strokeWidth;
-  const fontSize = Math.floor(width / 3);
-  const lineY = height * 0.6;
+  const fontSize = Math.floor(width / 1.5);
 
   return (
     <svg
@@ -37,33 +34,16 @@ export default function CalendarDateIcon({
         stroke="currentColor"
         strokeWidth={strokeWidth}
       />
-      <line
-        x1={padding / 2}
-        y1={lineY}
-        x2={width - padding / 2}
-        y2={lineY}
-        stroke="currentColor"
-        strokeWidth={strokeWidth}
-      />
+
       <text
         x="50%"
-        y={lineY / 2}
+        y="50%"
         fontSize={fontSize}
         fontWeight="bold"
         textAnchor="middle"
         fill="currentColor"
         dominantBaseline="central">
         {date}
-      </text>
-      <text
-        x="50%"
-        y={lineY + (height - lineY) / 2}
-        fontSize={fontSize * 0.7}
-        fontWeight="normal"
-        textAnchor="middle"
-        fill="currentColor"
-        dominantBaseline="central">
-        {month}
       </text>
     </svg>
   );

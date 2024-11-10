@@ -161,3 +161,15 @@ input.form-control,
 * {
   box-sizing: border-box;
 }
+
+.text-area-text-sm {
+  textarea {
+    @apply text-sm;
+  }
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}

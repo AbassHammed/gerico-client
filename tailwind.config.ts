@@ -59,6 +59,7 @@ module.exports = {
       secondary: 'hsl(var(--border-secondary) / <alpha-value>)',
       overlay: 'hsl(var(--border-overlay) / <alpha-value>)',
       control: 'hsl(var(--border-control) / <alpha-value>)',
+      default: 'hsl(var(--border-default) / <alpha-value>)',
       alternative: 'hsl(var(--border-alternative) / <alpha-value>)',
       strong: 'hsl(var(--border-strong) / <alpha-value>)',
       stronger: 'hsl(var(--border-stronger) / <alpha-value>)',
