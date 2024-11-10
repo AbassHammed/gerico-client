@@ -7,7 +7,7 @@ export const CATEGORY_OPTIONS = [
   {
     value: 'payslip',
     label: 'Abuse report',
-    description: 'Report abuse of a Supabase project or Supabase brand',
+    description: 'Report abuse ',
   },
   {
     value: 'leave',

@@ -1,3 +1,5 @@
+import { ReactNode } from 'react';
+
 export type ILoginInputs = {
   email: string;
   password: string;
@@ -38,4 +40,13 @@ export interface IIssue extends IIssueInput {
   issue_id: string;
   solved: boolean;
   issue_date: string;
+}
+
+export interface IRoute {
+  key: string;
+  label: string;
+  icon: ReactNode;
+  link?: string;
+  disabled?: boolean;
+  linkComponent?: ReactNode;
 }
