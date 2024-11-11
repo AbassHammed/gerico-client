@@ -1,11 +1,13 @@
 // private components
 export { Button, buttonVariants } from './button';
-export { Form } from './form';
+export * from './form';
 export { Input } from './input';
 export { default as InformationBox } from './InformationBox';
 export { default as CalendarDateIcon } from './icons/CalendarDateIcon';
 export { default as User } from './icons/user';
 export { default as Home } from './icons/home';
+export { Markdown } from './Markdown';
+export { default as InputNumber } from './inputNumber/InputNumber';
 
 // Shadcn
 export * from './shadcn/ui/dropdown-menu';
