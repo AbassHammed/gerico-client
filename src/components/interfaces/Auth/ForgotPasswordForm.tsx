@@ -36,27 +36,29 @@ const ForgotPasswordForm = () => {
       initialValues={{ email: '' }}
       validationSchema={forgotPasswordSchema}
       onSubmit={onForgotPassword}>
-      <div className="flex flex-col pt-4 space-y-4">
-        <Input
-          id="email"
-          name="email"
-          type="email"
-          label="Email"
-          placeholder="you@example.com"
-          disabled={loading}
-          autoComplete="email"
-        />
+      {() => (
+        <div className="flex flex-col pt-4 space-y-4">
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            label="Email"
+            placeholder="you@example.com"
+            disabled={loading}
+            autoComplete="email"
+          />
 
-        <Button
-          block
-          form="forgot-password-form"
-          htmlType="submit"
-          size="medium"
-          disabled={loading}
-          loading={loading}>
-          Send Reset Email
-        </Button>
-      </div>
+          <Button
+            block
+            form="forgot-password-form"
+            htmlType="submit"
+            size="medium"
+            disabled={loading}
+            loading={loading}>
+            Send Reset Email
+          </Button>
+        </div>
+      )}
     </Form>
   );
 };

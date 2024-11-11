@@ -374,6 +374,91 @@ export default {
     actions_container: 'absolute inset-y-0 right-0 pl-3 pr-1 flex space-x-1 items-center',
   },
 
+  listbox: {
+    base: `
+      block
+      box-border
+      w-full
+      rounded-md
+      shadow-sm
+      text-foreground
+      border
+      focus-visible:shadow-md
+      ${defaults.focus}
+      focus-visible:border-foreground-muted
+      focus-visible:ring-background-control
+      ${defaults.placeholder}
+      indent-px
+      transition-all
+      bg-none
+    `,
+    container: 'relative',
+    label: `truncate`,
+    variants: {
+      standard: `
+        bg-control
+        border border-control
+
+        aria-expanded:border-foreground-muted
+        aria-expanded:ring-border-muted
+        aria-expanded:ring-2
+        `,
+      error: `
+        bg-destructive-200
+        border border-destructive-500
+        focus:ring-destructive-400
+        placeholder:text-destructive-400
+       `,
+    },
+    options_container_animate: `
+      transition
+      data-open:animate-slide-down
+      data-open:opacity-1
+      data-closed:animate-slide-up
+      data-closed:opacity-0
+    `,
+    options_container: `
+      bg-overlay
+      shadow-lg
+      border border-solid
+      border-overlay max-h-60
+      rounded-md py-1 text-base
+      sm:text-sm z-10 overflow-hidden overflow-y-scroll
+
+      origin-dropdown
+      data-open:animate-dropdown-content-show
+      data-closed:animate-dropdown-content-hide
+    `,
+    with_icon: 'pl-2',
+    addOnBefore: `
+      w-full flex flex-row items-center space-x-3
+    `,
+    size: {
+      ...default__padding_and_text,
+    },
+    disabled: `opacity-50`,
+    actions_container: 'absolute inset-y-0 right-0 pl-3 pr-1 flex space-x-1 items-center',
+    chevron_container: 'absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none',
+    chevron: 'h-5 w-5 text-foreground-muted',
+    option: `
+      w-listbox
+      transition cursor-pointer select-none relative py-2 pl-3 pr-9
+      text-foreground-light
+      text-sm
+      hover:bg-border-overlay
+      focus:bg-border-overlay
+      focus:text-foreground
+      border-none
+      focus:outline-none
+    `,
+    option_active: `text-foreground bg-selection`,
+    option_disabled: `cursor-not-allowed opacity-60`,
+    option_inner: `flex items-center space-x-3`,
+    option_check: `absolute inset-y-0 right-0 flex items-center pr-3 text-brand`,
+    option_check_active: `text-brand`,
+    option_check_icon: `h-5 w-5`,
+  },
+
   sidepanel: {
     base: `
       z-50

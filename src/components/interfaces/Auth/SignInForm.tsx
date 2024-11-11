@@ -48,53 +48,55 @@ const SignInForm = () => {
       initialValues={{ email: '', password: '' }}
       validationSchema={signInSchema}
       onSubmit={onSignIn}>
-      <div className="flex flex-col gap-4">
-        <Input
-          id="email"
-          name="email"
-          type="email"
-          label="Email"
-          placeholder="you@example.com"
-          disabled={loading}
-          autoComplete="email"
-        />
-
-        <div className="relative">
+      {() => (
+        <div className="flex flex-col gap-4">
           <Input
-            id="password"
-            name="password"
-            type={passwordHidden ? 'password' : 'text'}
-            label="Password"
-            placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
+            id="email"
+            name="email"
+            type="email"
+            label="Email"
+            placeholder="you@example.com"
             disabled={loading}
-            autoComplete="current-password"
-            actions={
-              <Button
-                icon={passwordHidden ? <Eye /> : <EyeOff />}
-                type="default"
-                className="!mr-1"
-                onClick={() => setPasswordHidden(prev => !prev)}
-              />
-            }
+            autoComplete="email"
           />
 
-          <Link
-            href="/auth-2/forgot-password"
-            className="absolute top-0 right-0 text-sm text-foreground-lighter">
-            Forgot Password?
-          </Link>
-        </div>
+          <div className="relative">
+            <Input
+              id="password"
+              name="password"
+              type={passwordHidden ? 'password' : 'text'}
+              label="Password"
+              placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
+              disabled={loading}
+              autoComplete="current-password"
+              actions={
+                <Button
+                  icon={passwordHidden ? <Eye /> : <EyeOff />}
+                  type="default"
+                  className="!mr-1"
+                  onClick={() => setPasswordHidden(prev => !prev)}
+                />
+              }
+            />
 
-        <Button
-          block
-          form="signIn-form"
-          htmlType="submit"
-          size="large"
-          disabled={loading}
-          loading={loading}>
-          Sign In
-        </Button>
-      </div>
+            <Link
+              href="/auth/forgot-password"
+              className="absolute top-0 right-0 text-sm text-foreground-lighter">
+              Forgot Password?
+            </Link>
+          </div>
+
+          <Button
+            block
+            form="signIn-form"
+            htmlType="submit"
+            size="large"
+            disabled={loading}
+            loading={loading}>
+            Sign In
+          </Button>
+        </div>
+      )}
     </Form>
   );
 };
