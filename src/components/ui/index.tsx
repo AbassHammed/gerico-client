@@ -1,5 +1,6 @@
 // private components
 export { Button, buttonVariants } from './button';
+export type { ButtonProps } from './button';
 export * from './form';
 export { Input } from './input';
 export { default as InformationBox } from './InformationBox';
@@ -8,6 +9,7 @@ export { default as User } from './icons/user';
 export { default as Home } from './icons/home';
 export { Markdown } from './Markdown';
 export { default as InputNumber } from './inputNumber/InputNumber';
+export { default as Listbox } from './Listbox/Listbox';
 
 // Shadcn
 export * from './shadcn/ui/dropdown-menu';

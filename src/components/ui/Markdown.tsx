@@ -1,8 +1,8 @@
 import { cn } from '@/lib/utils';
-import { ReactMarkdown, ReactMarkdownOptions } from 'react-markdown/lib/react-markdown';
+import ReactMarkdown, { Options } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
-interface Props extends Omit<ReactMarkdownOptions, 'children' | 'node'> {
+interface Props extends Omit<Options, 'children' | 'node'> {
   className?: string;
   content: string;
   extLinks?: boolean;

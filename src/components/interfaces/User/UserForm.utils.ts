@@ -57,7 +57,6 @@ const userSchema = Yup.object({
     .min(0, 'Number of dependants must be at least 0'),
 });
 
-// Define a TypeScript type based on the schema
 export type UserSchemaType = Yup.InferType<typeof userSchema>;
 
 export const generateFormValues = (config: Partial<UserSchemaType> = {}): UserSchemaType => ({
