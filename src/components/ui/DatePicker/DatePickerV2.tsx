@@ -11,6 +11,7 @@ import {
   Separator,
 } from '@ui';
 import { format, isValid, parse } from 'date-fns';
+import { fr } from 'date-fns/locale';
 import dayjs from 'dayjs';
 import { Calendar as CalendarIcon } from 'lucide-react';
 
@@ -118,7 +119,7 @@ function _DatePicker({
               </div>
             </>
           )}
-          <Input value={inputValue} placeholder="MM/dd/yyyy" onChange={handleInputChange} />
+          <Input value={inputValue} placeholder="MM/DD/YYYY" onChange={handleInputChange} />
           <div className="rounded-md border">
             <Calendar
               mode="single"
@@ -126,6 +127,7 @@ function _DatePicker({
               selected={date}
               month={month}
               onMonthChange={setMonth}
+              locale={fr}
             />
           </div>
           <Separator />

@@ -17,7 +17,7 @@ const ChangeDefaultPassword = () => (
     </div>
 
     <div className="my-8 self-center text-sm">
-      <Link href="/auth-2/sign-in" className="underline hover:text-foreground-light">
+      <Link href="/auth/sign-in" className="underline hover:text-foreground-light">
         Annuler
       </Link>
     </div>

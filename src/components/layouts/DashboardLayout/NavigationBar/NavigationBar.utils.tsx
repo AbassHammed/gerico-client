@@ -7,11 +7,16 @@ export const ICON_STROKE_WIDTH = 1.5;
 
 export const generateDateRoute = (): IRoute[] => {
   const today = new Date();
+  const formattedDate = new Intl.DateTimeFormat('fr-FR', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+  }).format(today);
 
   return [
     {
       key: 'calendar',
-      label: today.toLocaleDateString(),
+      label: formattedDate,
       icon: (
         <CalendarDateIcon
           size={ICON_SIZE}

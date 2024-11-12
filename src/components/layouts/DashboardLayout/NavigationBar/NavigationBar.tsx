@@ -146,7 +146,7 @@ const NavigationBar = () => {
             <NavigationIconLink
               key={route.key}
               route={route}
-              isActive={activeRoute === route.key}
+              isActive={activeRoute === route.link}
               onClick={onCloseNavigationIconLink}
             />
           ))}
