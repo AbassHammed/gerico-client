@@ -10,3 +10,4 @@ export {
 } from './FormPanel';
 export { FormHeader } from './FormHeader';
 export { FormActions } from './FormActions';
+export { default as FormField } from './FormField';

@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 
-import { format } from 'date-fns';
 import { Clock } from 'lucide-react';
 
 import type { TimeSplitInputProps, TimeType } from './DatePicker.types';
@@ -21,7 +20,7 @@ const TimeSplitInput = ({
   const [focus, setFocus] = useState(false);
 
   function handleOnBlur() {
-    const _time = time;
+    const _time = { ...time };
 
     if (_time.HH.length === 1) {
       _time.HH = `0${_time.HH}`;
@@ -43,105 +42,76 @@ const TimeSplitInput = ({
       _time.ss = '00';
     }
 
-    let endTimeChanges = false;
-    const endTimePayload = endTime;
+    setTime(_time);
 
-    let startTimeChanges = false;
-    const startTimePayload = startTime;
+    if (
+      type !== 'default' &&
+      startDate &&
+      endDate &&
+      startTime &&
+      endTime &&
+      setStartTime &&
+      setEndTime
+    ) {
+      let endTimeChanges = false;
+      const endTimePayload = { ...endTime };
 
-    // Only run time conflicts if
-    // startDate and endDate are the same date
+      let startTimeChanges = false;
+      const startTimePayload = { ...startTime };
 
-    if (format(new Date(startDate), 'dd/mm/yyyy') === format(new Date(endDate), 'dd/mm/yyyy')) {
-      // checks if start time is ahead of end time
-
-      if (type === 'start') {
-        if (_time.HH && Number(_time.HH) > Number(endTime.HH)) {
-          endTimePayload.HH = _time.HH;
-          endTimeChanges = true;
+      if (startDate.toDateString() === endDate.toDateString()) {
+        if (type === 'start') {
+          if (Number(_time.HH) > Number(endTime.HH)) {
+            endTimePayload.HH = _time.HH;
+            endTimeChanges = true;
+          }
+          if (Number(_time.HH) >= Number(endTime.HH) && Number(_time.mm) > Number(endTime.mm)) {
+            endTimePayload.mm = _time.mm;
+            endTimeChanges = true;
+          }
+          if (
+            Number(_time.HH) >= Number(endTime.HH) &&
+            Number(_time.mm) >= Number(endTime.mm) &&
+            Number(_time.ss) > Number(endTime.ss)
+          ) {
+            endTimePayload.ss = _time.ss;
+            endTimeChanges = true;
+          }
         }
 
-        if (
-          // also check the hour
-          _time.HH &&
-          Number(_time.HH) >= Number(endTime.HH) &&
-          // check the minutes
-          _time.mm &&
-          Number(_time.mm) > Number(endTime.mm)
-        ) {
-          endTimePayload.mm = _time.mm;
-          endTimeChanges = true;
-        }
-
-        if (
-          // also check the hour
-          _time.HH &&
-          Number(_time.HH) >= Number(endTime.HH) &&
-          // check the minutes
-          _time.mm &&
-          Number(_time.mm) >= Number(endTime.mm) &&
-          // check the seconds
-          _time.ss &&
-          Number(_time.ss) > Number(endTime.ss)
-        ) {
-          endTimePayload.ss = _time.ss;
-          endTimeChanges = true;
-        }
-      }
-
-      if (type === 'end') {
-        if (_time.HH && Number(_time.HH) < Number(startTime.HH)) {
-          startTimePayload.HH = _time.HH;
-          startTimeChanges = true;
-        }
-
-        if (
-          // also check the hour
-          _time.HH &&
-          Number(_time.HH) <= Number(startTime.HH) &&
-          // check the minutes
-          _time.mm &&
-          Number(_time.mm) < Number(startTime.mm)
-        ) {
-          startTimePayload.mm = _time.mm;
-          startTimeChanges = true;
-        }
-
-        if (
-          // also check the hour
-          _time.HH &&
-          Number(_time.HH) <= Number(startTime.HH) &&
-          // check the minutes
-          _time.mm &&
-          Number(_time.mm) <= Number(startTime.mm) &&
-          // check the seconds
-          _time.ss &&
-          Number(_time.ss) < Number(startTime.ss)
-        ) {
-          startTimePayload.ss = _time.ss;
-          startTimeChanges = true;
+        if (type === 'end') {
+          if (Number(_time.HH) < Number(startTime.HH)) {
+            startTimePayload.HH = _time.HH;
+            startTimeChanges = true;
+          }
+          if (Number(_time.HH) <= Number(startTime.HH) && Number(_time.mm) < Number(startTime.mm)) {
+            startTimePayload.mm = _time.mm;
+            startTimeChanges = true;
+          }
+          if (
+            Number(_time.HH) <= Number(startTime.HH) &&
+            Number(_time.mm) <= Number(startTime.mm) &&
+            Number(_time.ss) < Number(startTime.ss)
+          ) {
+            startTimePayload.ss = _time.ss;
+            startTimeChanges = true;
+          }
         }
       }
-    }
 
-    setTime({ ..._time });
-
-    if (endTimeChanges) {
-      setEndTime({ ...endTimePayload });
-    }
-    if (startTimeChanges) {
-      setStartTime({ ...startTimePayload });
+      if (endTimeChanges) {
+        setEndTime(endTimePayload);
+      }
+      if (startTimeChanges) {
+        setStartTime(startTimePayload);
+      }
     }
 
     setFocus(false);
   }
 
   function handleOnChange(value: string, valueType: TimeType) {
-    const payload = {
-      HH: time.HH,
-      mm: time.mm,
-      ss: time.ss,
-    };
+    const payload = { ...time };
     if (value.length > 2) {
       return;
     }
@@ -153,21 +123,15 @@ const TimeSplitInput = ({
         }
         break;
       case 'mm':
-        if (value && Number(value) > 59) {
-          return;
-        }
-        break;
       case 'ss':
         if (value && Number(value) > 59) {
           return;
         }
         break;
-      default:
-        break;
     }
 
     payload[valueType] = value;
-    setTime({ ...payload });
+    setTime(payload);
   }
 
   const handleFocus = (event: React.FocusEvent<HTMLInputElement>) => {
@@ -176,7 +140,9 @@ const TimeSplitInput = ({
   };
 
   useEffect(() => {
-    handleOnBlur();
+    if (type !== 'default' && startDate && endDate) {
+      handleOnBlur();
+    }
   }, [startDate, endDate]);
 
   return (

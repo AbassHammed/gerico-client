@@ -3,6 +3,7 @@
 import {
   Form,
   FormActions,
+  FormField,
   FormHeader,
   FormPanel,
   FormSection,
@@ -13,6 +14,40 @@ import {
 } from '@ui';
 
 import { generateFormValues, userSchema, UserSchemaType } from './UserForm.utils';
+
+const ContractTypeOptions = [
+  {
+    label: 'CDI',
+    value: 'CDI',
+  },
+  {
+    label: 'CDD',
+    value: 'CDD',
+  },
+  {
+    label: 'Stage',
+    value: 'stage',
+  },
+];
+
+const MaritalStatusOptions = [
+  {
+    label: 'Marié',
+    value: 'marié',
+  },
+  {
+    label: 'Veuf',
+    value: 'veuf',
+  },
+  {
+    label: 'Divorcé',
+    value: 'divorcé',
+  },
+  {
+    label: 'Célibataire',
+    value: 'célibataire',
+  },
+];
 
 const UserForm = () => {
   const formId = 'auth-config-smtp-form';
@@ -28,7 +63,7 @@ const UserForm = () => {
       initialValues={initialValues}
       onSubmit={onSubmit}
       validationSchema={userSchema}>
-      {({ handleReset, values }: any) => {
+      {({ handleReset, values, setFieldValue }: any) => {
         const hasChanges = JSON.stringify(values) !== JSON.stringify(initialValues);
         // console.error(values);
 
@@ -138,6 +173,42 @@ const UserForm = () => {
                   <Input id="city" name="city" label="City" disabled={false} />
                   <Input id="postal_code" name="postal_code" label="Postal code" disabled={false} />
                   <Input id="country" name="country" label="Country" disabled={false} />
+                </FormSectionContent>
+              </FormSection>
+
+              <FormSection header={<FormSectionLabel>Contract Details</FormSectionLabel>}>
+                <FormSectionContent loading={false}>
+                  <FormField
+                    name="contract_type"
+                    properties={{
+                      type: 'select',
+                      title: 'Contract Type',
+                      enum: ContractTypeOptions,
+                    }}
+                    formValues={values}
+                    disabled={false}
+                    setFieldValue={setFieldValue}
+                  />
+
+                  <FormField
+                    name="marital_status"
+                    properties={{
+                      type: 'select',
+                      title: 'Marital Status',
+                      enum: MaritalStatusOptions,
+                    }}
+                    formValues={values}
+                    disabled={false}
+                    setFieldValue={setFieldValue}
+                  />
+
+                  <InputNumber
+                    id="dependants"
+                    size="small"
+                    label="Dependants"
+                    descriptionText="How many children do you have."
+                    disabled={false}
+                  />
                 </FormSectionContent>
               </FormSection>
             </FormPanel>

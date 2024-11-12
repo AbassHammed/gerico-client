@@ -10,11 +10,11 @@ export type DatePickerToFrom = { to: string | null; from: string | null };
 export interface TimeSplitInputProps {
   time: Time;
   setTime: (x: Time) => void;
-  type: 'start' | 'end';
-  setStartTime: (x: Time) => void;
-  setEndTime: (x: Time) => void;
-  startTime: Time;
-  endTime: Time;
-  startDate: any;
-  endDate: any;
+  type?: 'default' | 'start' | 'end';
+  setStartTime?: (x: Time) => void;
+  setEndTime?: (x: Time) => void;
+  startTime?: Time;
+  endTime?: Time;
+  startDate?: Date;
+  endDate?: Date;
 }

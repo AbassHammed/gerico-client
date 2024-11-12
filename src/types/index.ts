@@ -50,3 +50,9 @@ export interface IRoute {
   disabled?: boolean;
   linkComponent?: ReactNode;
 }
+
+export interface Enum {
+  label: string;
+  value: string;
+  icon?: string;
+}

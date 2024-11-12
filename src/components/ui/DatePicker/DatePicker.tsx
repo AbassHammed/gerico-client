@@ -191,8 +191,8 @@ function _DatePicker({
                         setTime={setStartTime}
                         setStartTime={setStartTime}
                         setEndTime={setEndTime}
-                        startDate={startDate}
-                        endDate={endDate}
+                        startDate={startDate!}
+                        endDate={endDate!}
                       />
                     </div>
                     <div
@@ -216,8 +216,8 @@ function _DatePicker({
                     setTime={setEndTime}
                     setStartTime={setStartTime}
                     setEndTime={setEndTime}
-                    startDate={startDate}
-                    endDate={endDate}
+                    startDate={startDate!}
+                    endDate={endDate!}
                   />
                 </div>
               </div>
