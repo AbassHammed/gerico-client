@@ -11,6 +11,7 @@ export { Markdown } from './Markdown';
 export { default as InputNumber } from './inputNumber/InputNumber';
 export { default as Listbox } from './Listbox/Listbox';
 export * from './DatePicker';
+export { default as Toggle } from './Toggle';
 
 // Shadcn
 export * from './shadcn/ui/dropdown-menu';
