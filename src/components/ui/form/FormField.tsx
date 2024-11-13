@@ -3,8 +3,7 @@
 import { useEffect, useState } from 'react';
 
 import type { Enum } from '@/types';
-import { Button, DatePickerV2, Input, InputNumber, Listbox } from '@ui';
-import dayjs from 'dayjs';
+import { Button, DatePickerV2, Input, InputNumber, Listbox, Toggle } from '@ui';
 import { Eye, EyeOff } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 
@@ -16,10 +15,6 @@ interface FormFieldProps {
   disabled?: boolean;
 }
 
-function formatDate(date: Date): string {
-  return dayjs(date).format('dddd, MMMM D, YYYY HH:mm:ss Z');
-}
-
 const FormField = ({
   name,
   properties,
@@ -29,7 +24,12 @@ const FormField = ({
 }: FormFieldProps) => {
   const [hidden, setHidden] = useState(!!properties.isSecret);
   const [dateAsText, setDateAsText] = useState(
-    formValues[name] ? formatDate(new Date(formValues[name])) : '',
+    new Intl.DateTimeFormat('fr-FR', {
+      weekday: 'long',
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric',
+    }).format(new Date()),
   );
 
   useEffect(() => {
@@ -80,8 +80,15 @@ const FormField = ({
               hideTime
               onChange={date => {
                 if (date) {
-                  setFieldValue(name, date.toLocaleDateString());
-                  setDateAsText(formatDate(new Date(date)));
+                  setFieldValue(name, date);
+                  setDateAsText(
+                    new Intl.DateTimeFormat('fr-FR', {
+                      weekday: 'long',
+                      day: '2-digit',
+                      month: 'long',
+                      year: 'numeric',
+                    }).format(date),
+                  );
                 } else {
                   setDateAsText('');
                   setFieldValue(name, '');
@@ -210,6 +217,27 @@ const FormField = ({
                 </ReactMarkdown>
               ) : null}
             </span>
+          }
+        />
+      );
+
+    case 'boolean':
+      return (
+        <Toggle
+          size="small"
+          id={name}
+          name={name}
+          disabled={disabled}
+          label={properties.title}
+          descriptionText={
+            properties.description ? (
+              <ReactMarkdown
+                unwrapDisallowed
+                disallowedElements={['p']}
+                className="form-field-markdown">
+                {properties.description}
+              </ReactMarkdown>
+            ) : null
           }
         />
       );

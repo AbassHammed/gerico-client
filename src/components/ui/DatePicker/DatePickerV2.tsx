@@ -29,7 +29,7 @@ export interface DatePickerProps {
 
 const DATE_DEFAULT = new Date();
 
-const TIME_DEFAULT = { HH: '23', mm: '59', ss: '59' };
+const TIME_DEFAULT = { HH: '00', mm: '00', ss: '00' };
 
 function _DatePicker({
   onChange,

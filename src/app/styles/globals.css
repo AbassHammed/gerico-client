@@ -173,3 +173,9 @@ input.form-control,
   height: 0;
   display: none;
 }
+
+.form-field-markdown {
+  a {
+    @apply text-brand transition opacity-75 hover:opacity-100 underline;
+  }
+}

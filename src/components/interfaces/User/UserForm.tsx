@@ -11,6 +11,7 @@ import {
   FormSectionLabel,
   Input,
   InputNumber,
+  Toggle,
 } from '@ui';
 
 import { generateFormValues, userSchema, UserSchemaType } from './UserForm.utils';
@@ -208,6 +209,39 @@ const UserForm = () => {
                     label="Dependants"
                     descriptionText="How many children do you have."
                     disabled={false}
+                  />
+                </FormSectionContent>
+              </FormSection>
+
+              <FormSection header={<FormSectionLabel>Refresh Tokens</FormSectionLabel>}>
+                <FormSectionContent loading={false}>
+                  <Toggle
+                    id="is_admin"
+                    size="small"
+                    label="Detect and revoke potentially compromised refresh tokens"
+                    layout="flex"
+                    descriptionText="Prevent replay attacks from potentially compromised refresh tokens. Recommendation: ON."
+                    disabled={false}
+                  />
+                  <FormField
+                    name="date_of_birth"
+                    properties={{
+                      type: 'datetime',
+                      title: 'Date of birth',
+                    }}
+                    formValues={values}
+                    disabled={false}
+                    setFieldValue={setFieldValue}
+                  />
+                  <FormField
+                    name="hire_date"
+                    properties={{
+                      type: 'datetime',
+                      title: 'Hire date',
+                    }}
+                    formValues={values}
+                    disabled={false}
+                    setFieldValue={setFieldValue}
                   />
                 </FormSectionContent>
               </FormSection>
