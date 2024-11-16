@@ -1,5 +1,7 @@
 'use client';
 
+import { useGetUser } from '@/hooks/getUser';
+import { useCreateUser } from '@/hooks/useCreateUser';
 import {
   Form,
   FormActions,
@@ -13,6 +15,7 @@ import {
   InputNumber,
   Toggle,
 } from '@ui';
+import { toast } from 'sonner';
 
 import { generateFormValues, userSchema, UserSchemaType } from './UserForm.utils';
 
@@ -72,9 +75,23 @@ const CivilityOptions = [
 const UserForm = () => {
   const formId = 'auth-config-smtp-form';
   const initialValues = generateFormValues();
+  const { user } = useGetUser();
+  const { createUser } = useCreateUser();
 
-  const onSubmit = (inputs: UserSchemaType) => {
-    console.error(inputs);
+  const onSubmit = async (inputs: UserSchemaType) => {
+    // this will probably never happen since the user is required to be connected to access this page
+    if (!user) {
+      toast.error('You are not connected');
+      return;
+    }
+
+    try {
+      const company_id = user.company_id;
+      const message = await createUser({ ...inputs, company_id });
+      toast.success(message);
+    } catch (error: any) {
+      toast.error(`Failed to create user: ${error.message ? error.message : 'An error occurred'}`);
+    }
   };
 
   return (
@@ -160,15 +177,15 @@ const UserForm = () => {
                 disabled={false}>
                 <FormSectionContent loading={false}>
                   <Input
-                    name="job"
-                    id="job"
+                    name="job_title"
+                    id="job_title"
                     label="Job title"
                     placeholder="Manager"
                     disabled={false}
                   />
                   <Input
-                    name="user_department"
-                    id="user_department"
+                    name="job_department"
+                    id="job_department"
                     label="Employee Departement"
                     placeholder="UX/UI"
                     disabled={false}

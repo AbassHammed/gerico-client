@@ -15,13 +15,13 @@ const userSchema = Yup.object({
     .email('Invalid email address')
     .required('Email is required')
     .max(100, 'Email must be at most 100 characters'),
-  job: Yup.string()
+  job_title: Yup.string()
     .required('Job title is required')
     .max(100, 'Job title must be at most 100 characters'),
   date_of_birth: Yup.date()
     .required('Date of birth is required')
     .max(new Date(), 'Date of birth cannot be in the future'),
-  user_department: Yup.string()
+  job_department: Yup.string()
     .required('Department is required')
     .max(100, 'Department name must be at most 100 characters'),
   remaining_leave_balance: Yup.number()
@@ -45,6 +45,7 @@ const userSchema = Yup.object({
     .max(50, 'Country must be at most 50 characters'),
   social_security_number: Yup.string()
     .required('Social security number is required')
+    .min(15, 'Social security number must be at least 15 characters')
     .max(15, 'Social security number must be at most 15 characters'),
   contract_type: Yup.string()
     .oneOf(['CDI', 'CDD', 'stage', 'apprentissage', 'freelance'], 'Invalid contract type')
@@ -66,9 +67,9 @@ export const generateFormValues = (config: Partial<UserSchemaType> = {}): UserSc
   last_name: config.last_name || '',
   phone_number: config.phone_number || '',
   email: config.email || '',
-  job: config.job || '',
+  job_title: config.job_title || '',
   date_of_birth: config.date_of_birth || new Date(),
-  user_department: config.user_department || '',
+  job_department: config.job_department || '',
   remaining_leave_balance: config.remaining_leave_balance || 0,
   is_admin: config.is_admin ?? false,
   hire_date: config.hire_date || new Date(),
