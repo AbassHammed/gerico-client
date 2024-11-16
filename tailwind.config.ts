@@ -10,6 +10,13 @@ module.exports = {
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
+    variables: {
+      DEFAULT: {
+        width: {
+          listbox: '320px',
+        },
+      },
+    },
     container: {
       center: true,
       padding: '2rem',
@@ -192,6 +199,9 @@ module.exports = {
           border: 'hsl(var(--sidebar-border))',
           ring: 'hsl(var(--sidebar-ring))',
         },
+      },
+      width: {
+        listbox: 'var(--width-listbox);',
       },
       borderRadius: {
         lg: `var(--radius)`,

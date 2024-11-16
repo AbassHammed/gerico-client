@@ -1,6 +1,7 @@
 import * as Yup from 'yup';
 
 const userSchema = Yup.object({
+  civility: Yup.string().oneOf(['mr', 'mme', 'ms', 'autre']).required('Civility is required'),
   first_name: Yup.string()
     .required('First name is required')
     .max(50, 'First name must be at most 50 characters'),
@@ -60,6 +61,7 @@ const userSchema = Yup.object({
 export type UserSchemaType = Yup.InferType<typeof userSchema>;
 
 export const generateFormValues = (config: Partial<UserSchemaType> = {}): UserSchemaType => ({
+  civility: config.civility || 'autre',
   first_name: config.first_name || '',
   last_name: config.last_name || '',
   phone_number: config.phone_number || '',

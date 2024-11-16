@@ -99,24 +99,17 @@ function Listbox({
   }, [value]);
 
   useEffect(() => {
-    // handle listbox options width size
-
     function handleResize() {
-      // Set window width/height to state
-
       document.documentElement.style.setProperty(
         '--width-listbox',
         `${optionsWidth ? optionsWidth : triggerRef.current?.offsetWidth}px`,
       );
     }
 
-    // Add event listener
     window.addEventListener('resize', handleResize);
 
-    // Call handler right away so state gets updated with initial window size
     handleResize();
 
-    // Remove event listener on cleanup
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
@@ -128,9 +121,6 @@ function Listbox({
       return content.find((node: any) => node.props.value === _value);
     }
 
-    /*
-     * value prop overrides everything
-     */
     if (value) {
       setSelected(value);
       const node: any = findNode(value);
@@ -138,9 +128,6 @@ function Listbox({
       return;
     }
 
-    /*
-     * if no value prop, then use selected state
-     */
     if (selected) {
       const node: any = findNode(selected);
       setSelectedNode(node?.props ? node.props : undefined);
@@ -151,9 +138,6 @@ function Listbox({
       setSelectedNode(node?.props ? node.props : undefined);
       return;
     } else {
-      /*
-       * if no selected value (including a `defaultvalue`), then use first child
-       */
       setSelectedNode(content[0]?.props);
       return;
     }
@@ -165,10 +149,6 @@ function Listbox({
     }
     setSelected(value);
 
-    /*
-     * Create change event for formik
-     * formik expects an input change event
-     */
     const event: any = {};
     event.target = {
       type: 'select',
@@ -176,17 +156,11 @@ function Listbox({
       id: id,
       value: value,
       checked: undefined,
-      // outerHTML: undefined,
-      // options: undefined,
-      // multiple: undefined,
     };
 
-    // update form
-    // Create a new 'change' event
     if (formContextOnChange) {
       formContextOnChange(event);
     }
-    // run field level validation
     if (validation) {
       fieldLevelValidation(id, validation(value));
     }

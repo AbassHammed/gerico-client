@@ -27,7 +27,7 @@ const SignInForm = () => {
     try {
       const { code } = await login({ email, password });
       if (code) {
-        if (code !== 'DEFAULTPASS') {
+        if (code === 'DEFAULTPASS') {
           toast.success(`You used a default password, you have to change it `, { id: toastId });
           router.replace('/auth/change-password');
           return;
@@ -35,7 +35,7 @@ const SignInForm = () => {
       }
 
       toast.success(`Signed in successfully!`, { id: toastId });
-      router.push('/home');
+      router.push('/dashboard');
     } catch (error: any) {
       toast.error(`Failed to sign in: ${error.message}`, { id: toastId });
     }

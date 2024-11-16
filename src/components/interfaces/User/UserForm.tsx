@@ -50,6 +50,25 @@ const MaritalStatusOptions = [
   },
 ];
 
+const CivilityOptions = [
+  {
+    label: 'Monsieur',
+    value: 'mr',
+  },
+  {
+    label: 'Madame',
+    value: 'mme',
+  },
+  {
+    label: 'Mademoiselle',
+    value: 'ms',
+  },
+  {
+    label: 'Autre',
+    value: 'autre',
+  },
+];
+
 const UserForm = () => {
   const formId = 'auth-config-smtp-form';
   const initialValues = generateFormValues();
@@ -87,6 +106,17 @@ const UserForm = () => {
                 header={<FormSectionLabel>Personal details</FormSectionLabel>}
                 disabled={false}>
                 <FormSectionContent loading={false}>
+                  <FormField
+                    name="civility"
+                    properties={{
+                      type: 'select',
+                      title: 'Civility',
+                      enum: CivilityOptions,
+                    }}
+                    formValues={values}
+                    disabled={false}
+                    setFieldValue={setFieldValue}
+                  />
                   <Input
                     name="first_name"
                     id="first_name"

@@ -38,7 +38,7 @@ async function changePassword(url: string, { arg }: { arg: IChangePasswordInput 
 
 export default function useChangeDefaultPassword() {
   const { trigger, isMutating: loading } = useSWRMutation(
-    'http://localhost:5000/api/employee/change-default-password',
+    'http://localhost:5000/api/users/change-default-password',
     changePassword,
   );
 

@@ -1,3 +1,5 @@
+'use client';
+
 /* eslint-disable indent */
 import React, { useEffect, useState } from 'react';
 
