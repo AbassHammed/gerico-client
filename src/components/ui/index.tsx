@@ -14,6 +14,7 @@ export * from './DatePicker';
 export { default as Toggle } from './Toggle';
 export * from './Scaffold';
 export { default as ShimmeringLoader, GenericSkeletonLoader } from './ShimmeringLoader';
+export { default as Table } from './Table';
 
 // Shadcn
 export * from './shadcn/ui/dropdown-menu';
