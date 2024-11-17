@@ -85,10 +85,15 @@ async function fetcher(url: string) {
 }
 
 export function useCompanyInfo(siret: string) {
-  const { data, error, isLoading } = useSWR<ICompanyInfo>(
+  const { data, error, isLoading, isValidating, mutate } = useSWR<ICompanyInfo>(
     `http://localhost:5000/api/company/${siret}`,
     fetcher,
   );
 
-  return { companyInfo: data, loading: (!error && !data) || isLoading, error };
+  return {
+    companyInfo: data,
+    loading: (!error && !data) || isLoading || isValidating,
+    error,
+    mutateCompanyInfo: mutate,
+  };
 }

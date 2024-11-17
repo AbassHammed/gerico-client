@@ -13,6 +13,7 @@ export { default as Listbox } from './Listbox/Listbox';
 export * from './DatePicker';
 export { default as Toggle } from './Toggle';
 export * from './Scaffold';
+export { default as ShimmeringLoader, GenericSkeletonLoader } from './ShimmeringLoader';
 
 // Shadcn
 export * from './shadcn/ui/dropdown-menu';
