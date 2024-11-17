@@ -13,6 +13,7 @@ interface FormFieldProps {
   formValues: any;
   setFieldValue: (field: string, v: any) => any;
   disabled?: boolean;
+  className?: string;
 }
 
 const FormField = ({
@@ -21,6 +22,7 @@ const FormField = ({
   formValues,
   disabled = false,
   setFieldValue,
+  className,
 }: FormFieldProps) => {
   const [hidden, setHidden] = useState(!!properties.isSecret);
   const [dateAsText, setDateAsText] = useState(
@@ -59,6 +61,7 @@ const FormField = ({
           name={name}
           type="text"
           value={dateAsText}
+          className={className}
           readOnly
           label={properties.title}
           labelOptional={
@@ -107,6 +110,7 @@ const FormField = ({
           layout="vertical"
           id={name}
           name={name}
+          className={className}
           disabled={disabled}
           type={hidden ? 'password' : 'text'}
           label={properties.title}
@@ -148,6 +152,7 @@ const FormField = ({
         <Input.TextArea
           size="small"
           layout="vertical"
+          className={className}
           id={name}
           name={name}
           disabled={disabled}
@@ -192,6 +197,7 @@ const FormField = ({
           size="small"
           layout="vertical"
           id={name}
+          className={className}
           name={name}
           disabled={disabled}
           label={properties.title}
@@ -227,6 +233,7 @@ const FormField = ({
           size="small"
           id={name}
           name={name}
+          className={className}
           disabled={disabled}
           label={properties.title}
           descriptionText={
@@ -245,8 +252,9 @@ const FormField = ({
     case 'select':
       return (
         <Listbox
-          size="small"
+          // size="small"
           name={name}
+          className={className}
           disabled={disabled}
           label={properties.title}
           descriptionText={

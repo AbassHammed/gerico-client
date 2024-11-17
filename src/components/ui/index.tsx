@@ -12,6 +12,7 @@ export { default as InputNumber } from './inputNumber/InputNumber';
 export { default as Listbox } from './Listbox/Listbox';
 export * from './DatePicker';
 export { default as Toggle } from './Toggle';
+export * from './Scaffold';
 
 // Shadcn
 export * from './shadcn/ui/dropdown-menu';

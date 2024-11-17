@@ -87,3 +87,15 @@ export interface IUser {
   dependants: number;
   company_id: string;
 }
+
+export interface ICompanyInfo {
+  siret: string;
+  code_ape: string;
+  name: string;
+  address_line1: string;
+  address_line2?: string;
+  city: string;
+  postal_code: string;
+  country: string;
+  convention_collective: string;
+}

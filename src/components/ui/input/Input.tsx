@@ -30,7 +30,7 @@ export interface Props
   afterLabel?: string;
   beforeLabel?: string;
   labelOptional?: string | React.ReactNode;
-  layout?: 'horizontal' | 'vertical';
+  layout?: 'horizontal' | 'vertical' | 'flex';
   reveal?: boolean;
   actions?: React.ReactNode;
   size?: 'tiny' | 'small' | 'medium' | 'large' | 'xlarge';

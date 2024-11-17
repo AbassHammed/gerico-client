@@ -619,7 +619,7 @@ export default {
     data_input_vertical_layout__align_right: 'text-right',
 
     label: {
-      base: 'block text-foreground-light',
+      base: 'inline-block text-foreground-light',
       size: {
         ...defaults.size.text,
       },
