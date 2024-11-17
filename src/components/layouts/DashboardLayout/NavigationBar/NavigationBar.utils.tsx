@@ -48,6 +48,6 @@ export const generateSettingsRoutes = (): IRoute[] => [
     key: 'settings',
     label: 'Org Settings',
     icon: <Settings size={ICON_SIZE} strokeWidth={ICON_STROKE_WIDTH} />,
-    link: `/dashboard/settings/general`,
+    link: `/dashboard/settings`,
   },
 ];

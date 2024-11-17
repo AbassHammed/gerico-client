@@ -1,6 +1,7 @@
 'use client';
 
 import { useCompanyInfo, useUpdateCompanyInfo } from '@/hooks/company-mutations';
+import { useGetUser } from '@/hooks/getUser';
 import { ICompanyInfo } from '@/types';
 import {
   Form,
@@ -19,14 +20,16 @@ import { toast } from 'sonner';
 
 import { COUNTRIES } from './DashboardSettings.constants';
 
-const BillingAddress = () => {
-  const { companyInfo } = useCompanyInfo();
+const AddressSettings = () => {
+  const { user } = useGetUser();
+  const { companyInfo } = useCompanyInfo(user?.company_id ?? '');
+
   const { updateCompany, loading } = useUpdateCompanyInfo();
   const formId = 'billing-address-form';
-  const initialValues = omit(companyInfo, ['siret', 'code_ape', 'name', 'convention_collective']);
+  const initialValues = omit(companyInfo, ['siret', 'code_ape', 'name', 'collective_convention']);
 
   const validate = (
-    values: Omit<ICompanyInfo, 'siret' | 'code_ape' | 'name' | 'convention_collective'>,
+    values: Omit<ICompanyInfo, 'siret' | 'code_ape' | 'name' | 'collective_convention'>,
   ) => {
     const errors = {} as any;
     if (
@@ -45,7 +48,7 @@ const BillingAddress = () => {
   };
 
   const onSubmit = async (
-    values: Omit<ICompanyInfo, 'siret' | 'code_ape' | 'name' | 'convention_collective'>,
+    values: Omit<ICompanyInfo, 'siret' | 'code_ape' | 'name' | 'collective_convention'>,
     { resetForm }: any,
   ) => {
     const toastId = toast.loading('Updating address...');
@@ -98,12 +101,14 @@ const BillingAddress = () => {
                 <FormSection>
                   <FormSectionContent fullWidth loading={false} className="!gap-2">
                     <Input
+                      defaultValue={companyInfo?.address_line1}
                       id="address_line1"
                       name="address_line1"
                       placeholder="Address line 1"
                       disabled={loading}
                     />
                     <Input
+                      defaultValue={companyInfo?.address_line2}
                       id="address_line2"
                       name="address_line2"
                       placeholder="Address line 2"
@@ -111,6 +116,7 @@ const BillingAddress = () => {
                     />
                     <div className="flex space-x-2">
                       <Input
+                        defaultValue={companyInfo?.city}
                         className="w-full"
                         id="city"
                         name="city"
@@ -118,6 +124,7 @@ const BillingAddress = () => {
                         disabled={loading}
                       />
                       <Input
+                        defaultValue={companyInfo?.postal_code}
                         className="w-full"
                         id="postal_code"
                         name="postal_code"
@@ -127,6 +134,7 @@ const BillingAddress = () => {
                     </div>
 
                     <Listbox
+                      defaultValue={companyInfo?.country}
                       className="w-full"
                       id="country"
                       name="country"
@@ -155,4 +163,4 @@ const BillingAddress = () => {
   );
 };
 
-export default BillingAddress;
+export default AddressSettings;

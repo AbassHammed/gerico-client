@@ -84,9 +84,9 @@ async function fetcher(url: string) {
   }
 }
 
-export function useCompanyInfo() {
+export function useCompanyInfo(siret: string) {
   const { data, error, isLoading } = useSWR<ICompanyInfo>(
-    `http://localhost:5000/api/company`,
+    `http://localhost:5000/api/company/${siret}`,
     fetcher,
   );
 
