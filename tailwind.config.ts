@@ -117,6 +117,7 @@ module.exports = {
         // Other color variables
         black: 'hsl(var(--colors-black) / <alpha-value>)',
         white: 'hsl(var(--colors-white) / <alpha-value>)',
+        'gray-1100': 'hsl(var(--colors-gray-1100) / <alpha-value>)',
         'gray-dark': {
           '100': 'hsl(var(--colors-gray-dark-100) / <alpha-value>)',
           '200': 'hsl(var(--colors-gray-dark-200) / <alpha-value>)',

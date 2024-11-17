@@ -17,6 +17,7 @@ export { default as ShimmeringLoader, GenericSkeletonLoader } from './Shimmering
 export { default as Table } from './Table';
 export * from './Admonition';
 export * from './Dialogs';
+export { default as Loading } from './Loading';
 
 // Shadcn
 export * from './shadcn/ui/dropdown-menu';

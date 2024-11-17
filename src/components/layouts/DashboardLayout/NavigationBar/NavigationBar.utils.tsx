@@ -39,7 +39,7 @@ export const generateToolRoutes = (): IRoute[] => [
     key: 'all:employees',
     label: 'All employees',
     icon: <Users size={ICON_SIZE} strokeWidth={ICON_STROKE_WIDTH} />,
-    link: '/dashboard/all-users',
+    link: '/dashboard/employees',
   },
 ];
 

@@ -193,4 +193,6 @@
   --background-default: var(--colors-gray-light-100);
   --background-200: var(--colors-gray-light-200);
   --foreground-default: var(--colors-gray-light-1200);
+
+  --gray-1100: var(--colors-gray-dark-1100);
 }
