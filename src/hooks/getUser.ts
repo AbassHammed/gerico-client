@@ -39,7 +39,10 @@ async function getUser(url: string) {
 }
 
 export function useGetUser() {
-  const { data, error, isLoading } = useSWR<IUser>('http://localhost:5000/api/users/me', getUser);
+  const { data, error, isLoading } = useSWR<IUser>(
+    'http://localhost:5000/api/v1/users/me',
+    getUser,
+  );
 
   const router = useRouter();
 

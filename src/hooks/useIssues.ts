@@ -25,7 +25,7 @@ async function markIssueAsResolved(url: string) {
 
 export function useMarkIssueAsResolved(issueId: string) {
   const { trigger, isMutating: loading } = useSWRMutation(
-    `http://localhost:5000/api/issues/${issueId}/solved`,
+    `http://localhost:5000/api/v1/issues/${issueId}/solved`,
     markIssueAsResolved,
   );
 

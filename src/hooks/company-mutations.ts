@@ -38,7 +38,7 @@ async function updateCompanyInfo(url: string, { arg }: { arg: ICompanyInfo }) {
 
 export function useUpdateCompanyInfo() {
   const { trigger, isMutating: loading } = useSWRMutation(
-    `http://localhost:5000/api/company/update`,
+    `http://localhost:5000/api/v1/company`,
     updateCompanyInfo,
   );
 
@@ -86,7 +86,7 @@ async function fetcher(url: string) {
 
 export function useCompanyInfo(siret: string) {
   const { data, error, isLoading, isValidating, mutate } = useSWR<ICompanyInfo>(
-    `http://localhost:5000/api/company/${siret}`,
+    `http://localhost:5000/api/v1/company/${siret}`,
     fetcher,
   );
 

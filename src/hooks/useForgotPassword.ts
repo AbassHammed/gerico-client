@@ -26,7 +26,7 @@ async function forgotPassword(url: string, { arg }: { arg: { email: string } }) 
 
 export function useForgotPassword() {
   const { trigger, isMutating: loading } = useSWRMutation(
-    'http://localhost:5000/api/users/forgot-password',
+    'http://localhost:5000/api/v1/users/forgot-password',
     forgotPassword,
   );
 

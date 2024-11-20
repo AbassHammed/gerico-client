@@ -35,7 +35,7 @@ async function fetcher(url: string) {
 }
 
 export function useEmployees() {
-  const { data, error, isLoading } = useSWR<IUser[]>('http://localhost:5000/api/users', fetcher);
+  const { data, error, isLoading } = useSWR<IUser[]>('http://localhost:5000/api/v1/users', fetcher);
 
   return { employees: data, error, isLoading };
 }

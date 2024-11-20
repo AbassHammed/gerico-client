@@ -40,7 +40,7 @@ async function createNewUser(
 
 export function useCreateUser() {
   const { trigger, isMutating: loading } = useSWRMutation(
-    'http://localhost:5000/api/users/create',
+    'http://localhost:5000/api/v1/users',
     createNewUser,
   );
 

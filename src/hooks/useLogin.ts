@@ -67,7 +67,7 @@ async function sendRequest(
 
 export default function useLogin() {
   const { trigger, isMutating: loading } = useSWRMutation(
-    'http://localhost:5000/api/users/login',
+    'http://localhost:5000/api/v1/users/login',
     sendRequest,
   );
 
