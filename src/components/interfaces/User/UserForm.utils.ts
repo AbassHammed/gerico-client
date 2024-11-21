@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 
 const userSchema = Yup.object({
-  civility: Yup.string().oneOf(['mr', 'mme', 'ms', 'autre']).required('Civility is required'),
+  civility: Yup.string().required('Civility is required'),
   first_name: Yup.string()
     .required('First name is required')
     .max(50, 'First name must be at most 50 characters'),
@@ -18,9 +18,7 @@ const userSchema = Yup.object({
   job_title: Yup.string()
     .required('Job title is required')
     .max(100, 'Job title must be at most 100 characters'),
-  date_of_birth: Yup.date()
-    .required('Date of birth is required')
-    .max(new Date(), 'Date of birth cannot be in the future'),
+  date_of_birth: Yup.string().required('Date of birth is required'),
   job_department: Yup.string()
     .required('Department is required')
     .max(100, 'Department name must be at most 100 characters'),
@@ -29,9 +27,7 @@ const userSchema = Yup.object({
     .positive('Remaining leave balance must be positive')
     .max(999.9, 'Remaining leave balance must be less than 1000'),
   is_admin: Yup.boolean().default(false),
-  hire_date: Yup.date()
-    .required('Hire date is required')
-    .max(new Date(), 'Hire date cannot be in the future'),
+  hire_date: Yup.string().required('Hire date is required'),
   address_line1: Yup.string()
     .required('Address line 1 is required')
     .max(255, 'Address line 1 must be at most 255 characters'),
@@ -47,12 +43,8 @@ const userSchema = Yup.object({
     .required('Social security number is required')
     .min(15, 'Social security number must be at least 15 characters')
     .max(15, 'Social security number must be at most 15 characters'),
-  contract_type: Yup.string()
-    .oneOf(['CDI', 'CDD', 'stage', 'apprentissage', 'freelance'], 'Invalid contract type')
-    .required('Contract type is required'),
-  marital_status: Yup.string()
-    .oneOf(['célibataire', 'marié', 'divorcé', 'veuf'], 'Invalid marital status')
-    .required('Marital status is required'),
+  contract_type: Yup.string().required('Contract type is required'),
+  marital_status: Yup.string().required('Marital status is required'),
   dependants: Yup.number()
     .required('Number of dependants is required')
     .integer('Number of dependants must be an integer')
@@ -68,11 +60,11 @@ export const generateFormValues = (config: Partial<UserSchemaType> = {}): UserSc
   phone_number: config.phone_number || '',
   email: config.email || '',
   job_title: config.job_title || '',
-  date_of_birth: config.date_of_birth || new Date(),
+  date_of_birth: config.date_of_birth || '',
   job_department: config.job_department || '',
   remaining_leave_balance: config.remaining_leave_balance || 0,
   is_admin: config.is_admin ?? false,
-  hire_date: config.hire_date || new Date(),
+  hire_date: config.hire_date || '',
   address_line1: config.address_line1 || '',
   address_line2: config.address_line2 || '',
   city: config.city || '',

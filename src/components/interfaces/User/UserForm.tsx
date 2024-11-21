@@ -1,7 +1,8 @@
 'use client';
 
 import { useCreateUser } from '@/hooks/useCreateUser';
-import { useGetUser } from '@/hooks/useUser';
+import { useUser } from '@/hooks/useUser';
+import { IUser } from '@/types';
 import {
   Form,
   FormActions,
@@ -72,10 +73,15 @@ const CivilityOptions = [
   },
 ];
 
-const UserForm = () => {
+interface UserFormProps {
+  isUpdatePage?: boolean;
+  defaultUser?: IUser;
+}
+
+const UserForm = ({ isUpdatePage = false, defaultUser }: UserFormProps) => {
   const formId = 'auth-config-smtp-form';
-  const initialValues = generateFormValues();
-  const { user } = useGetUser();
+  const initialValues = generateFormValues(defaultUser);
+  const { user } = useUser();
   const { createUser, loading } = useCreateUser();
 
   const onSubmit = async (inputs: UserSchemaType, { resetForm }: any) => {
@@ -103,7 +109,6 @@ const UserForm = () => {
       validationSchema={userSchema}>
       {({ handleReset, values, setFieldValue }: any) => {
         const hasChanges = JSON.stringify(values) !== JSON.stringify(initialValues);
-        // console.error(values);
 
         return (
           <>
@@ -176,7 +181,7 @@ const UserForm = () => {
                     id="social_security_number"
                     label="Social security number"
                     placeholder="1 04 07 28 338 345"
-                    disabled={loading}
+                    disabled={loading || isUpdatePage}
                   />
                 </FormSectionContent>
               </FormSection>
@@ -208,7 +213,7 @@ const UserForm = () => {
                     name="remaining_leave_balance"
                     label="Remaining leave balance"
                     actions={<span className="mr-3 text-foreground-lighter">days</span>}
-                    disabled={loading}
+                    disabled={loading || isUpdatePage}
                   />
                 </FormSectionContent>
               </FormSection>
@@ -308,7 +313,7 @@ const UserForm = () => {
                       title: 'Hire date',
                     }}
                     formValues={values}
-                    disabled={loading}
+                    disabled={loading || isUpdatePage}
                     setFieldValue={setFieldValue}
                   />
                 </FormSectionContent>

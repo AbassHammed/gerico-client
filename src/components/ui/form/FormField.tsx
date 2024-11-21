@@ -25,21 +25,38 @@ const FormField = ({
   className,
 }: FormFieldProps) => {
   const [hidden, setHidden] = useState(!!properties.isSecret);
-  const [dateAsText, setDateAsText] = useState(
-    new Intl.DateTimeFormat('fr-FR', {
-      weekday: 'long',
-      day: '2-digit',
-      month: 'long',
-      year: 'numeric',
-    }).format(new Date()),
-  );
+  const [dateAsText, setDateAsText] = useState('');
+
+  const updateDateDisplay = (dateString: string) => {
+    if (dateString) {
+      const date = new Date(dateString);
+      if (!isNaN(date.getTime())) {
+        setDateAsText(
+          new Intl.DateTimeFormat('fr-FR', {
+            weekday: 'long',
+            day: '2-digit',
+            month: 'long',
+            year: 'numeric',
+          }).format(date),
+        );
+      } else {
+        setDateAsText('');
+      }
+    } else {
+      setDateAsText('');
+    }
+  };
+
+  useEffect(() => {
+    updateDateDisplay(formValues[name]);
+  }, [formValues[name]]);
 
   useEffect(() => {
     if (properties.show && properties.show.key && !formValues[properties.show.key]) {
       setFieldValue(name, '');
       setDateAsText('');
     }
-  }, [properties.show && properties.show.key && !formValues[properties.show.key]]);
+  }, [properties.show, formValues, name, setFieldValue]);
 
   if (properties.show) {
     if (properties.show.matches) {
@@ -83,15 +100,8 @@ const FormField = ({
               hideTime
               onChange={date => {
                 if (date) {
-                  setFieldValue(name, date);
-                  setDateAsText(
-                    new Intl.DateTimeFormat('fr-FR', {
-                      weekday: 'long',
-                      day: '2-digit',
-                      month: 'long',
-                      year: 'numeric',
-                    }).format(date),
-                  );
+                  setFieldValue(name, date.toISOString());
+                  updateDateDisplay(date.toISOString());
                 } else {
                   setDateAsText('');
                   setFieldValue(name, '');

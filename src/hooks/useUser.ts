@@ -48,3 +48,15 @@ export function useUser() {
     error,
   };
 }
+
+export function useProfile(slug: string) {
+  const { data, error, isValidating, isLoading } = useSWR<{ user: IUser }>(
+    `${API_URL}/users/${slug}`,
+    fetchUser,
+  );
+  return {
+    user: data?.user,
+    isLoading: (!error && !data) || isValidating || isLoading,
+    error,
+  };
+}

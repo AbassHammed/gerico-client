@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 
+import { useRouter } from 'next/navigation';
+
 import { IUser } from '@/types';
 import {
   Button,
@@ -17,6 +19,7 @@ import { MoreVertical, Trash } from 'lucide-react';
 
 export const UserActions = ({ member }: { member: IUser }) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const router = useRouter();
 
   const isLoading = false;
 
@@ -34,7 +37,8 @@ export const UserActions = ({ member }: { member: IUser }) => {
             />
           </DropdownMenuTrigger>
           <DropdownMenuContent side="bottom" align="end" className="w-52">
-            <DropdownMenuItem onClick={() => noop(null)}>
+            <DropdownMenuItem
+              onClick={() => router.push(`/dashboard/employees/${member.uid}/update`)}>
               <div className="flex flex-col">
                 <p>Reset password</p>
                 <p className="text-foreground-lighter">Set password to default.</p>
