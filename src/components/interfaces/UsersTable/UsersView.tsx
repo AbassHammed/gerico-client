@@ -1,8 +1,8 @@
 'use client';
 
 /* eslint-disable indent */
-import { useGetUser } from '@/hooks/getUser';
 import { useEmployees } from '@/hooks/useEmployees';
+import { useUser } from '@/hooks/useUser';
 import { GenericSkeletonLoader, Loading, Table } from '@ui';
 import { AlertCircle } from 'lucide-react';
 
@@ -13,7 +13,7 @@ export interface MembersViewProps {
 }
 
 const UsersView = ({ searchString }: MembersViewProps) => {
-  const { user: profile } = useGetUser();
+  const { user: profile } = useUser();
   const { employees: members, error: membersError, isLoading: isLoadingMembers } = useEmployees();
 
   const allMembers = members ?? [];

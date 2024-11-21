@@ -1,7 +1,7 @@
 'use client';
 
-import { useGetUser } from '@/hooks/getUser';
 import { useCreateUser } from '@/hooks/useCreateUser';
+import { useGetUser } from '@/hooks/useUser';
 import {
   Form,
   FormActions,

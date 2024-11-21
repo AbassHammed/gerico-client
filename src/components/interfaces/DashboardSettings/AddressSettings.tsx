@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 
 import { useCompanyInfo, useUpdateCompanyInfo } from '@/hooks/company-mutations';
-import { useGetUser } from '@/hooks/getUser';
+import { useUser } from '@/hooks/useUser';
 import { ICompanyInfo } from '@/types';
 import {
   Form,
@@ -24,7 +24,7 @@ import { toast } from 'sonner';
 import { COUNTRIES } from './DashboardSettings.constants';
 
 const AddressSettings = () => {
-  const { user, isLoading, error } = useGetUser();
+  const { user, isLoading, error } = useUser();
   const {
     companyInfo,
     loading: stillLoading,

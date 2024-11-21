@@ -1,6 +1,6 @@
 'use client';
 
-import { useGetUser } from '@/hooks/getUser';
+import { useUser } from '@/hooks/useUser';
 import { IUser } from '@/types';
 import { Badge, Table } from '@ui';
 import { User, X } from 'lucide-react';
@@ -8,7 +8,7 @@ import { User, X } from 'lucide-react';
 import { UserActions } from './UserActions';
 
 export const UserRow = ({ member }: { member: IUser }) => {
-  const { user } = useGetUser();
+  const { user } = useUser();
 
   return (
     <Table.tr>

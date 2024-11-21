@@ -10,13 +10,13 @@ import {
   ScaffoldTitle,
 } from '@/components/ui';
 import { useCompanyInfo } from '@/hooks/company-mutations';
-import { useGetUser } from '@/hooks/getUser';
+import { useUser } from '@/hooks/useUser';
 
 import AddressSettings from './AddressSettings';
 import GeneralSettings from './GeneralSettings';
 
 const Settings = () => {
-  const { user } = useGetUser();
+  const { user } = useUser();
   const { companyInfo } = useCompanyInfo(user?.company_id ?? '');
 
   return (

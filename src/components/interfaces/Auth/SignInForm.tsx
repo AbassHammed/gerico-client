@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import useLogin from '@/hooks/useLogin';
 import { Button, Form, Input } from '@ui';
@@ -18,6 +18,7 @@ const signInSchema = object({
 
 const SignInForm = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { login, loading } = useLogin();
   const [passwordHidden, setPasswordHidden] = useState(true);
 
@@ -35,7 +36,8 @@ const SignInForm = () => {
       }
 
       toast.success(`Signed in successfully!`, { id: toastId });
-      router.push('/dashboard');
+      const redirectTo = searchParams.get('redirect') || '/dashboard';
+      router.push(decodeURIComponent(redirectTo));
     } catch (error: any) {
       toast.error(`Failed to sign in: ${error.message}`, { id: toastId });
     }
