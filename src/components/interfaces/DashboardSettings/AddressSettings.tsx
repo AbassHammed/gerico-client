@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 'use client';
 
 import { useEffect } from 'react';
@@ -44,13 +45,13 @@ const AddressSettings = () => {
       (values.address_line1 || values.address_line2 || values.postal_code || values.city) &&
       !values.country
     ) {
-      errors['country'] = 'Please select a country';
+      errors['country'] = 'Veuillez sélectionner un pays';
     }
     if (
       (values.country || values.address_line2 || values.postal_code || values.city) &&
       !values.address_line1
     ) {
-      errors['address_line1'] = 'Please provide an address line';
+      errors['address_line1'] = 'Veuillez fournir une adresse';
     }
     return errors;
   };
@@ -58,7 +59,7 @@ const AddressSettings = () => {
   const onSubmit = async (
     values: Omit<ICompanyInfo, 'siret' | 'code_ape' | 'name' | 'collective_convention'>,
   ) => {
-    const toastId = toast.loading('Updating address...');
+    const toastId = toast.loading("Mise à jour de l'adresse...");
     try {
       if (!companyInfo) {
         return;
@@ -77,9 +78,10 @@ const AddressSettings = () => {
     <ScaffoldSection>
       <ScaffoldSectionDetail>
         <div className="sticky space-y-2 top-12">
-          <p className="text-foreground text-base m-0">Payslips Address</p>
+          <p className="text-foreground text-base m-0">Adresse de l'organisation</p>
           <p className="text-sm text-foreground-light m-0">
-            This will be reflected in every upcoming payslips, past payslips are not affected
+            Cette modification sera appliquée sur les prochaines fiches de paie, les anciennes ne
+            seront pas affectées
           </p>
         </div>
       </ScaffoldSectionDetail>
@@ -128,13 +130,13 @@ const AddressSettings = () => {
                       <Input
                         id="address_line1"
                         name="address_line1"
-                        placeholder="Address line 1"
+                        placeholder="Adresse ligne 1"
                         disabled={loading}
                       />
                       <Input
                         id="address_line2"
                         name="address_line2"
-                        placeholder="Address line 2"
+                        placeholder="Adresse ligne 2"
                         disabled={loading}
                       />
                       <div className="flex space-x-2">
@@ -142,14 +144,14 @@ const AddressSettings = () => {
                           className="w-full"
                           id="city"
                           name="city"
-                          placeholder="City"
+                          placeholder="Ville"
                           disabled={loading}
                         />
                         <Input
                           className="w-full"
                           id="postal_code"
                           name="postal_code"
-                          placeholder="Postal code"
+                          placeholder="Code postal"
                           disabled={loading}
                         />
                       </div>
@@ -158,7 +160,7 @@ const AddressSettings = () => {
                         className="w-full"
                         id="country"
                         name="country"
-                        placeholder="Country"
+                        placeholder="Pays"
                         disabled={loading}>
                         <Listbox.Option label="---" key="empty" value="">
                           ---

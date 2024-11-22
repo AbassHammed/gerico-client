@@ -1,45 +1,46 @@
+/* eslint-disable quotes */
 export const CATEGORY_OPTIONS = [
   {
     value: 'others',
-    label: 'Billing',
-    description: 'Issues with credit card charges | invoices | overcharging',
+    label: 'Autres demandes',
+    description: 'Questions générales ou demandes diverses',
   },
   {
     value: 'payslip',
-    label: 'Abuse report',
-    description: 'Report abuse ',
+    label: 'Fiche de paie',
+    description: "Problèmes d'accès ou de téléchargement des bulletins de salaire",
   },
   {
     value: 'leave',
-    label: 'Refund enquiry',
-    description: 'Formal enquiry form for requesting refunds',
+    label: 'Congés',
+    description: 'Assistance pour les demandes de congés',
   },
   {
     value: 'auth',
-    label: 'Issues with logging in',
-    description: 'Issues with logging in and MFA',
+    label: 'Connexion',
+    description: "Problèmes de connexion ou d'authentification",
   },
 ];
 
 export const SEVERITY_OPTIONS = [
   {
     value: 'Low',
-    label: 'Low',
-    description: 'General guidance',
+    label: 'Faible',
+    description: "Simple demande d'information",
   },
   {
     value: 'Normal',
     label: 'Normal',
-    description: 'System impaired',
+    description: 'Fonctionnement perturbé',
   },
   {
     value: 'High',
-    label: 'High',
-    description: 'Production system impaired',
+    label: 'Élevé',
+    description: 'Problème bloquant pour le travail',
   },
   {
     value: 'Urgent',
     label: 'Urgent',
-    description: 'Production system down',
+    description: 'Système complètement inaccessible',
   },
 ];

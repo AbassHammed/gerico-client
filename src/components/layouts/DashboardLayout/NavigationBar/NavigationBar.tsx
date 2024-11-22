@@ -127,7 +127,7 @@ const NavigationBar = () => {
             <NavigationIconLink
               key={route.key}
               route={route}
-              isActive={activeRoute === route.key}
+              isActive={activeRoute.includes(route.link!)}
               onClick={onCloseNavigationIconLink}
             />
           ))}
@@ -146,7 +146,7 @@ const NavigationBar = () => {
             <NavigationIconLink
               key={route.key}
               route={route}
-              isActive={activeRoute === route.link}
+              isActive={activeRoute.includes(route.link!)}
               onClick={onCloseNavigationIconLink}
             />
           ))}
@@ -158,7 +158,7 @@ const NavigationBar = () => {
             <NavigationIconLink
               key={route.key}
               route={route}
-              isActive={activeRoute === route.key}
+              isActive={activeRoute.includes(route.link!)}
               onClick={onCloseNavigationIconLink}
             />
           ))}

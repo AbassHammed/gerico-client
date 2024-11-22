@@ -35,7 +35,7 @@ export const ChangeDefaultPasswordForm = () => {
       confirmPassword: passwordSchema,
     })
     .refine(mdp => mdp.confirmPassword === mdp.password, {
-      message: 'Les mots de passe ne correspondent pas.',
+      message: 'Les mots de passe ne correspondent pas',
       path: ['confirmPassword'],
     });
 
@@ -56,7 +56,7 @@ export const ChangeDefaultPasswordForm = () => {
       await change(values);
       router.push('/dashboard');
     } catch (error: any) {
-      toast.error('Unknown Error', {
+      toast.error('Erreur inconnue', {
         description: error.message,
       });
     }
@@ -72,7 +72,7 @@ export const ChangeDefaultPasswordForm = () => {
           name="password"
           control={form.control}
           render={({ field }) => (
-            <FormItemLayout layout="vertical" label="Password">
+            <FormItemLayout layout="vertical" label="Mot de passe">
               <FormControl_Shadcn>
                 <div className="relative">
                   <Input_Shadcn
@@ -80,12 +80,12 @@ export const ChangeDefaultPasswordForm = () => {
                     id="password"
                     name="password"
                     type={passwordHidden ? 'password' : 'text'}
-                    aria-label="Password"
+                    aria-label="Mot de passe"
                     autoComplete="new-password"
                     disabled={loading}
                     onFocus={() => setShowConditions('password')}
                     onBlur={() => setShowConditions(null)}
-                    placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
+                    placeholder="••••••••"
                   />
                   <div className="absolute inset-y-0 right-0 pl-3 pr-1 flex space-x-1 items-center">
                     <Button
@@ -105,7 +105,7 @@ export const ChangeDefaultPasswordForm = () => {
           name="confirmPassword"
           control={form.control}
           render={({ field }) => (
-            <FormItemLayout layout="vertical" label="Confirm Password">
+            <FormItemLayout layout="vertical" label="Confirmer le mot de passe">
               <FormControl_Shadcn>
                 <div className="relative">
                   <Input_Shadcn
@@ -113,12 +113,12 @@ export const ChangeDefaultPasswordForm = () => {
                     id="confirmPassword"
                     name="confirmPassword"
                     type={passwordHidden1 ? 'password' : 'text'}
-                    aria-label="Confirm Password"
+                    aria-label="Confirmer le mot de passe"
                     autoComplete="new-password"
                     disabled={loading}
                     onFocus={() => setShowConditions('confirmPassword')}
                     onBlur={() => setShowConditions(null)}
-                    placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
+                    placeholder="••••••••"
                   />
                   <div className="absolute inset-y-0 right-0 pl-3 pr-1 flex space-x-1 items-center">
                     <Button

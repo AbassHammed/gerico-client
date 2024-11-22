@@ -54,12 +54,12 @@ const PasswordConditionsHelper = ({ password }: PasswordConditionsHelperProps) =
 
   return (
     <div className="text-sm">
-      <PasswordCondition title="Uppercase letter" isMet={hasUppercase} />
-      <PasswordCondition title="Lowercase letter" isMet={hasLowercase} />
-      <PasswordCondition title="Number" isMet={hasNumber} />
-      <PasswordCondition title="Special character (e.g. !?<>@#$%)" isMet={hasSpecialCharacter} />
-      <PasswordCondition title="8 characters or more" isMet={isEightCharactersLong} />
-      {password.length > 72 && <PasswordCondition title="72 characters or less" isMet={false} />}
+      <PasswordCondition title="Une lettre majuscule" isMet={hasUppercase} />
+      <PasswordCondition title="Une lettre minuscule" isMet={hasLowercase} />
+      <PasswordCondition title="Un chiffre" isMet={hasNumber} />
+      <PasswordCondition title="Un caractère spécial (ex: !?<>@#$%)" isMet={hasSpecialCharacter} />
+      <PasswordCondition title="8 caractères minimum" isMet={isEightCharactersLong} />
+      {password.length > 72 && <PasswordCondition title="72 caractères maximum" isMet={false} />}
     </div>
   );
 };

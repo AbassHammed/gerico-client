@@ -6,6 +6,6 @@ export const ExpectationInfoBox = () => (
     icon={<AlertCircle size={18} strokeWidth={2} />}
     defaultVisibility={true}
     hideCollapse={true}
-    title="Please, make sure to include your first name, last name and as much information possible."
+    title="Veuillez renseigner votre prénom, nom et fournir le plus de détails possible."
   />
 );

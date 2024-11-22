@@ -1,6 +1,5 @@
 'use client';
 
-/* eslint-disable quotes */
 import { useState } from 'react';
 
 import { FormItemLayout } from '@/components/ui/form/FormItemLayout';
@@ -35,8 +34,8 @@ export const SupportForm = () => {
   const FormSchema = z.object({
     category: z.string(),
     severity: z.string(),
-    subject: z.string().min(1, 'Please add a subject heading'),
-    message: z.string().min(1, "Please add a message about the issue that you're facing"),
+    subject: z.string().min(1, 'Veuillez ajouter un sujet'),
+    message: z.string().min(1, 'Veuillez décrire le problème rencontré'),
   });
 
   const defaultValues = {
@@ -64,9 +63,10 @@ export const SupportForm = () => {
         <div className={`absolute top-0 duration-500 delay-300 w-full `}>
           <Alert_Shadcn variant="default">
             <CheckCircle />
-            <AlertTitle_Shadcn>Report successfully submitted</AlertTitle_Shadcn>
+            <AlertTitle_Shadcn>Demande envoyée avec succès</AlertTitle_Shadcn>
             <AlertDescription_Shadcn className="text-xs">
-              Something has happenned, i don't know
+              Notre équipe traitera votre demande dans les plus brefs délais. Vous recevrez une
+              réponse par email.
             </AlertDescription_Shadcn>
           </Alert_Shadcn>
         </div>
@@ -76,7 +76,7 @@ export const SupportForm = () => {
             id="support-form"
             className="flex flex-col gap-y-8"
             onSubmit={form.handleSubmit(onSubmit)}>
-            <h3 className="px-6 text-xl">How can we help?</h3>
+            <h3 className="px-6 text-xl">Comment pouvons-nous vous aider ?</h3>
 
             <div
               className={'px-6 grid sm:grid-cols-2 sm:grid-rows-1 gap-4 grid-cols-1 grid-rows-2'}>
@@ -84,7 +84,7 @@ export const SupportForm = () => {
                 name="category"
                 control={form.control}
                 render={({ field }) => (
-                  <FormItemLayout layout="vertical" label="Area of concern">
+                  <FormItemLayout layout="vertical" label="Domaine d'intervention">
                     <FormControl_Shadcn>
                       <Select_Shadcn
                         {...field}
@@ -116,14 +116,14 @@ export const SupportForm = () => {
                 name="severity"
                 control={form.control}
                 render={({ field }) => (
-                  <FormItemLayout layout="vertical" label="Severity">
+                  <FormItemLayout layout="vertical" label="Gravité">
                     <FormControl_Shadcn>
                       <Select_Shadcn
                         {...field}
                         defaultValue={field.value}
                         onValueChange={field.onChange}>
                         <SelectTrigger_Shadcn className="w-full">
-                          <SelectValue_Shadcn placeholder="Select a severity">
+                          <SelectValue_Shadcn placeholder="Sélectionner une gravité">
                             {field.value}
                           </SelectValue_Shadcn>
                         </SelectTrigger_Shadcn>
@@ -153,9 +153,9 @@ export const SupportForm = () => {
                 name="subject"
                 control={form.control}
                 render={({ field }) => (
-                  <FormItemLayout layout="vertical" label="Subject">
+                  <FormItemLayout layout="vertical" label="Sujet">
                     <FormControl_Shadcn>
-                      <Input_Shadcn {...field} placeholder="Summary of the problem you have" />
+                      <Input_Shadcn {...field} placeholder="Résumé du problème rencontré" />
                     </FormControl_Shadcn>
                   </FormItemLayout>
                 )}
@@ -171,13 +171,13 @@ export const SupportForm = () => {
                   className="px-6"
                   layout="vertical"
                   label="Message"
-                  labelOptional="5000 character limit">
+                  labelOptional="Limite de 5000 caractères  ">
                   <FormControl_Shadcn>
                     <TextArea_Shadcn
                       {...field}
                       rows={4}
                       maxLength={5000}
-                      placeholder="Describe the issue you're facing, along with any relevant information. Please be as detailed and specific as possible."
+                      placeholder="Décrivez le problème rencontré, ainsi que toute information pertinente. Soyez aussi précis et spécifique que possible."
                     />
                   </FormControl_Shadcn>
                 </FormItemLayout>
@@ -193,7 +193,7 @@ export const SupportForm = () => {
                   disabled={false}
                   className="text-white"
                   loading={false}>
-                  Send support request
+                  Envoyer la demande
                 </Button>
               </div>
             </div>

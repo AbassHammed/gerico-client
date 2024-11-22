@@ -8,6 +8,7 @@ import {
   ScaffoldDivider,
   ScaffoldHeader,
   ScaffoldTitle,
+  ShimmeringLoader,
 } from '@/components/ui';
 import { useCompanyInfo } from '@/hooks/company-mutations';
 import { useUser } from '@/hooks/useUser';
@@ -17,14 +18,14 @@ import GeneralSettings from './GeneralSettings';
 
 const Settings = () => {
   const { user } = useUser();
-  const { companyInfo } = useCompanyInfo(user?.company_id ?? '');
+  const { companyInfo, loading } = useCompanyInfo(user?.company_id ?? '');
 
   return (
     <React.Fragment>
       <ScaffoldHeader className="pb-0">
         <ScaffoldContainer id="billing-page-top">
           <ScaffoldTitle className="pb-3">
-            {companyInfo?.name ?? 'Organization'} settings
+            {loading && !companyInfo ? <ShimmeringLoader /> : `Paramètres de ${companyInfo?.name}`}
           </ScaffoldTitle>
         </ScaffoldContainer>
       </ScaffoldHeader>

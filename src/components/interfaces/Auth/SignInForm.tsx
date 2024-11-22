@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 'use client';
 
 import { useState } from 'react';
@@ -12,8 +13,8 @@ import { toast } from 'sonner';
 import { object, string } from 'yup';
 
 const signInSchema = object({
-  email: string().email('Must be a valid email').required('Email is required'),
-  password: string().required('Password is required'),
+  email: string().email("L'email doit être valide").required("L'email est requis"),
+  password: string().required('Le mot de passe est requis'),
 });
 
 const SignInForm = () => {
@@ -23,23 +24,25 @@ const SignInForm = () => {
   const [passwordHidden, setPasswordHidden] = useState(true);
 
   const onSignIn = async ({ email, password }: { email: string; password: string }) => {
-    const toastId = toast.loading('Signing in...');
+    const toastId = toast.loading('Connexion en cours...');
 
     try {
       const { code } = await login({ email, password });
       if (code) {
         if (code === 'DEFAULTPASS') {
-          toast.success(`You used a default password, you have to change it `, { id: toastId });
+          toast.success(`Vous utilisez un mot de passe par défaut, vous devez le changer`, {
+            id: toastId,
+          });
           router.replace('/auth/change-password');
           return;
         }
       }
 
-      toast.success(`Signed in successfully!`, { id: toastId });
+      toast.success(`Connexion réussie !`, { id: toastId });
       const redirectTo = searchParams.get('redirect') || '/dashboard';
       router.push(decodeURIComponent(redirectTo));
     } catch (error: any) {
-      toast.error(`Failed to sign in: ${error.message}`, { id: toastId });
+      toast.error(`Échec de la connexion : ${error.message}`, { id: toastId });
     }
   };
 
@@ -67,8 +70,8 @@ const SignInForm = () => {
               id="password"
               name="password"
               type={passwordHidden ? 'password' : 'text'}
-              label="Password"
-              placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
+              label="Mot de passe"
+              placeholder="••••••••"
               disabled={loading}
               autoComplete="current-password"
               actions={
@@ -84,7 +87,7 @@ const SignInForm = () => {
             <Link
               href="/auth/forgot-password"
               className="absolute top-0 right-0 text-sm text-foreground-lighter">
-              Forgot Password?
+              Mot de passe oublié ?
             </Link>
           </div>
 
@@ -95,7 +98,7 @@ const SignInForm = () => {
             size="large"
             disabled={loading}
             loading={loading}>
-            Sign In
+            Se connecter
           </Button>
         </div>
       )}

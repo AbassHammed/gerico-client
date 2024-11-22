@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 'use client';
 
 import { useRouter } from 'next/navigation';
@@ -8,7 +9,7 @@ import { toast } from 'sonner';
 import { object, string } from 'yup';
 
 const forgotPasswordSchema = object({
-  email: string().email('Must be a valid email').required('Email is required'),
+  email: string().email("L'email doit être valide").required("L'email est requis"),
 });
 
 const ForgotPasswordForm = () => {
@@ -19,11 +20,11 @@ const ForgotPasswordForm = () => {
     try {
       await sendMail({ email });
       toast.success(
-        `If you registered using your email and password, you will receive a password reset email.`,
+        `Si vous vous êtes inscrit avec votre email et mot de passe, vous recevrez un email de réinitialisation.`,
       );
       router.push('/auth/reset-password');
     } catch (error: any) {
-      toast.error('Invalid operation', {
+      toast.error('Opération invalide', {
         description: error.message,
       });
     }
@@ -55,7 +56,7 @@ const ForgotPasswordForm = () => {
             size="medium"
             disabled={loading}
             loading={loading}>
-            Send Reset Email
+            Envoyer le mail
           </Button>
         </div>
       )}

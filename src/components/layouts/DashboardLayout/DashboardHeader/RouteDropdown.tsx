@@ -74,7 +74,7 @@ const RouteDropdown = () => {
                       href={route.link ?? '#'}
                       className="w-full flex items-center justify-between">
                       {route.label}
-                      {route.link === pathname && <Check size={16} />}
+                      {pathname.includes(route.link!) && <Check size={16} />}
                     </Link>
                   </CommandItem_Shadcn>
                 ))}

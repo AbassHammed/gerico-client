@@ -14,12 +14,12 @@ const GeneralSettings = () => {
     <Form id={formId} initialValues={{}} onSubmit={noop}>
       {() => (
         <FormPanel>
-          <FormSection header={<FormSectionLabel>General settings</FormSectionLabel>}>
+          <FormSection header={<FormSectionLabel>Paramètres généraux</FormSectionLabel>}>
             <FormSectionContent loading={false}>
               <Input
                 id="name"
                 size="small"
-                label="Organization name"
+                label="Nom de l'organisation"
                 disabled
                 value={companyInfo?.name}
               />
@@ -44,7 +44,7 @@ const GeneralSettings = () => {
                 disabled
                 id="collective_convention"
                 size="small"
-                label="Collective convention"
+                label="Convention collective"
                 value={companyInfo?.collective_convention}
               />
             </FormSectionContent>

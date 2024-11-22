@@ -35,12 +35,12 @@ export const ResetPasswordForm = () => {
 
   const FormSchema = z
     .object({
-      reset_code: z.string().min(6, { message: 'Your code must be 6 caracters' }),
+      reset_code: z.string().min(6, { message: 'Le code doit contenir 6 caractères' }),
       password: passwordSchema,
       confirm_password: passwordSchema,
     })
     .refine(mdp => mdp.confirm_password === mdp.password, {
-      message: 'Les mots de passe ne correspondent pas.',
+      message: 'Les mots de passe ne correspondent pas',
       path: ['confirmPassword'],
     });
 
@@ -68,7 +68,7 @@ export const ResetPasswordForm = () => {
         return;
       }
     } catch (error: any) {
-      toast.error('Invalid operation', {
+      toast.error('Opération invalide', {
         description: error.message,
       });
     }
@@ -112,7 +112,7 @@ export const ResetPasswordForm = () => {
           name="password"
           control={form.control}
           render={({ field }) => (
-            <FormItemLayout layout="vertical" label="Password">
+            <FormItemLayout layout="vertical" label="Mot de passe">
               <FormControl_Shadcn>
                 <div className="relative">
                   <Input_Shadcn
@@ -120,12 +120,12 @@ export const ResetPasswordForm = () => {
                     id="password"
                     name="password"
                     type={passwordHidden ? 'password' : 'text'}
-                    aria-label="Password"
+                    aria-label="Mot de passe"
                     disabled={loading}
                     autoComplete="new-password"
                     onFocus={() => setShowConditions('password')}
                     onBlur={() => setShowConditions(null)}
-                    placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
+                    placeholder="••••••••"
                   />
                   <div className="absolute inset-y-0 right-0 pl-3 pr-1 flex space-x-1 items-center">
                     <Button
@@ -145,7 +145,7 @@ export const ResetPasswordForm = () => {
           name="confirm_password"
           control={form.control}
           render={({ field }) => (
-            <FormItemLayout layout="vertical" label="Confirm Password">
+            <FormItemLayout layout="vertical" label="Confirmer le mot de passe">
               <FormControl_Shadcn>
                 <div className="relative">
                   <Input_Shadcn
@@ -153,12 +153,12 @@ export const ResetPasswordForm = () => {
                     id="confirmPassword"
                     name="confirmPassword"
                     type={passwordHidden1 ? 'password' : 'text'}
-                    aria-label="Confirm Password"
+                    aria-label="Confirmer le mot de passe"
                     autoComplete="new-password"
                     disabled={loading}
                     onFocus={() => setShowConditions('confirmPassword')}
                     onBlur={() => setShowConditions(null)}
-                    placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
+                    placeholder="••••••••"
                   />
                   <div className="absolute inset-y-0 right-0 pl-3 pr-1 flex space-x-1 items-center">
                     <Button
@@ -188,7 +188,7 @@ export const ResetPasswordForm = () => {
           htmlType="submit"
           size={'large'}
           disabled={confirm_password.length === 0 || password.length === 0 || loading}>
-          Reset password
+          Réinitialiser le mot de passe
         </Button>
       </form>
     </Form_Shadcn>
