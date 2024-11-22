@@ -4,6 +4,8 @@ import { IChangePasswordInput } from '@/types';
 import { getCookie, setCookie } from 'cookies-next';
 import useSWRMutation from 'swr/mutation';
 
+import { API_URL } from './useUser';
+
 async function changePassword(url: string, { arg }: { arg: IChangePasswordInput }) {
   try {
     const s_token = getCookie('auth_token');
@@ -38,7 +40,7 @@ async function changePassword(url: string, { arg }: { arg: IChangePasswordInput 
 
 export default function useChangeDefaultPassword() {
   const { trigger, isMutating: loading } = useSWRMutation(
-    'http://localhost:5000/api/v1/users/change-default-password',
+    `${API_URL}/users/change-default-password`,
     changePassword,
   );
 

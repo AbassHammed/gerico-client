@@ -3,6 +3,8 @@
 import { getCookie } from 'cookies-next';
 import useSWRMutation from 'swr/mutation';
 
+import { API_URL } from './useUser';
+
 async function sendReset_Code(url: string) {
   try {
     const uid = getCookie('t_uid');
@@ -31,7 +33,7 @@ async function sendReset_Code(url: string) {
 
 export function useResendCode() {
   const { trigger, isMutating: loading } = useSWRMutation(
-    'http://localhost:5000/api/v1/users/resend-password-code',
+    `${API_URL}/users/resend-password-code`,
     sendReset_Code,
   );
 

@@ -4,6 +4,8 @@ import { ResetPasswordType } from '@/types';
 import { deleteCookie } from 'cookies-next';
 import useSWRMutation from 'swr/mutation';
 
+import { API_URL } from './useUser';
+
 async function resetPass(url: string, { arg }: { arg: ResetPasswordType }) {
   try {
     const response = await fetch(url, {
@@ -27,7 +29,7 @@ async function resetPass(url: string, { arg }: { arg: ResetPasswordType }) {
 
 export function useResetPassword() {
   const { trigger, isMutating: loading } = useSWRMutation(
-    'http://localhost:5000/api/v1/users/reset-password',
+    `${API_URL}/users/reset-password`,
     resetPass,
   );
 

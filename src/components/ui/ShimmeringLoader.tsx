@@ -34,5 +34,15 @@ const GenericSkeletonLoader = () => (
   </div>
 );
 
-export { GenericSkeletonLoader };
+function GenericSkeletonLoaderList() {
+  return (
+    <div className="my-10 space-y-6">
+      {Array.from({ length: 5 }).map((_, index) => (
+        <GenericSkeletonLoader key={index} />
+      ))}
+    </div>
+  );
+}
+
+export { GenericSkeletonLoader, GenericSkeletonLoaderList };
 export default ShimmeringLoader;

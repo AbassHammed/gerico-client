@@ -5,6 +5,8 @@ import { getCookie } from 'cookies-next';
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 
+import { API_URL } from './useUser';
+
 async function updateCompanyInfo(url: string, { arg }: { arg: ICompanyInfo }) {
   try {
     const authToken = getCookie('auth_token');
@@ -37,10 +39,7 @@ async function updateCompanyInfo(url: string, { arg }: { arg: ICompanyInfo }) {
 }
 
 export function useUpdateCompanyInfo() {
-  const { trigger, isMutating: loading } = useSWRMutation(
-    `http://localhost:5000/api/v1/company`,
-    updateCompanyInfo,
-  );
+  const { trigger, isMutating: loading } = useSWRMutation(`${API_URL}/company`, updateCompanyInfo);
 
   const updateCompany = async (arg: ICompanyInfo) => {
     try {
@@ -86,7 +85,7 @@ async function fetcher(url: string) {
 
 export function useCompanyInfo(siret: string) {
   const { data, error, isLoading, isValidating, mutate } = useSWR<ICompanyInfo>(
-    `http://localhost:5000/api/v1/company/${siret}`,
+    `${API_URL}/company/${siret}`,
     fetcher,
   );
 

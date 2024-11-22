@@ -4,6 +4,8 @@ import { ILoginInputs } from '@/types';
 import { setCookie } from 'cookies-next';
 import useSWRMutation from 'swr/mutation';
 
+import { API_URL } from './useUser';
+
 function parseUserAgent(ua: string) {
   let browser = 'Unknown';
   let os = 'Unknown';
@@ -66,10 +68,7 @@ async function sendRequest(
 }
 
 export default function useLogin() {
-  const { trigger, isMutating: loading } = useSWRMutation(
-    'http://localhost:5000/api/v1/users/login',
-    sendRequest,
-  );
+  const { trigger, isMutating: loading } = useSWRMutation(`${API_URL}/users/login`, sendRequest);
 
   const login = async (inputs: ILoginInputs) => {
     try {

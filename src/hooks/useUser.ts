@@ -8,7 +8,7 @@ import type { IUser } from '@/types';
 import { getCookie } from 'cookies-next';
 import useSWR from 'swr';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api/v1';
+export const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api/v1';
 
 async function fetchUser(url: string) {
   const token = getCookie('auth_token');
@@ -50,7 +50,7 @@ export function useUser() {
 }
 
 export function useProfile(slug: string) {
-  const { data, error, isValidating, isLoading } = useSWR<{ user: IUser }>(
+  const { data, error, isValidating, isLoading, mutate } = useSWR<{ user: IUser }>(
     `${API_URL}/users/${slug}`,
     fetchUser,
   );
@@ -58,5 +58,6 @@ export function useProfile(slug: string) {
     user: data?.user,
     isLoading: (!error && !data) || isValidating || isLoading,
     error,
+    mutate,
   };
 }

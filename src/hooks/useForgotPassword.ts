@@ -3,6 +3,8 @@
 import { setCookie } from 'cookies-next';
 import useSWRMutation from 'swr/mutation';
 
+import { API_URL } from './useUser';
+
 async function forgotPassword(url: string, { arg }: { arg: { email: string } }) {
   try {
     const response = await fetch(url, {
@@ -26,7 +28,7 @@ async function forgotPassword(url: string, { arg }: { arg: { email: string } }) 
 
 export function useForgotPassword() {
   const { trigger, isMutating: loading } = useSWRMutation(
-    'http://localhost:5000/api/v1/users/forgot-password',
+    `${API_URL}/users/forgot-password`,
     forgotPassword,
   );
 

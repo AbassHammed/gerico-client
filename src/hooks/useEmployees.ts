@@ -4,6 +4,8 @@ import { IUser } from '@/types';
 import { getCookie } from 'cookies-next';
 import useSWR from 'swr';
 
+import { API_URL } from './useUser';
+
 async function fetcher(url: string) {
   try {
     const authToken = getCookie('auth_token');
@@ -35,7 +37,7 @@ async function fetcher(url: string) {
 }
 
 export function useEmployees() {
-  const { data, error, isLoading } = useSWR<IUser[]>('http://localhost:5000/api/v1/users', fetcher);
+  const { data, error, isLoading } = useSWR<IUser[]>(`${API_URL}/users`, fetcher);
 
   return { employees: data, error, isLoading };
 }

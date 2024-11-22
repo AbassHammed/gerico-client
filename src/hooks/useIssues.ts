@@ -4,6 +4,8 @@ import { IIssue, IIssueInput } from '@/types';
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 
+import { API_URL } from './useUser';
+
 async function markIssueAsResolved(url: string) {
   try {
     const response = await fetch(url, {
@@ -25,7 +27,7 @@ async function markIssueAsResolved(url: string) {
 
 export function useMarkIssueAsResolved(issueId: string) {
   const { trigger, isMutating: loading } = useSWRMutation(
-    `http://localhost:5000/api/v1/issues/${issueId}/solved`,
+    `${API_URL}/issues/${issueId}/solved`,
     markIssueAsResolved,
   );
 

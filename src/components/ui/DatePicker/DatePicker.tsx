@@ -284,10 +284,10 @@ function _DatePicker({
           <div className="flex items-center justify-end gap-2 py-2 px-3 pb-4">
             {!hideClear && (
               <Button type="default" onClick={() => handleClear()}>
-                Clear
+                Effacer
               </Button>
             )}
-            <Button onClick={() => handleSubmit()}>Apply</Button>
+            <Button onClick={() => handleSubmit()}>Appliquer</Button>
           </div>
         </>
       </PopoverContent_Shadcn>
