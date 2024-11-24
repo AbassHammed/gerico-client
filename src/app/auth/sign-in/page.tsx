@@ -1,3 +1,5 @@
+import { Suspense } from 'react';
+
 import { Metadata } from 'next';
 
 import SignInForm from '@/components/interfaces/Auth/SignInForm';
@@ -8,9 +10,11 @@ export const metadata: Metadata = {
 };
 
 const SignInPage = () => (
-  <AuthLayout heading="Welcome back" subheading="Sign in to your account" showDisclaimer>
+  <AuthLayout heading="Bienvenue" subheading="Connectez-vous à votre compte" showDisclaimer>
     <div className="flex flex-col">
-      <SignInForm />
+      <Suspense fallback={<div>Loading...</div>}>
+        <SignInForm />
+      </Suspense>
     </div>
   </AuthLayout>
 );

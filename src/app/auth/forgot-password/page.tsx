@@ -10,8 +10,8 @@ export const metadata: Metadata = {
 
 const ForgotPasswordPage = () => (
   <AuthLayout
-    heading="Reset Your Password"
-    subheading="Type in your email and we'll send you a link to reset your password">
+    heading="Mot de passe oublié"
+    subheading="Saisissez votre adresse e-mail et nous vous enverrons un code pour réinitialiser votre mot de passe">
     <div className="flex flex-col gap-4">
       <ForgotPasswordForm />
     </div>
