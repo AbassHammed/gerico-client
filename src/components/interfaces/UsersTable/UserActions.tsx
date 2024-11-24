@@ -1,9 +1,11 @@
+/* eslint-disable quotes */
 'use client';
 
 import { useState } from 'react';
 
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
+import { useArchiveUser, useResendWelcomeEmail } from '@/hooks/admin-actions';
 import { IUser } from '@/types';
 import {
   Button,
@@ -14,12 +16,31 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@ui';
-import { noop } from 'lodash';
 import { MoreVertical, Trash } from 'lucide-react';
+import { toast } from 'sonner';
 
 export const UserActions = ({ member }: { member: IUser }) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const router = useRouter();
+  const { archive, loading } = useArchiveUser(member.uid);
+  const { resendEmail, loading: resendLoading } = useResendWelcomeEmail(member.uid);
+
+  const handleArchive = async () => {
+    try {
+      const res = await archive();
+      toast.success(res);
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  };
+
+  const handleResendEmail = async () => {
+    try {
+      const res = await resendEmail();
+      toast.success(res);
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  };
 
   const isLoading = false;
 
@@ -36,24 +57,24 @@ export const UserActions = ({ member }: { member: IUser }) => {
               icon={<MoreVertical />}
             />
           </DropdownMenuTrigger>
-          <DropdownMenuContent side="bottom" align="end" className="w-52">
-            <DropdownMenuItem
-              onClick={() => router.push(`/dashboard/employees/${member.uid}/update`)}>
-              <div className="flex flex-col">
-                <p>Reset password</p>
-                <p className="text-foreground-lighter">Set password to default.</p>
-              </div>
+          <DropdownMenuContent side="bottom" align="end" className="w-60">
+            <DropdownMenuItem>
+              <Link href={`/dashboard/employees/${member.uid}/update`} className="flex flex-col">
+                <p>Modifier les informations</p>
+                <p className="text-foreground-lighter">Mettre à jour les données de l'employé</p>
+              </Link>
             </DropdownMenuItem>
 
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => noop(null)}>
+            <DropdownMenuItem onClick={handleResendEmail} disabled={resendLoading}>
               <div className="flex flex-col">
-                <p>Resend welcome mail</p>
+                <p>Renvoyer l'email de bienvenue</p>
                 <p className="text-foreground-lighter">
-                  Resend welcome email with default password
+                  Renvoyer l'email avec les identifiants de connexion
                 </p>
               </div>
             </DropdownMenuItem>
+            <DropdownMenuSeparator />
 
             <DropdownMenuItem
               className="space-x-2 items-start"
@@ -62,7 +83,7 @@ export const UserActions = ({ member }: { member: IUser }) => {
               }}>
               <Trash size={16} />
               <div className="flex flex-col">
-                <p>Archive user</p>
+                <p>Archiver l'employé</p>
               </div>
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -71,42 +92,35 @@ export const UserActions = ({ member }: { member: IUser }) => {
       <ConfirmationModal
         size="large"
         visible={isDeleteModalOpen}
-        // loading={isDeletingMember}
-        title="Confirm to remove member"
-        confirmLabel="Remove"
+        loading={loading}
+        disabled={member.is_archived}
+        title="Confirmation d'archivage"
+        confirmLabel="Archiver"
         variant="warning"
         alert={{
-          title: 'All user content from this member will be permanently removed.',
+          title: "Les données de l'employé seront archivées.",
           description: (
             <div>
-              Removing a member will delete all of the user's saved content in all projects of this
-              organization, which includes:
+              L'archivage d'un employé conservera son historique mais désactivera son accès au
+              système. Cela inclut :
               <ul className="list-disc pl-4 my-2">
-                <li>
-                  SQL snippets{' '}
-                  <span className="text-foreground">
-                    (both <span className="underline">private</span> and{' '}
-                    <span className="underline">shared</span> snippets)
-                  </span>
-                </li>
-                <li>Custom reports</li>
-                <li>Log Explorer queries</li>
+                <li>L'historique des fiches de paie</li>
+                <li>L'historique des congés</li>
+                <li>Les documents administratifs</li>
               </ul>
               <p className="mt-4 text-foreground-lighter">
-                If you'd like to retain the member's shared SQL snippets, right click on them and
-                "Duplicate personal copy" in the SQL Editor before removing this member.
+                L'employé ne pourra plus se connecter à son espace personnel après l'archivage. Ses
+                données seront conservées conformément aux obligations légales.
               </p>
             </div>
           ),
         }}
         onCancel={() => setIsDeleteModalOpen(false)}
-        onConfirm={() => {
-          noop(null);
-        }}>
+        onConfirm={handleArchive}>
         <p className="text-sm text-foreground-light">
-          Are you sure you want to remove{' '}
+          Êtes-vous sûr de vouloir archiver{' '}
           <span className="text-foreground">{`${member.civility} ${member.first_name} ${member.last_name}`}</span>{' '}
-          from <span className="text-foreground">{''}</span>?
+          ?
         </p>
       </ConfirmationModal>
     </>

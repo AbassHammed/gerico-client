@@ -6,6 +6,7 @@ import Image from 'next/legacy/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 
+import { useUser } from '@/hooks/useUser';
 import { useAppStateSnapshot } from '@/lib/app-state';
 import { cn } from '@/lib/utils';
 import {
@@ -20,6 +21,7 @@ import {
   Separator,
   User,
 } from '@ui';
+import { deleteCookie } from 'cookies-next';
 
 import {
   generateDateRoute,
@@ -30,16 +32,11 @@ import {
 } from './NavigationBar.utils';
 import NavigationIconLink from './NavigationIconLink';
 
-const profile = {
-  first_name: 'John',
-  last_name: 'Doe',
-  email: 'john.doe@example.com',
-};
-
 const NavigationBar = () => {
   const snap = useAppStateSnapshot();
   const pathname = usePathname();
   const router = useRouter();
+  const { user: profile } = useUser();
 
   const [userDropdownOpen, setUserDropdownOpenState] = useState(false);
 
@@ -53,6 +50,11 @@ const NavigationBar = () => {
       false,
       event.target.id === 'icon-link' || ['svg', 'path'].includes(event.target.localName),
     );
+  };
+
+  const onSignOut = async () => {
+    deleteCookie('auth_token');
+    router.push('/auth/sign-in');
   };
 
   const UserAccountButton = (
@@ -163,6 +165,8 @@ const NavigationBar = () => {
             />
           ))}
 
+          <Separator className="my-1 bg-border-muted" />
+
           <DropdownMenu
             open={userDropdownOpen}
             onOpenChange={(open: boolean) => {
@@ -190,17 +194,10 @@ const NavigationBar = () => {
                   </>
                 )}
               </div>
-              <DropdownMenuSeparator />
 
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
-                <DropdownMenuItem
-                  onSelect={async () => {
-                    // await signOut();
-                    await router.push('/sign-in');
-                  }}>
-                  Log out
-                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={onSignOut}>Log out</DropdownMenuItem>
               </DropdownMenuGroup>
             </DropdownMenuContent>
           </DropdownMenu>

@@ -1,10 +1,14 @@
 'use client';
 
 /* eslint-disable indent */
+import { useState } from 'react';
+
 import { useEmployees } from '@/hooks/useEmployees';
 import { useUser } from '@/hooks/useUser';
-import { GenericSkeletonLoader, Loading, Table } from '@ui';
-import { AlertCircle } from 'lucide-react';
+import { IUser } from '@/types';
+import * as Tooltip from '@radix-ui/react-tooltip';
+import { Button, GenericSkeletonLoader, Loading, Table } from '@ui';
+import { AlertCircle, ArrowDown, ArrowUp } from 'lucide-react';
 
 import { UserRow } from './UserRow';
 
@@ -15,19 +19,28 @@ export interface MembersViewProps {
 const UsersView = ({ searchString }: MembersViewProps) => {
   const { user: profile } = useUser();
   const { employees: members, error: membersError, isLoading: isLoadingMembers } = useEmployees();
+  const [dateSortDesc, setDateSortDesc] = useState(true);
 
   const allMembers = members ?? [];
-  const filteredMembers = !searchString
-    ? allMembers
-    : allMembers
-        .filter(
-          member =>
-            member.last_name.toLowerCase().includes(searchString.toLowerCase()) ||
-            member.first_name.toLowerCase().includes(searchString.toLowerCase()) ||
-            member.email.toLowerCase().includes(searchString.toLowerCase()),
-        )
-        .slice()
-        .sort((a, b) => a.last_name.localeCompare(b.last_name));
+  const sortByArchiveAndName = (a: IUser, b: IUser) => {
+    // Compare archived status first
+    if (a.is_archived !== b.is_archived) {
+      return a.is_archived ? 1 : -1;
+    }
+    // If archive status is the same, sort by last name
+    return a.last_name.localeCompare(b.last_name);
+  };
+
+  const matchesSearch = (member: IUser, search: string) => {
+    const searchLower = search.toLowerCase();
+    return [member.last_name, member.first_name, member.email].some(field =>
+      field.toLowerCase().includes(searchLower),
+    );
+  };
+
+  const filteredMembers = allMembers
+    .filter(member => !searchString || matchesSearch(member, searchString))
+    .sort(sortByArchiveAndName);
 
   return (
     <>
@@ -44,11 +57,48 @@ const UsersView = ({ searchString }: MembersViewProps) => {
               head={[
                 <Table.th key="header-user">User</Table.th>,
                 <Table.th key="header-status" className="w-24" />,
-                <Table.th key="header-mfa" className="text-center w-32">
-                  Enabled MFA
+                <Table.th key="header-hire-date">
+                  <div className="flex items-center space-x-2">
+                    <p>Hire Date</p>
+
+                    <Tooltip.Root delayDuration={0}>
+                      <Tooltip.Trigger asChild>
+                        <Button
+                          type="text"
+                          className="px-1"
+                          icon={
+                            dateSortDesc ? (
+                              <ArrowDown strokeWidth={1.5} size={14} />
+                            ) : (
+                              <ArrowUp strokeWidth={1.5} size={14} />
+                            )
+                          }
+                          onClick={() => setDateSortDesc(!dateSortDesc)}
+                        />
+                      </Tooltip.Trigger>
+                      <Tooltip.Portal>
+                        <Tooltip.Portal>
+                          <Tooltip.Content side="right">
+                            <Tooltip.Arrow className="radix-tooltip-arrow" />
+                            <div
+                              className={[
+                                'rounded bg-alternative py-1 px-2 leading-none shadow',
+                                'border border-background',
+                              ].join(' ')}>
+                              <span className="text-xs text-foreground">
+                                {dateSortDesc ? 'Sort latest first' : 'Sort earliest first'}
+                              </span>
+                            </div>
+                          </Tooltip.Content>
+                        </Tooltip.Portal>
+                      </Tooltip.Portal>
+                    </Tooltip.Root>
+                  </div>
                 </Table.th>,
-                <Table.th key="header-role" className="flex items-center space-x-1">
-                  <span>Role</span>
+                <Table.th key="header-role">
+                  <div className="flex items-center space-x-2">
+                    <span>Role</span>
+                  </div>
                 </Table.th>,
                 <Table.th key="header-action" />,
               ]}

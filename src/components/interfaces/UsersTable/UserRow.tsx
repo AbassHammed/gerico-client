@@ -3,7 +3,7 @@
 import { useUser } from '@/hooks/useUser';
 import { IUser } from '@/types';
 import { Badge, Table } from '@ui';
-import { User, X } from 'lucide-react';
+import { User } from 'lucide-react';
 
 import { UserActions } from './UserActions';
 
@@ -32,8 +32,14 @@ export const UserRow = ({ member }: { member: IUser }) => {
       </Table.td>
 
       <Table.td>
-        <div className="flex items-center justify-center">
-          <X className="text-foreground-light" strokeWidth={1.5} size={20} />
+        <div className="flex items-center">
+          <p>
+            {new Intl.DateTimeFormat('fr-FR', {
+              day: '2-digit',
+              month: 'long',
+              year: '2-digit',
+            }).format(new Date(member.hire_date))}
+          </p>
         </div>
       </Table.td>
 

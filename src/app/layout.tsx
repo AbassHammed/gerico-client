@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 
+import { TooltipProvider } from '@radix-ui/react-tooltip';
 import { Toaster } from 'sonner';
 
 import './styles/globals.css';
@@ -60,8 +61,10 @@ export default function RootLayout({
         <link rel="manifest" href="/site.webmanifest" />
       </head>
       <body className={`${inter.className}  antialiased`}>
-        <SWRLayout>{children}</SWRLayout>
-        <Toaster richColors position="top-center" />
+        <TooltipProvider>
+          <SWRLayout>{children}</SWRLayout>
+          <Toaster richColors position="top-center" />
+        </TooltipProvider>
       </body>
     </html>
   );
