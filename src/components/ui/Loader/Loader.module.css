@@ -1,0 +1,126 @@
+.xlviLoader {
+  --xlvi-container-size: calc(var(--xlvi-size) * 1.75);
+  width: var(--xlvi-container-size);
+  height: var(--xlvi-container-size);
+  position: relative;
+  background: var(--xlvi-background);
+}
+
+.box {
+  position: absolute;
+  box-sizing: border-box;
+  border-radius: calc(var(--xlvi-size) * 0.375);
+  border-width: calc(var(--xlvi-size) * 0.25);
+  border-style: solid;
+}
+
+.box1 {
+  border-color: var(--xlvi-color-1);
+  animation: anim1 3s cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
+}
+
+.box2 {
+  border-color: var(--xlvi-color-2);
+  animation: anim2 3s cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
+}
+
+.box3 {
+  border-color: var(--xlvi-color-3);
+  animation: anim3 3s cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
+}
+
+@keyframes anim1 {
+  0%,
+  100% {
+    width: calc(var(--xlvi-size) * 1.75);
+    height: calc(var(--xlvi-size) * 0.75);
+    top: var(--xlvi-size);
+    left: 0;
+  }
+  25% {
+    width: calc(var(--xlvi-size) * 0.75);
+    height: calc(var(--xlvi-size) * 0.75);
+    top: var(--xlvi-size);
+    left: 0;
+  }
+  50% {
+    width: calc(var(--xlvi-size) * 0.75);
+    height: calc(var(--xlvi-size) * 0.75);
+    top: var(--xlvi-size);
+    left: 0;
+  }
+  75% {
+    width: calc(var(--xlvi-size) * 0.75);
+    height: calc(var(--xlvi-size) * 1.75);
+    top: 0;
+    left: 0;
+  }
+}
+
+@keyframes anim2 {
+  0%,
+  100% {
+    width: calc(var(--xlvi-size) * 0.75);
+    height: calc(var(--xlvi-size) * 0.75);
+    top: 0;
+    left: 0;
+  }
+  25% {
+    width: calc(var(--xlvi-size) * 0.75);
+    height: calc(var(--xlvi-size) * 0.75);
+    top: 0;
+    left: 0;
+  }
+  50% {
+    width: calc(var(--xlvi-size) * 1.75);
+    height: calc(var(--xlvi-size) * 0.75);
+    top: 0;
+    left: 0;
+  }
+  75% {
+    width: calc(var(--xlvi-size) * 0.75);
+    height: calc(var(--xlvi-size) * 0.75);
+    top: 0;
+    left: var(--xlvi-size);
+  }
+}
+
+@keyframes anim3 {
+  0%,
+  100% {
+    width: calc(var(--xlvi-size) * 0.75);
+    height: calc(var(--xlvi-size) * 0.75);
+    top: 0;
+    left: var(--xlvi-size);
+  }
+  25% {
+    width: calc(var(--xlvi-size) * 0.75);
+    height: calc(var(--xlvi-size) * 1.75);
+    top: 0;
+    left: var(--xlvi-size);
+  }
+  50% {
+    width: calc(var(--xlvi-size) * 0.75);
+    height: calc(var(--xlvi-size) * 0.75);
+    top: var(--xlvi-size);
+    left: var(--xlvi-size);
+  }
+  75% {
+    width: calc(var(--xlvi-size) * 0.75);
+    height: calc(var(--xlvi-size) * 0.75);
+    top: var(--xlvi-size);
+    left: var(--xlvi-size);
+  }
+}
+
+@media (min-width: 768px) {
+  .xlviLoader {
+    --xlvi-size: var(--xlvi-size-desktop);
+  }
+}
+
+@media (max-width: 767px) {
+  .xlviLoader {
+    --xlvi-size: var(--xlvi-size-mobile);
+  }
+}
