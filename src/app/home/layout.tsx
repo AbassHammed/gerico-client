@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 
-import HLayout from '@/components/layouts/homeLayout';
+import HLayout from '@/components/layouts/HomeLayout/homeLayout';
 
 export const metadata: Metadata = {
   title: 'Home',
