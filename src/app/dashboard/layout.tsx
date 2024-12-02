@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 import DLayout from '@/components/layouts/DashboardLayout/DashboardLayout';
 
 export const metadata: Metadata = {
-  title: 'Dashboard',
+  title: 'Tableau de bord',
 };
 
 export default function DashboardLayout({
