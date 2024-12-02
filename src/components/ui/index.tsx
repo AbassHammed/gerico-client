@@ -18,7 +18,8 @@ export { default as Table } from './Table';
 export * from './Admonition';
 export * from './Dialogs';
 export { default as Loading } from './Loading';
-export { default as LoadingV2 } from './Loader/loading';
+export { default as LoadingV1 } from './Loader/Loading';
+export { default as LoadingV2 } from './Loader/LoadingV2';
 
 // Shadcn
 export * from './shadcn/ui/dropdown-menu';
