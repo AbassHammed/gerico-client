@@ -1,8 +1,10 @@
+/* eslint-disable quotes */
 'use client';
 
 import { useState } from 'react';
 
 import { FormItemLayout } from '@/components/ui/form/FormItemLayout';
+import { useReportIssue } from '@/hooks/useIssues';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Alert_Shadcn,
@@ -24,25 +26,27 @@ import {
 } from '@ui';
 import { CheckCircle, Mail } from 'lucide-react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { ExpectationInfoBox } from './ExpectationInfoBox';
 import { CATEGORY_OPTIONS, SEVERITY_OPTIONS } from './supportForm.constants';
 
 export const SupportForm = () => {
+  const { reportIssue, loading } = useReportIssue();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const FormSchema = z.object({
-    category: z.string(),
-    severity: z.string(),
+    type: z.string(),
+    priority: z.string(),
     subject: z.string().min(1, 'Veuillez ajouter un sujet'),
-    message: z.string().min(1, 'Veuillez décrire le problème rencontré'),
+    description: z.string().min(1, 'Veuillez décrire le problème rencontré'),
   });
 
   const defaultValues = {
-    category: CATEGORY_OPTIONS[0].value,
-    severity: 'Low',
+    type: CATEGORY_OPTIONS[0].value,
+    priority: 'Low',
     subject: '',
-    message: '',
+    description: '',
   };
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -53,8 +57,14 @@ export const SupportForm = () => {
   });
 
   const onSubmit: SubmitHandler<z.infer<typeof FormSchema>> = async values => {
-    setIsSubmitted(true);
-    console.error(values);
+    try {
+      const res = await reportIssue(values);
+      setIsSubmitted(res);
+    } catch (error: any) {
+      toast.error("Une erreur est survenue lors de l'envoi de la demande", {
+        description: error.message,
+      });
+    }
   };
 
   return (
@@ -65,7 +75,7 @@ export const SupportForm = () => {
             <CheckCircle />
             <AlertTitle_Shadcn>Demande envoyée avec succès</AlertTitle_Shadcn>
             <AlertDescription_Shadcn className="text-xs">
-              Notre équipe traitera votre demande dans les plus brefs délais. Vous recevrez une
+              L'astrient traitera votre demande dans les plus brefs délais. Vous recevrez une
               réponse par email.
             </AlertDescription_Shadcn>
           </Alert_Shadcn>
@@ -81,7 +91,7 @@ export const SupportForm = () => {
             <div
               className={'px-6 grid sm:grid-cols-2 sm:grid-rows-1 gap-4 grid-cols-1 grid-rows-2'}>
               <FormField_Shadcn
-                name="category"
+                name="type"
                 control={form.control}
                 render={({ field }) => (
                   <FormItemLayout layout="vertical" label="Domaine d'intervention">
@@ -113,7 +123,7 @@ export const SupportForm = () => {
                 )}
               />
               <FormField_Shadcn
-                name="severity"
+                name="priority"
                 control={form.control}
                 render={({ field }) => (
                   <FormItemLayout layout="vertical" label="Gravité">
@@ -124,7 +134,7 @@ export const SupportForm = () => {
                         onValueChange={field.onChange}>
                         <SelectTrigger_Shadcn className="w-full">
                           <SelectValue_Shadcn placeholder="Sélectionner une gravité">
-                            {field.value}
+                            {SEVERITY_OPTIONS.find(o => o.value === field.value)?.label}
                           </SelectValue_Shadcn>
                         </SelectTrigger_Shadcn>
                         <SelectContent_Shadcn>
@@ -164,7 +174,7 @@ export const SupportForm = () => {
             </div>
 
             <FormField_Shadcn
-              name="message"
+              name="description"
               control={form.control}
               render={({ field }) => (
                 <FormItemLayout
@@ -190,9 +200,9 @@ export const SupportForm = () => {
                   htmlType="submit"
                   size="small"
                   icon={<Mail className="text-white" />}
-                  disabled={false}
+                  disabled={loading}
                   className="text-white"
-                  loading={false}>
+                  loading={loading}>
                   Envoyer la demande
                 </Button>
               </div>

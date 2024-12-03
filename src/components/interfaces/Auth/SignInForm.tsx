@@ -96,6 +96,7 @@ const SignInForm = () => {
             form="signIn-form"
             htmlType="submit"
             size="large"
+            className="text-white"
             disabled={loading}
             loading={loading}>
             Se connecter

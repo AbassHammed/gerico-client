@@ -30,10 +30,10 @@ export type ResetPasswordType = {
 };
 
 export interface IIssueInput {
-  type: 'auth' | 'leave' | 'payslip' | 'other';
-  priority: 'high' | 'average' | 'normal';
-  subject: string;
+  type: string;
   description: string;
+  priority: string;
+  subject: string;
 }
 
 export interface IIssue extends IIssueInput {

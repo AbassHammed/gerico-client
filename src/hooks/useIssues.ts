@@ -126,10 +126,7 @@ async function issueReporter(url: string, { arg }: { arg: IIssueInput }) {
 }
 
 export function useReportIssue() {
-  const { trigger, isMutating: loading } = useSWRMutation(
-    'http://localhost:5000/api/issues/report',
-    issueReporter,
-  );
+  const { trigger, isMutating: loading } = useSWRMutation(`${API_URL}/issues`, issueReporter);
 
   const reportIssue = async (inputs: IIssueInput) => {
     try {
