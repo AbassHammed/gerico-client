@@ -1,8 +1,16 @@
 'use client';
 
+import React from 'react';
+
 import UserForm from '@/components/interfaces/User/UserForm';
 import { UserSchemaType } from '@/components/interfaces/User/UserForm.utils';
-import { ScaffoldContainer } from '@/components/ui/Scaffold';
+import {
+  ScaffoldContainer,
+  ScaffoldContainerLegacy,
+  ScaffoldDivider,
+  ScaffoldHeader,
+  ScaffoldTitle,
+} from '@/components/ui';
 import { GenericSkeletonLoaderList } from '@/components/ui/ShimmeringLoader';
 import { useCreateUser } from '@/hooks/useCreateUser';
 import { useUser } from '@/hooks/useUser';
@@ -29,9 +37,19 @@ export default function EmployeeForm() {
     }
   };
   return (
-    <ScaffoldContainer className="flex flex-col gap-10" bottomPadding>
-      {(isLoading || loading) && <GenericSkeletonLoaderList />}
-      {!isLoading && !loading && <UserForm onSubmit={onSubmit} isSubmitting={loading} />}
-    </ScaffoldContainer>
+    <React.Fragment>
+      <ScaffoldHeader className="pb-0">
+        <ScaffoldContainer>
+          <ScaffoldTitle className="pb-3">Créer un nouvel employé</ScaffoldTitle>
+        </ScaffoldContainer>
+      </ScaffoldHeader>
+
+      <ScaffoldDivider />
+
+      <ScaffoldContainerLegacy>
+        {(isLoading || loading) && <GenericSkeletonLoaderList />}
+        {!isLoading && !loading && <UserForm onSubmit={onSubmit} isSubmitting={loading} />}
+      </ScaffoldContainerLegacy>
+    </React.Fragment>
   );
 }

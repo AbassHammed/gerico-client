@@ -106,7 +106,6 @@ export const UserActions = ({ member }: { member: IUser }) => {
               <ul className="list-disc pl-4 my-2">
                 <li>L'historique des fiches de paie</li>
                 <li>L'historique des congés</li>
-                <li>Les documents administratifs</li>
               </ul>
               <p className="mt-4 text-foreground-lighter">
                 L'employé ne pourra plus se connecter à son espace personnel après l'archivage. Ses

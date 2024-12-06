@@ -48,7 +48,6 @@ const UserForm = ({ isUpdatePage = false, defaultUser, onSubmit, isSubmitting }:
         return (
           <>
             <FormHeader
-              title={isUpdatePage ? 'Modifier un employé' : 'Créer un employé'}
               description={
                 isUpdatePage
                   ? "Modifier les informations de l'employé"

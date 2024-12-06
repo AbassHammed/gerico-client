@@ -1,8 +1,15 @@
 'use client';
 
+import React from 'react';
+
 import UserForm from '@/components/interfaces/User/UserForm';
 import { UserSchemaType } from '@/components/interfaces/User/UserForm.utils';
-import { ScaffoldContainer } from '@/components/ui/Scaffold';
+import {
+  ScaffoldContainer,
+  ScaffoldContainerLegacy,
+  ScaffoldHeader,
+  ScaffoldTitle,
+} from '@/components/ui/Scaffold';
 import { GenericSkeletonLoaderList } from '@/components/ui/ShimmeringLoader';
 import { useUpdateUser } from '@/hooks/useCreateUser';
 import { useProfile } from '@/hooks/useUser';
@@ -29,11 +36,21 @@ export default function ModifyEmployeeForm({ params }: { params: { slug: string 
   };
 
   return (
-    <ScaffoldContainer className="flex flex-col gap-10" bottomPadding>
-      {(isLoading || !user) && <GenericSkeletonLoaderList />}
-      {user && (
-        <UserForm defaultUser={user} isUpdatePage onSubmit={onSubmit} isSubmitting={loading} />
-      )}
-    </ScaffoldContainer>
+    <React.Fragment>
+      <ScaffoldHeader className="pb-0">
+        <ScaffoldContainer>
+          <ScaffoldTitle className="pb-3">
+            Modifier l'employé {user?.first_name} {user?.last_name}
+          </ScaffoldTitle>
+        </ScaffoldContainer>
+      </ScaffoldHeader>
+
+      <ScaffoldContainerLegacy className="flex flex-col gap-10">
+        {(isLoading || !user) && <GenericSkeletonLoaderList />}
+        {user && (
+          <UserForm defaultUser={user} isUpdatePage onSubmit={onSubmit} isSubmitting={loading} />
+        )}
+      </ScaffoldContainerLegacy>
+    </React.Fragment>
   );
 }
