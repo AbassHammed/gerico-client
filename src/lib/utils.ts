@@ -1,8 +1,20 @@
+import { ISSThreshold } from '@/types';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
+}
+
+export function createThresholdMap(thresholds: ISSThreshold[]) {
+  return thresholds.reduce(
+    (acc, threshold) => {
+      const key = threshold.treshold_name.toLowerCase().replace(/\s+/g, '_');
+      acc[key] = [threshold.min_value, threshold.max_value];
+      return acc;
+    },
+    {} as Record<string, [number, number]>,
+  );
 }
 
 export const buildPathWithParams = (pathname: string) => {

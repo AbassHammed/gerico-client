@@ -53,3 +53,32 @@ export interface PaySlipRow {
   partSalariale: Part;
   partPatronale: Part;
 }
+
+// Define the type for the threshold values
+type ThresholdValue = [number, number];
+
+// Define the interface for the hook's return type
+export interface SocialSecurityThresholdsResult {
+  socialSecurityThresholdMap: Record<string, ThresholdValue>;
+  social_security_ceiling: ThresholdValue;
+  social_security_ceiling_min: number;
+  social_security_ceiling_max: number;
+  tranche_A: ThresholdValue;
+  tranche_A_min: number;
+  tranche_A_max: number;
+  tranche_B: ThresholdValue;
+  tranche_B_min: number;
+  tranche_B_max: number;
+  tranche2: ThresholdValue;
+  tranche2_min: number;
+  tranche2_max: number;
+  trancheA_B_C: ThresholdValue;
+  trancheA_B_C_min: number;
+  trancheA_B_C_max: number;
+  trancheA_B: ThresholdValue;
+  trancheA_B_min: number;
+  trancheA_B_max: number;
+  CSG_CRDS_percentage: number;
+  isLoading: boolean;
+  error: Error | null;
+}
