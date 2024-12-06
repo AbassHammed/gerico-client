@@ -99,3 +99,20 @@ export interface ICompanyInfo {
   country: string;
   collective_convention: string;
 }
+
+export interface ISSThreshold {
+  threshold_id: string;
+  treshold_name: string;
+  min_value: number;
+  max_value: number;
+  is_ceiling: boolean;
+}
+
+export interface IDeduction {
+  deduction_id: string;
+  deduction_type: string;
+  deduction_name: string;
+  part_salarial: number;
+  part_patronal: number;
+  threshold_id: string;
+}

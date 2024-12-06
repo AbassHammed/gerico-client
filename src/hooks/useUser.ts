@@ -31,7 +31,10 @@ async function fetchUser(url: string) {
 }
 
 export function useUser() {
-  const { data, error } = useSWR<{ user: IUser }>(`${API_URL}/users/me`, fetchUser);
+  const { data, error, isLoading, isValidating } = useSWR<{ user: IUser }>(
+    `${API_URL}/users/me`,
+    fetchUser,
+  );
   const router = useRouter();
 
   useEffect(() => {
@@ -44,7 +47,7 @@ export function useUser() {
 
   return {
     user: data?.user,
-    isLoading: !error && !data,
+    isLoading: isValidating || isLoading,
     error,
   };
 }
@@ -56,7 +59,7 @@ export function useProfile(slug: string) {
   );
   return {
     user: data?.user,
-    isLoading: (!error && !data) || isValidating || isLoading,
+    isLoading: isValidating || isLoading,
     error,
     mutate,
   };
