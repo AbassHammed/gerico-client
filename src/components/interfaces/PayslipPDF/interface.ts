@@ -55,7 +55,7 @@ export interface PaySlipRow {
 }
 
 // Define the type for the threshold values
-type ThresholdValue = [number, number];
+export type ThresholdValue = [number, number];
 
 // Define the interface for the hook's return type
 export interface SocialSecurityThresholdsResult {

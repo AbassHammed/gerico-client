@@ -2,43 +2,44 @@
 
 import { useMemo } from 'react';
 
+import { ThresholdValue } from '@/components/interfaces/PayslipPDF/interface';
 import { createThresholdMap } from '@/lib/utils';
 
-import { useGetThresholds } from './useHooks';
+import { useGetThresholds } from '../useHooks';
 
 export function useSocialSecurityThresholds() {
   const { thresholds, isLoading, error } = useGetThresholds();
 
-  const {
-    socialSecurityThresholdMap,
-    social_security_ceiling,
-    social_security_ceiling_min,
-    social_security_ceiling_max,
-    tranche_A,
-    tranche_A_min,
-    tranche_A_max,
-    tranche_B,
-    tranche_B_min,
-    tranche_B_max,
-    tranche2,
-    tranche2_min,
-    tranche2_max,
-    trancheA_B_C,
-    trancheA_B_C_min,
-    trancheA_B_C_max,
-    trancheA_B,
-    trancheA_B_min,
-    trancheA_B_max,
-  } = useMemo(() => {
+  const result = useMemo(() => {
     if (!thresholds) {
-      return {} as any;
+      return {
+        socialSecurityThresholdMap: {},
+        social_security_ceiling: [0, 0],
+        social_security_ceiling_min: 0,
+        social_security_ceiling_max: 0,
+        tranche_A: [0, 0],
+        tranche_A_min: 0,
+        tranche_A_max: 0,
+        tranche_B: [0, 0],
+        tranche_B_min: 0,
+        tranche_B_max: 0,
+        tranche2: [0, 0],
+        tranche2_min: 0,
+        tranche2_max: 0,
+        trancheA_B_C: [0, 0],
+        trancheA_B_C_min: 0,
+        trancheA_B_C_max: 0,
+        trancheA_B: [0, 0],
+        trancheA_B_min: 0,
+        trancheA_B_max: 0,
+      };
     }
 
     const map = createThresholdMap(thresholds);
 
-    const getThreshold = (name: string) => map[name] || [0, 0];
-    const getMin = (threshold: [number, number]) => threshold[0];
-    const getMax = (threshold: [number, number]) => threshold[1];
+    const getThreshold = (name: string): ThresholdValue => map[name] || [0, 0];
+    const getMin = (threshold: ThresholdValue) => threshold[0];
+    const getMax = (threshold: ThresholdValue) => threshold[1];
 
     const social_security_ceiling = getThreshold('plafond_sécurité_sociale');
     const tranche_A = getThreshold('tranche_a');
@@ -73,27 +74,9 @@ export function useSocialSecurityThresholds() {
   const CSG_CRDS_percentage = 0.9825;
 
   return {
-    socialSecurityThresholdMap,
-    social_security_ceiling,
-    social_security_ceiling_min,
-    social_security_ceiling_max,
-    tranche_A,
-    tranche_A_min,
-    tranche_A_max,
-    tranche_B,
-    tranche_B_min,
-    tranche_B_max,
-    tranche2,
-    tranche2_min,
-    tranche2_max,
-    trancheA_B_C,
-    trancheA_B_C_min,
-    trancheA_B_C_max,
-    trancheA_B,
-    trancheA_B_min,
-    trancheA_B_max,
+    ...result,
     CSG_CRDS_percentage,
     isLoading,
-    error,
+    error: error || null,
   };
 }
