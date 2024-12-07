@@ -100,7 +100,7 @@ const NavigationBar = () => {
           'hide-scrollbar flex flex-col justify-between overflow-y-auto',
         )}>
         <ul className="flex flex-col gap-y-1 justify-start px-2 relative">
-          <Link href="#" className="mx-2 flex items-center h-[40px]">
+          <Link href="#" className="md:hidden mx-2 flex items-center h-[40px]">
             <Image
               alt="Gerico"
               priority
@@ -109,6 +109,17 @@ const NavigationBar = () => {
               height={40}
               src={`/app/gerico-logo-icon.svg`}
               className="absolute h-[40px] w-6 cursor-pointer rounded"
+            />
+          </Link>
+          <Link href="/dashboard" className="hidden md:flex mx-2 items-center h-[40px]">
+            <Image
+              src="/app/gerico-logo-wordmark.svg"
+              alt="Gérico Logo"
+              height={24}
+              width={100}
+              quality={95}
+              priority
+              className="absolute h-[40px] cursor-pointer rounded"
             />
           </Link>
           {dateRoute.map(route => (
