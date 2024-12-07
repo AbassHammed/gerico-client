@@ -4,37 +4,10 @@ import { useMemo } from 'react';
 
 import { ThresholdValue } from '@/components/interfaces/PayslipPDF/interface';
 import { createThresholdMap } from '@/lib/utils';
+import { ISSThreshold } from '@/types';
 
-import { useGetThresholds } from '../useHooks';
-
-export function useSocialSecurityThresholds() {
-  const { thresholds, isLoading, error } = useGetThresholds();
-
+export function useSocialSecurityThresholds(thresholds: ISSThreshold[]) {
   const result = useMemo(() => {
-    if (!thresholds) {
-      return {
-        socialSecurityThresholdMap: {},
-        social_security_ceiling: [0, 0],
-        social_security_ceiling_min: 0,
-        social_security_ceiling_max: 0,
-        tranche_A: [0, 0],
-        tranche_A_min: 0,
-        tranche_A_max: 0,
-        tranche_B: [0, 0],
-        tranche_B_min: 0,
-        tranche_B_max: 0,
-        tranche2: [0, 0],
-        tranche2_min: 0,
-        tranche2_max: 0,
-        trancheA_B_C: [0, 0],
-        trancheA_B_C_min: 0,
-        trancheA_B_C_max: 0,
-        trancheA_B: [0, 0],
-        trancheA_B_min: 0,
-        trancheA_B_max: 0,
-      };
-    }
-
     const map = createThresholdMap(thresholds);
 
     const getThreshold = (name: string): ThresholdValue => map[name] || [0, 0];
@@ -76,7 +49,5 @@ export function useSocialSecurityThresholds() {
   return {
     ...result,
     CSG_CRDS_percentage,
-    isLoading,
-    error: error || null,
   };
 }

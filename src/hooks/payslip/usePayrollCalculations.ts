@@ -1,10 +1,11 @@
 import { useMemo } from 'react';
 
 import { PaySlip } from '@/components/interfaces/PayslipPDF/interface';
+import { ISSThreshold } from '@/types';
 
 import { useSocialSecurityThresholds } from './useSocialSecurityThresholds';
 
-export function usePayrollCalculations() {
+export function usePayrollCalculations(thresholds: ISSThreshold[]) {
   const {
     social_security_ceiling_min,
     tranche_A_max,
@@ -15,7 +16,7 @@ export function usePayrollCalculations() {
     trancheA_B_min,
     trancheA_B_max,
     CSG_CRDS_percentage,
-  } = useSocialSecurityThresholds();
+  } = useSocialSecurityThresholds(thresholds);
 
   const calculations = useMemo(
     () => ({

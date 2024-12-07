@@ -17,6 +17,20 @@ export function createThresholdMap(thresholds: ISSThreshold[]) {
   );
 }
 
+export function createMap<T, U>(
+  arr: T[],
+  keyCallback: (item: T) => string,
+  valueCallback: (item: T) => U,
+) {
+  return arr.reduce(
+    (acc, item) => {
+      acc[keyCallback(item)] = valueCallback(item);
+      return acc;
+    },
+    {} as Record<string, U>,
+  );
+}
+
 export const buildPathWithParams = (pathname: string) => {
   const searchParams = new URLSearchParams(location.search);
   return `${pathname}?${searchParams.toString()}`;
