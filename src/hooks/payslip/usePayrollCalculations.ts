@@ -114,7 +114,7 @@ export function usePayrollCalculations(thresholds: ISSThreshold[]) {
         return [partSalariale, partPatronale];
       },
 
-      calculateGrossSalary: (pay_slip: PaySlip, temp_partiel: number): number => {
+      calculateGrossSalary: (pay_slip: PaySlip, temp_partiel: number = 100): number => {
         const adjustedHours = 151.67 * (temp_partiel / 100);
         const baseSalary = pay_slip.hourly_rate * adjustedHours;
         let totalOvertimePay = 0;

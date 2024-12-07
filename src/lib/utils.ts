@@ -9,7 +9,7 @@ export function cn(...inputs: ClassValue[]) {
 export function createThresholdMap(thresholds: ISSThreshold[]) {
   return thresholds.reduce(
     (acc, threshold) => {
-      const key = threshold.treshold_name.toLowerCase().replace(/\s+/g, '_');
+      const key = threshold.threshold_name.toLowerCase().replace(/\s+/g, '_');
       acc[key] = [threshold.min_value, threshold.max_value];
       return acc;
     },

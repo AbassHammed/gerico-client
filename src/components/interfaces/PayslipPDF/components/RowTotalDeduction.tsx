@@ -1,25 +1,9 @@
+'use client';
+
 import { Text, View } from '@react-pdf/renderer';
 
-import { PaySlipItem, PaySlipRow } from '../interface';
+import { PaySlipRow } from '../interface';
 import { styles } from '../styles';
-import { totals } from '../utils/calculateSalaryAndTotalDeductions';
-
-const paySlipTotalDeductions: PaySlipItem[] = [
-  //TOTAL DES COTISATIONS
-  {
-    isCotisationTitle: true,
-    cotisation: 'TOTAL DES COTISATIONS',
-    assiette: '',
-    partSalariale: {
-      percentage: 0,
-      amount: totals.totalSalarial,
-    },
-    partPatronale: {
-      percentage: 0,
-      amount: totals.totalPatronal,
-    },
-  },
-];
 
 const PaySlipRowTotalDeduction: React.FC<PaySlipRow> = ({
   isCotisationTitle,
@@ -54,4 +38,4 @@ const PaySlipRowTotalDeduction: React.FC<PaySlipRow> = ({
   </View>
 );
 
-export { PaySlipRowTotalDeduction, paySlipTotalDeductions };
+export { PaySlipRowTotalDeduction };

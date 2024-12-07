@@ -49,7 +49,7 @@ export type PaySlipItem = {
 export interface PaySlipRow {
   isCotisationTitle: boolean;
   cotisation: string;
-  assiette: string;
+  assiette: string | number;
   partSalariale: Part;
   partPatronale: Part;
 }

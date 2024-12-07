@@ -102,7 +102,7 @@ export interface ICompanyInfo {
 
 export interface ISSThreshold {
   threshold_id: string;
-  treshold_name: string;
+  threshold_name: string;
   min_value: number;
   max_value: number;
   is_ceiling: boolean;
