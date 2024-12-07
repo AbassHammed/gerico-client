@@ -26,8 +26,8 @@ export const NavigationIconButton = forwardRef<
     <div className="absolute left-2 text-foreground-lighter">{icon}</div>
     <span
       className={cn(
-        'absolute left-7 group-data-[state=expanded]:left-10',
-        'opacity-0 group-data-[state=expanded]:opacity-100',
+        'absolute left-7 md:left-10',
+        'opacity-0 md:opacity-100',
         'w-[10rem] text-sm flex flex-col items-center',
         'transition-all',
       )}>
@@ -38,7 +38,7 @@ export const NavigationIconButton = forwardRef<
         className={cn(
           'absolute right-2 flex items-center',
           'opacity-0 transition-all',
-          'group-data-[state=expanded]:opacity-100 ',
+          'md:opacity-100 ',
         )}>
         {rightText}
       </div>

@@ -8,7 +8,6 @@ import {
 
 import Link from 'next/link';
 
-import { useAppStateSnapshot } from '@/lib/app-state';
 import { cn } from '@/lib/utils';
 import type { IRoute } from '@/types';
 import { noop } from 'lodash';
@@ -20,8 +19,6 @@ interface NavigationIconButtonProps extends AnchorHTMLAttributes<HTMLAnchorEleme
 
 const NavigationIconLink = forwardRef<HTMLAnchorElement, NavigationIconButtonProps>(
   ({ route, isActive = false, onClick = noop, ...props }, ref) => {
-    const snap = useAppStateSnapshot();
-
     const iconClasses = [
       'absolute left-0 top-0 flex rounded items-center h-10 w-10 items-center justify-center text-foreground-lighter', // Layout
       'group-hover/item:text-foreground-light',
@@ -31,11 +28,11 @@ const NavigationIconLink = forwardRef<HTMLAnchorElement, NavigationIconButtonPro
 
     const classes = [
       'relative',
-      'h-10 w-10 group-data-[state=expanded]:w-full',
+      'h-10 w-10 md:w-full',
       'transition-all duration-200',
       'flex items-center rounded',
       'group-data-[state=collapsed]:justify-center',
-      'group-data-[state=expanded]:-space-x-2',
+      'md:-space-x-2',
       'hover:bg-surface-200',
       'group/item',
       `${isActive && '!bg-selection shadow-sm'}`,
@@ -69,13 +66,12 @@ const NavigationIconLink = forwardRef<HTMLAnchorElement, NavigationIconButtonPro
           {route.icon}
         </span>
         <span
-          aria-hidden={snap.navigationPanelOpen || undefined}
           className={cn(
             'min-w-[128px] text-sm text-foreground-light',
             'group-hover/item:text-foreground',
             'group-aria-current/item:text-foreground',
-            'absolute left-7 group-data-[state=expanded]:left-12',
-            'opacity-0 group-data-[state=expanded]:opacity-100',
+            'absolute left-7 md:left-12',
+            'opacity-0 md:opacity-100',
             `${isActive && 'text-foreground hover:text-foreground'}`,
             'transition-all',
           )}>

@@ -1,9 +1,10 @@
 'use client';
 
+import Image from 'next/image';
+
 import { useUser } from '@/hooks/useUser';
 import { IUser } from '@/types';
 import { Badge, Table } from '@ui';
-import { User } from 'lucide-react';
 
 import { UserActions } from './UserActions';
 
@@ -15,9 +16,13 @@ export const UserRow = ({ member }: { member: IUser }) => {
       <Table.td>
         <div className="flex items-center space-x-4">
           <div>
-            <div className="w-[40px] h-[40px] bg-surface-100 border border-overlay rounded-full text-foreground-lighter flex items-center justify-center">
-              <User size={20} strokeWidth={1.5} />
-            </div>
+            <Image
+              alt={member.first_name}
+              src={`https://avatar.vercel.sh/${member.uid}.png?size=80`}
+              width="40"
+              height="40"
+              className="border rounded-full"
+            />
           </div>
           <div className="flex item-center gap-x-2">
             <p className="text-foreground-light truncate">{`${member.last_name} ${member.first_name}`}</p>

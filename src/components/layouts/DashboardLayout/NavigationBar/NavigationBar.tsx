@@ -7,7 +7,6 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 
 import { useUser } from '@/hooks/useUser';
-import { useAppStateSnapshot } from '@/lib/app-state';
 import { cn } from '@/lib/utils';
 import {
   Button,
@@ -19,7 +18,6 @@ import {
   DropdownMenuTrigger,
   Home,
   Separator,
-  User,
 } from '@ui';
 import { deleteCookie } from 'cookies-next';
 
@@ -33,7 +31,6 @@ import {
 import NavigationIconLink from './NavigationIconLink';
 
 const NavigationBar = () => {
-  const snap = useAppStateSnapshot();
   const pathname = usePathname();
   const router = useRouter();
   const { user: profile } = useUser();
@@ -44,13 +41,6 @@ const NavigationBar = () => {
   const dateRoute = generateDateRoute();
   const toolRoutes = generateToolRoutes();
   const settingsRoutes = generateSettingsRoutes();
-
-  const onCloseNavigationIconLink = (event: any) => {
-    snap.setNavigationPanelOpen(
-      false,
-      event.target.id === 'icon-link' || ['svg', 'path'].includes(event.target.localName),
-    );
-  };
 
   const onSignOut = async () => {
     deleteCookie('auth_token');
@@ -65,15 +55,21 @@ const NavigationBar = () => {
         'mt-3 h-10 [&>span]:relative [&>span]:flex [&>span]:w-full [&>span]:h-full p-0',
       )}
       block>
-      <div className="relative w-full h-full flex items-center justify-center">
-        <figure className="absolute left-1.5 min-h-6 min-w-6 bg-foreground rounded-full flex items-center justify-center">
-          <User size={ICON_SIZE - 2} strokeWidth={ICON_STROKE_WIDTH} className="text-background" />
-        </figure>
+      <div className="relative w-full h-full flex flex-row items-center justify-center space-x-4">
+        <div className="absolute left-0.5 h-8 w-8 rounded-full flex items-center justify-center">
+          <Image
+            alt={profile?.first_name}
+            src={`https://avatar.vercel.sh/${profile?.uid}.png?size=80`}
+            width="40"
+            height="40"
+            className="border rounded-full"
+          />
+        </div>
         <span
           className={cn(
             'w-[8rem] flex flex-col items-start text-sm truncate',
-            'absolute left-7 group-data-[state=expanded]:left-10',
-            'group-data-[state=collapsed]:opacity-0 group-data-[state=expanded]:opacity-100',
+            'left-7 group-md:left-10',
+            'opacity-0 md:opacity-100',
             'transition-all',
           )}>
           {profile && (
@@ -95,26 +91,16 @@ const NavigationBar = () => {
   );
 
   return (
-    <div className="w-14 h-full flex flex-col">
+    <div className="w-14 md:w-[13rem]  h-full flex flex-col">
       <nav
-        data-state={snap.navigationPanelOpen ? 'expanded' : 'collapsed'}
         className={cn(
-          'group py-2 z-10 h-full w-14 data-[state=expanded]:w-[13rem]',
-          'border-r bg-dash-sidebar border-default data-[state=expanded]:shadow-xl',
+          'group py-2 z-10 h-full w-14 md:w-[13rem]',
+          'border-r bg-dash-sidebar border-default',
           'transition-width duration-200',
           'hide-scrollbar flex flex-col justify-between overflow-y-auto',
-        )}
-        onMouseEnter={() => snap.setNavigationPanelOpen(true)}
-        onMouseLeave={() => {
-          if (!userDropdownOpen) {
-            snap.setNavigationPanelOpen(false);
-          }
-        }}>
+        )}>
         <ul className="flex flex-col gap-y-1 justify-start px-2 relative">
-          <Link
-            href="#"
-            className="mx-2 flex items-center h-[40px]"
-            onClick={onCloseNavigationIconLink}>
+          <Link href="#" className="mx-2 flex items-center h-[40px]">
             <Image
               alt="Gerico"
               priority
@@ -130,7 +116,6 @@ const NavigationBar = () => {
               key={route.key}
               route={route}
               isActive={activeRoute.includes(route.link!)}
-              onClick={onCloseNavigationIconLink}
             />
           ))}
           <NavigationIconLink
@@ -141,7 +126,6 @@ const NavigationBar = () => {
               icon: <Home size={ICON_SIZE} strokeWidth={ICON_STROKE_WIDTH} />,
               link: `/dashboard`,
             }}
-            onClick={onCloseNavigationIconLink}
           />
           <Separator className="my-1 bg-border-muted" />
           {toolRoutes.map(route => (
@@ -149,7 +133,6 @@ const NavigationBar = () => {
               key={route.key}
               route={route}
               isActive={activeRoute.includes(route.link!)}
-              onClick={onCloseNavigationIconLink}
             />
           ))}
           <Separator className="my-1 bg-border-muted" />
@@ -161,7 +144,6 @@ const NavigationBar = () => {
               key={route.key}
               route={route}
               isActive={activeRoute.includes(route.link!)}
-              onClick={onCloseNavigationIconLink}
             />
           ))}
 
@@ -171,9 +153,6 @@ const NavigationBar = () => {
             open={userDropdownOpen}
             onOpenChange={(open: boolean) => {
               setUserDropdownOpenState(open);
-              if (open === false) {
-                snap.setNavigationPanelOpen(false);
-              }
             }}>
             <DropdownMenuTrigger asChild>{UserAccountButton}</DropdownMenuTrigger>
 

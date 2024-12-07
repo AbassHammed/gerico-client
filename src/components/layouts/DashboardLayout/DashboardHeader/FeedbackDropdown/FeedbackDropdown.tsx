@@ -17,7 +17,7 @@ const FeedbackDropdown = () => {
       }}>
       <PopoverTrigger_Shadcn asChild>
         <Button asChild onClick={() => setIsOpen(isOpen => !isOpen)} type="outline">
-          <span className="hidden md:flex">Feedback</span>
+          <span>Feedback</span>
         </Button>
       </PopoverTrigger_Shadcn>
       <PopoverContent_Shadcn side="bottom" align="end" className="w-full p-0">

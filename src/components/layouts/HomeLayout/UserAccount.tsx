@@ -3,6 +3,8 @@
 
 import { useState } from 'react';
 
+import Image from 'next/image';
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,7 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@ui';
-import { LogOut, User } from 'lucide-react';
+import { LogOut } from 'lucide-react';
 
 interface UserInfo {
   civility: string;
@@ -45,9 +47,13 @@ export default function AvatarDropdown() {
             </p>
             <p className="text-xs text-foreground-light">{user.job_title}</p>
           </div>
-          <div className="w-[32px] h-[32px] bg-surface-100 border border-overlay rounded-full text-foreground-lighter flex items-center justify-center">
-            <User size={16} strokeWidth={1.5} />
-          </div>
+          <Image
+            alt={user.first_name}
+            src={`https://avatar.vercel.sh/${user.first_name}.png?size=64`}
+            width="32"
+            height="32"
+            className="border rounded-full"
+          />
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="center" className="w-56">
