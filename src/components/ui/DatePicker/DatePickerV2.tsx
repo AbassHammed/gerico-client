@@ -6,7 +6,7 @@ import {
   Button,
   ButtonProps,
   Calendar,
-  Input,
+  Input_Shadcn,
   Popover_Shadcn,
   PopoverContent_Shadcn,
   PopoverTrigger_Shadcn,
@@ -121,7 +121,7 @@ function _DatePicker({
               </div>
             </>
           )}
-          <Input value={inputValue} placeholder="MM/DD/YYYY" onChange={handleInputChange} />
+          <Input_Shadcn value={inputValue} placeholder="MM/DD/YYYY" onChange={handleInputChange} />
           <div className="rounded-md border">
             <Calendar
               mode="single"

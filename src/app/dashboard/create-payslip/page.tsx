@@ -2,7 +2,6 @@
 
 import React from 'react';
 
-import PayslipForm from '@/components/interfaces/Payslip/PayslipForm';
 import { ScaffoldContainer, ScaffoldDivider, ScaffoldHeader, ScaffoldTitle } from '@/components/ui';
 
 const CreatePayslipPage = () => (
@@ -14,7 +13,6 @@ const CreatePayslipPage = () => (
     </ScaffoldHeader>
 
     <ScaffoldDivider />
-    <PayslipForm />
   </React.Fragment>
 );
 
