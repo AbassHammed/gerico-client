@@ -271,7 +271,7 @@ export const user_data: { company: ICompanyInfo; user: IUser; pay_slip: PaySlip 
     end_period: '2024-10-31',
     pay_date: '2024-11-05',
     total_hours_worked: [
-      { week: 1, worked_hours: 35, overtime: 0 },
+      { week: 1, worked_hours: 35, overtime: 100 },
       { week: 2, worked_hours: 35, overtime: 0 },
       { week: 3, worked_hours: 35, overtime: 0 },
       { week: 4, worked_hours: 35, overtime: 0 },

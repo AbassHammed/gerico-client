@@ -15,8 +15,7 @@ import { ChevronDown, X } from 'lucide-react';
 import { mockUsers } from './data';
 
 interface UserSelectProps {
-  selectedUsersIds: string[];
-  onUsersChange: (users: string[]) => void;
+  onUsersChange: (users: string) => void;
 }
 
 export function MyUser({ user, removeUser }: { user: IUser; removeUser: (id: string) => void }) {
@@ -51,21 +50,19 @@ export function MyUser({ user, removeUser }: { user: IUser; removeUser: (id: str
   );
 }
 
-export default function UserSelect({ selectedUsersIds, onUsersChange }: UserSelectProps) {
+export default function UserSelect({ onUsersChange }: UserSelectProps) {
   const [users] = useState<IUser[]>(mockUsers);
   const [open, setOpen] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState<IUser[]>([]);
 
   const removeUser = (id: string) => {
-    onUsersChange(selectedUsersIds.filter(user => user !== id));
+    onUsersChange('');
     setSelectedUsers(selectedUsers.filter(user => user.uid !== id));
   };
 
   const addUser = (user: IUser) => {
-    if (!selectedUsersIds.some(p => p === user.uid)) {
-      onUsersChange([...selectedUsersIds, user.uid]);
-      setSelectedUsers([...selectedUsers, user]);
-    }
+    onUsersChange(user.uid);
+    setSelectedUsers([...selectedUsers, user]);
     setOpen(false);
   };
 
@@ -77,7 +74,9 @@ export default function UserSelect({ selectedUsersIds, onUsersChange }: UserSele
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className="w-full justify-between">
+            disabled={selectedUsers.length >= 1}
+            className="w-full justify-between bg-alternative dark:bg-muted  hover:bg-selection
+          border-strong hover:border-stronger">
             Search for a User to link to...
             <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button_Shadcn>

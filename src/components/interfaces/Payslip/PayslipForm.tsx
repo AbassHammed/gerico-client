@@ -26,6 +26,7 @@ import UserSelect from './UserSelect';
 const timeEntrySchema = z.object({
   week: z.number(),
   worked_hours: z.number(),
+  overtime: z.number(),
 });
 
 const PayslipSchema = z.object({
@@ -34,7 +35,9 @@ const PayslipSchema = z.object({
   start_period: z.string(),
   end_period: z.string(),
   time_entries: z.array(timeEntrySchema),
-  employees: z.array(z.string()),
+  employee: z.string(),
+  gross_salary: z.number(),
+  net_salary: z.number(),
 });
 
 type FormValues = z.infer<typeof PayslipSchema>;
@@ -47,8 +50,10 @@ const PayslipForm = () => {
     pay_date: '',
     start_period: '',
     end_period: '',
-    time_entries: [{ week: 1, worked_hours: 0 }],
-    employees: [],
+    time_entries: [{ week: 1, worked_hours: 0, overtime: 0 }],
+    employee: '',
+    gross_salary: 0,
+    net_salary: 0,
   };
 
   const form = useForm<FormValues>({
@@ -56,13 +61,31 @@ const PayslipForm = () => {
     defaultValues: initialValues,
   });
 
+  function calculateGrossSalary(): number {
+    const hourlyRate = Math.max(form.getValues().hourly_rate, 0);
+    const adjustedHours = 151.67;
+    const baseSalary = hourlyRate * adjustedHours;
+    let totalOvertimePay = 0;
+    form.getValues().time_entries.forEach(week => {
+      const overtime = week.overtime;
+      if (overtime > 0) {
+        const overtime25 = Math.min(overtime, 8) * 1.25 * hourlyRate;
+        const overtime50 = Math.max(overtime - 8, 0) * 1.5 * hourlyRate;
+        totalOvertimePay += overtime25 + overtime50;
+      }
+    });
+
+    const grossSalary = baseSalary + totalOvertimePay;
+    return parseFloat(grossSalary.toFixed(2));
+  }
+
   const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: 'time_entries',
   });
 
   function addTimeEntry() {
-    append({ week: fields.length + 1, worked_hours: 0 });
+    append({ week: fields.length + 1, worked_hours: 0, overtime: 0 });
   }
 
   function removeTimeEntry(index: number) {
@@ -86,6 +109,12 @@ const PayslipForm = () => {
     };
     console.error(dataWithOvertime);
   }
+
+  const handleOvertimeCalculation = (idx: number) =>
+    form.setValue(
+      `time_entries.${idx}.overtime`,
+      calculateOvertime(form.watch(`time_entries.${idx}.worked_hours`)),
+    );
 
   return (
     <Form {...form}>
@@ -159,6 +188,10 @@ const PayslipForm = () => {
                             label="Worked Hours"
                             placeholder="0.00"
                             {...field}
+                            onChange={e => {
+                              field.onChange(e);
+                              handleOvertimeCalculation(index);
+                            }}
                             size="small"
                             layout="vertical"
                           />
@@ -168,19 +201,28 @@ const PayslipForm = () => {
                     )}
                   />
 
-                  <FormItem className="flex flex-col">
-                    <FormControl>
-                      <Input
-                        type="number"
-                        label="Overtime"
-                        value={calculateOvertime(form.watch(`time_entries.${index}.worked_hours`))}
-                        size="small"
-                        layout="vertical"
-                        disabled
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
+                  <FormField
+                    control={form.control}
+                    name={`time_entries.${index}.overtime`}
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col">
+                        <FormControl>
+                          <Input
+                            {...field}
+                            type="number"
+                            label="Overtime"
+                            value={calculateOvertime(
+                              form.watch(`time_entries.${index}.worked_hours`),
+                            )}
+                            size="small"
+                            layout="vertical"
+                            disabled
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
                   <FormItem>
                     <FormControl>
@@ -210,16 +252,62 @@ const PayslipForm = () => {
             <FormSectionContent loading={false} fullWidth className="!gap-2 space-y-4">
               <FormField
                 control={form.control}
-                name="employees"
+                name="employee"
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <UserSelect selectedUsersIds={field.value} onUsersChange={field.onChange} />
+                      <UserSelect onUsersChange={field.onChange} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+            </FormSectionContent>
+          </FormSection>
+          <FormSection header={<FormSectionLabel>Salaries</FormSectionLabel>}>
+            <FormSectionContent loading={false} fullWidth className="!gap-2 space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                <FormField
+                  control={form.control}
+                  name="gross_salary"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          label="Salaire Brut"
+                          placeholder="0.00"
+                          {...field}
+                          size="small"
+                          layout="vertical"
+                          disabled
+                          value={calculateGrossSalary()}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="net_salary"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          label="Salaire Net"
+                          placeholder="0.00"
+                          {...field}
+                          size="small"
+                          layout="vertical"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </FormSectionContent>
           </FormSection>
         </FormPanel>
