@@ -21,6 +21,7 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { DatePickerField } from './DatePicker';
+import UserSelect from './UserSelect';
 
 const timeEntrySchema = z.object({
   week: z.number(),
@@ -203,6 +204,22 @@ const PayslipForm = () => {
                   Add Time Entry
                 </Button>
               </div>
+            </FormSectionContent>
+          </FormSection>
+          <FormSection header={<FormSectionLabel>Linked Projects</FormSectionLabel>}>
+            <FormSectionContent loading={false} fullWidth className="!gap-2 space-y-4">
+              <FormField
+                control={form.control}
+                name="employees"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <UserSelect selectedUsersIds={field.value} onUsersChange={field.onChange} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </FormSectionContent>
           </FormSection>
         </FormPanel>
