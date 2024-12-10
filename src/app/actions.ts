@@ -50,10 +50,10 @@ export const getSignedURL = async ({
   });
 
   try {
-    await s3Client.send(command);
     const signedUrl = await getSignedUrl(s3Client, command, { expiresIn: 60 * 60 });
     return { success: { signedUrl, fileUrl: signedUrl.split('?')[0] } };
   } catch (error: any) {
+    console.error(error);
     return { failure: error.message };
   }
 };
