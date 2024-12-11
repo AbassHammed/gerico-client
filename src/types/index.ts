@@ -17,6 +17,18 @@ export type ISiteConfig = {
   creator: string;
 };
 
+export type ICreatePayslip = {
+  uid: string;
+  gross_salary: number;
+  net_salary: number;
+  start_period: string;
+  end_period: string;
+  pay_date: string;
+  total_hours_worked: string;
+  hourly_rate: number;
+  path_to_pdf: string;
+};
+
 export type IChangePasswordInput = {
   password: string;
   confirmPassword: string;

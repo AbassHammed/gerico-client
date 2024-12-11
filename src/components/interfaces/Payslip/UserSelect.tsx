@@ -18,9 +18,18 @@ interface UserSelectProps {
   onUsersChange: (users: string) => void;
   setSelectedUser: Dispatch<SetStateAction<IUser | undefined>>;
   selectedUser: IUser | undefined;
+  loading?: boolean;
 }
 
-export function MyUser({ user, removeUser }: { user: IUser; removeUser: () => void }) {
+export function MyUser({
+  user,
+  removeUser,
+  loading,
+}: {
+  user: IUser;
+  removeUser: () => void;
+  loading?: boolean;
+}) {
   return (
     <Table.tr>
       <Table.td>
@@ -43,6 +52,7 @@ export function MyUser({ user, removeUser }: { user: IUser; removeUser: () => vo
         <Button
           size={'small'}
           type={'default'}
+          disabled={loading}
           onClick={() => removeUser()}
           aria-label={`Remove ${user.last_name}`}>
           <X className="h-4 w-4" />
@@ -56,6 +66,7 @@ export default function UserSelect({
   onUsersChange,
   selectedUser,
   setSelectedUser,
+  loading,
 }: UserSelectProps) {
   const { employees: members, isLoading: isLoadingMembers } = useEmployees();
   const [open, setOpen] = useState(false);
@@ -79,7 +90,7 @@ export default function UserSelect({
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            disabled={selectedUser !== undefined}
+            disabled={selectedUser !== undefined || loading}
             className="w-full justify-between bg-alternative dark:bg-muted  hover:bg-selection
           border-strong hover:border-stronger">
             Search for a User to link to...
@@ -118,7 +129,14 @@ export default function UserSelect({
                       </Table.td>
                     </Table.tr>,
                   ]
-                : [<MyUser key={selectedUser.uid} user={selectedUser} removeUser={removeUser} />]),
+                : [
+                    <MyUser
+                      key={selectedUser.uid}
+                      user={selectedUser}
+                      removeUser={removeUser}
+                      loading={loading}
+                    />,
+                  ]),
             ]}
           />
         </div>

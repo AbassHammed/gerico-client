@@ -12,9 +12,16 @@ interface DatePickerFieldProps {
   name: string;
   control: Control<any>;
   className?: string;
+  disabled?: boolean;
 }
 
-export function DatePickerField({ label, name, control, className }: DatePickerFieldProps) {
+export function DatePickerField({
+  label,
+  name,
+  control,
+  className,
+  disabled,
+}: DatePickerFieldProps) {
   const [dateAsText, setDateAsText] = useState('');
 
   const updateDateDisplay = (dateString: string) => {
@@ -53,6 +60,7 @@ export function DatePickerField({ label, name, control, className }: DatePickerF
               value={dateAsText}
               className={className}
               readOnly
+              disabled={disabled}
               label={label}
               actions={
                 <DatePickerV2

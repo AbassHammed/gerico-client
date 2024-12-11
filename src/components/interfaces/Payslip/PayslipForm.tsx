@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
 import crypto from 'crypto';
@@ -13,6 +12,7 @@ import {
   FormSectionContent,
   FormSectionLabel,
   Input,
+  InputNumber,
 } from '@/components/ui';
 import {
   Form,
@@ -25,7 +25,8 @@ import { GenericSkeletonLoaderList } from '@/components/ui/ShimmeringLoader';
 import { useCompanyInfo } from '@/hooks/company-mutations';
 import { useCalculations } from '@/hooks/payslip/useCalculations';
 import { useGetDeductions, useGetThresholds } from '@/hooks/useHooks';
-import { IUser } from '@/types';
+import { useCreatePayslip } from '@/hooks/usePayslips';
+import { ICreatePayslip, IUser } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { pdf } from '@react-pdf/renderer';
 import { CircleMinus, CirclePlus } from 'lucide-react';
@@ -66,6 +67,8 @@ const PayslipForm = () => {
   const { thresholds, isLoading: isThresholdsLoading, error: thresholdsError } = useGetThresholds();
   const [netSalary, setNetSalary] = React.useState<number>(0);
   const [seletedUser, setUser] = React.useState<IUser | undefined>(undefined);
+  const { createPayslip, loading: payslipLoading } = useCreatePayslip();
+  const [loading, setLoading] = React.useState<boolean>(false);
   let toastId: string | null | number = null;
 
   const initialValues: FormValues = {
@@ -182,16 +185,41 @@ const PayslipForm = () => {
     return workedHours > 35 ? workedHours - 35 : 0;
   }
 
-  function onSubmit(values: FormValues) {
-    toastId = toast.loading('Calculating Overtime...', { id: toastId });
-    const dataWithOvertime = {
-      ...values,
-      time_entries: values.time_entries.map(entry => ({
-        ...entry,
-        overtime: calculateOvertime(entry.worked_hours),
-      })),
-    };
-    console.error(dataWithOvertime);
+  async function onSubmit(values: FormValues) {
+    setLoading(true);
+    toastId = toast.loading('Calculating Overtime...', { id: toastId! });
+    try {
+      const dataWithOvertime = {
+        ...values,
+        time_entries: values.time_entries.map(entry => ({
+          ...entry,
+          overtime: calculateOvertime(entry.worked_hours),
+        })),
+      };
+
+      toastId = toast.loading('Creating Payslip...', { id: toastId! });
+      const fileUrl = await handleFileUpload();
+
+      const data: ICreatePayslip = {
+        uid: dataWithOvertime.employee,
+        gross_salary: dataWithOvertime.gross_salary,
+        net_salary: dataWithOvertime.net_salary,
+        start_period: dataWithOvertime.start_period,
+        end_period: dataWithOvertime.end_period,
+        pay_date: dataWithOvertime.pay_date,
+        hourly_rate: dataWithOvertime.hourly_rate,
+        total_hours_worked: JSON.stringify(dataWithOvertime.time_entries),
+        path_to_pdf: fileUrl,
+      };
+
+      const message = await createPayslip(data);
+      toast.success(message, { id: toastId! });
+      form.reset();
+    } catch (error: any) {
+      toast.error(error.message, { id: toastId! });
+    } finally {
+      setLoading(false);
+    }
   }
 
   const handleOvertimeCalculation = (idx: number) =>
@@ -216,7 +244,30 @@ const PayslipForm = () => {
   return (
     <Form {...form}>
       <form id={formId} onSubmit={form.handleSubmit(onSubmit)}>
-        <FormPanel>
+        <FormPanel
+          footer={
+            <div className="flex py-4 px-8">
+              <div className={['flex w-full items-center gap-2', 'justify-end'].join(' ')}>
+                <div className="flex items-center gap-2">
+                  <Button
+                    disabled={loading || payslipLoading}
+                    type="default"
+                    htmlType="reset"
+                    onClick={() => form.reset()}>
+                    Cancel
+                  </Button>
+                  <Button
+                    form={formId}
+                    type="primary"
+                    htmlType="submit"
+                    disabled={loading || payslipLoading}
+                    loading={payslipLoading}>
+                    Save
+                  </Button>
+                </div>
+              </div>
+            </div>
+          }>
           <FormSection header={<FormSectionLabel>Informations Préliminaires</FormSectionLabel>}>
             <FormSectionContent loading={false} fullWidth className="!gap-2 space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
@@ -226,13 +277,13 @@ const PayslipForm = () => {
                   render={({ field }) => (
                     <FormItem className="flex flex-col">
                       <FormControl>
-                        <Input
-                          type="number"
+                        <InputNumber
                           label="Hourly Rate"
                           placeholder="0.00"
                           {...field}
                           size="small"
                           layout="vertical"
+                          disabled={loading || payslipLoading}
                         />
                       </FormControl>
                       <FormMessage />
@@ -243,9 +294,19 @@ const PayslipForm = () => {
                 <DatePickerField name="pay_date" control={form.control} label="Pay Date" />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                <DatePickerField name="start_period" control={form.control} label="Start Period" />
+                <DatePickerField
+                  name="start_period"
+                  control={form.control}
+                  label="Start Period"
+                  disabled={loading || payslipLoading}
+                />
 
-                <DatePickerField name="end_period" control={form.control} label="End Period" />
+                <DatePickerField
+                  name="end_period"
+                  control={form.control}
+                  label="End Period"
+                  disabled={loading || payslipLoading}
+                />
               </div>
             </FormSectionContent>
           </FormSection>
@@ -291,6 +352,7 @@ const PayslipForm = () => {
                             }}
                             size="small"
                             layout="vertical"
+                            disabled={loading || payslipLoading}
                           />
                         </FormControl>
                         <FormMessage />
@@ -328,6 +390,7 @@ const PayslipForm = () => {
                         type={'default'}
                         icon={<CircleMinus />}
                         onClick={() => removeTimeEntry(index)}
+                        disabled={loading || payslipLoading}
                       />
                     </FormControl>
                     <FormMessage />
@@ -339,6 +402,7 @@ const PayslipForm = () => {
                   size={'small'}
                   icon={<CirclePlus />}
                   onClick={addTimeEntry}
+                  disabled={loading || payslipLoading}
                   className="text-white">
                   Add Time Entry
                 </Button>
@@ -357,6 +421,7 @@ const PayslipForm = () => {
                         onUsersChange={field.onChange}
                         setSelectedUser={setUser}
                         selectedUser={seletedUser}
+                        loading={loading || payslipLoading}
                       />
                     </FormControl>
                     <FormMessage />
