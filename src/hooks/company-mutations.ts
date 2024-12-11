@@ -2,9 +2,9 @@
 
 import { ICompanyInfo } from '@/types';
 import { getCookie } from 'cookies-next';
-import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 
+import { useApiGet } from './useApi';
 import { API_URL } from './useUser';
 
 async function updateCompanyInfo(url: string, { arg }: { arg: ICompanyInfo }) {
@@ -53,45 +53,15 @@ export function useUpdateCompanyInfo() {
   return { updateCompany, loading };
 }
 
-async function fetcher(url: string) {
-  try {
-    const authToken = getCookie('auth_token');
-
-    if (!authToken) {
-      throw new Error('You are not connected.');
-    }
-
-    const headers = {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${authToken}`,
-    };
-
-    const response = await fetch(url, {
-      method: 'GET',
-      headers,
-    });
-
-    if (!response.ok) {
-      const { error } = await response.json();
-      throw new Error(error);
-    }
-
-    const data = (await response.json()) as ICompanyInfo;
-    return data;
-  } catch (error: any) {
-    throw new Error(error.message);
-  }
-}
-
 export function useCompanyInfo() {
-  const { data, error, isLoading, isValidating, mutate } = useSWR<ICompanyInfo>(
-    `${API_URL}/company`,
-    fetcher,
-  );
+  const { data, error, isLoading, isValidating, mutate } = useApiGet<ICompanyInfo>('/company', {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  });
 
   return {
     companyInfo: data,
-    loading: (!error && !data) || isLoading || isValidating,
+    loading: isLoading || isValidating,
     error,
     mutateCompanyInfo: mutate,
   };

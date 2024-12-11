@@ -214,6 +214,8 @@ const PayslipForm = () => {
       const message = await createPayslip(data);
       toast.success(message, { id: toastId! });
       form.reset();
+      setNetSalary(0);
+      setUser(undefined);
     } catch (error: any) {
       console.error(error);
       toast.error(error.message, { id: toastId! });

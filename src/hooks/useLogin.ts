@@ -1,10 +1,9 @@
 'use client';
 
-import { ILoginInputs } from '@/types';
+import { ILoginInputs, IUser } from '@/types';
 import { setCookie } from 'cookies-next';
-import useSWRMutation from 'swr/mutation';
 
-import { API_URL } from './useUser';
+import { useApiMutation } from './useApi';
 
 function parseUserAgent(ua: string) {
   let browser = 'Unknown';
@@ -35,50 +34,31 @@ function parseUserAgent(ua: string) {
   return { browser, os };
 }
 
-async function sendRequest(
-  url: string,
-  { arg }: { arg: ILoginInputs & { browser: string; os: string } },
-) {
-  try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(arg),
-    });
-
-    if (!response.ok) {
-      const { error } = (await response.json()) as { error: string };
-      throw new Error(error);
-    }
-
-    const { token, code, user } = await response.json();
-    setCookie('auth_token', token);
-
-    // there are only three case where a `code` is being returned from the back
-    // 1&2. when the password is incorrect or email not found in the db in which case the status code is 400 so `!response.ok` will pass and an error will be thrown
-    // 3. when the user used a default password
-    if (code === 'DEFAULTPASS') {
-      return { code, user: null };
-    }
-
-    return { code: null, user };
-  } catch (error: any) {
-    throw new Error(error.message);
-  }
+interface LoginResponse {
+  token: string;
+  user: IUser | null;
+  code: string | null;
 }
 
 export default function useLogin() {
-  const { trigger, isMutating: loading } = useSWRMutation(`${API_URL}/users/login`, sendRequest);
+  const {
+    trigger,
+    isMutating: loading,
+    isSuccess,
+  } = useApiMutation<LoginResponse, ILoginInputs & { browser: string; os: string }>('/users/login');
 
   const login = async (inputs: ILoginInputs) => {
     try {
       const newInput = { ...inputs, ...parseUserAgent(window.navigator.userAgent) };
       const res = await trigger(newInput);
-      return res;
+      if (res?.token) {
+        setCookie('auth_token', res.token);
+      }
+      return { code: res?.code || null, user: res?.user || null };
     } catch (error: any) {
       throw new Error(error.message);
     }
   };
 
-  return { login, loading };
+  return { login, loading, isSuccess };
 }

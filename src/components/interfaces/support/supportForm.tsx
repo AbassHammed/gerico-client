@@ -1,7 +1,7 @@
 /* eslint-disable quotes */
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { FormItemLayout } from '@/components/ui/form/FormItemLayout';
 import { useReportIssue } from '@/hooks/useIssues';
@@ -33,7 +33,7 @@ import { ExpectationInfoBox } from './ExpectationInfoBox';
 import { CATEGORY_OPTIONS, SEVERITY_OPTIONS } from './supportForm.constants';
 
 export const SupportForm = () => {
-  const { reportIssue, loading } = useReportIssue();
+  const { reportIssue, loading, isSuccess } = useReportIssue();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const FormSchema = z.object({
     type: z.string(),
@@ -58,14 +58,19 @@ export const SupportForm = () => {
 
   const onSubmit: SubmitHandler<z.infer<typeof FormSchema>> = async values => {
     try {
-      const res = await reportIssue(values);
-      setIsSubmitted(res);
+      await reportIssue(values);
     } catch (error: any) {
       toast.error("Une erreur est survenue lors de l'envoi de la demande", {
         description: error.message,
       });
     }
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      setIsSubmitted(true);
+    }
+  }, [isSuccess]);
 
   return (
     <div className="relative">

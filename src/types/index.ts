@@ -128,3 +128,19 @@ export interface IDeduction {
   part_patronal: number;
   threshold_id: string;
 }
+
+export interface PaginatedResult<T> {
+  data: T[];
+  pagination: {
+    currentPage: number;
+    limit: number;
+    totalPages: number;
+    totalItems: number;
+  };
+}
+
+export interface PaginationParams {
+  page?: number;
+  limit?: number;
+  offset?: number;
+}
