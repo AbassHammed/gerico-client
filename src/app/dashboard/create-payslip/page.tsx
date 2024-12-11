@@ -2,7 +2,14 @@
 
 import React from 'react';
 
-import { ScaffoldContainer, ScaffoldDivider, ScaffoldHeader, ScaffoldTitle } from '@/components/ui';
+import PayslipForm from '@/components/interfaces/Payslip/PayslipForm';
+import {
+  ScaffoldContainer,
+  ScaffoldContainerLegacy,
+  ScaffoldDivider,
+  ScaffoldHeader,
+  ScaffoldTitle,
+} from '@/components/ui';
 
 const CreatePayslipPage = () => (
   <React.Fragment>
@@ -13,6 +20,9 @@ const CreatePayslipPage = () => (
     </ScaffoldHeader>
 
     <ScaffoldDivider />
+    <ScaffoldContainerLegacy>
+      <PayslipForm />
+    </ScaffoldContainerLegacy>
   </React.Fragment>
 );
 

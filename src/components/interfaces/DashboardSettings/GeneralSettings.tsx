@@ -1,13 +1,11 @@
 'use client';
 
 import { useCompanyInfo } from '@/hooks/company-mutations';
-import { useUser } from '@/hooks/useUser';
 import { Form, FormPanel, FormSection, FormSectionContent, FormSectionLabel, Input } from '@ui';
 import { noop } from 'lodash';
 
 const GeneralSettings = () => {
-  const { user } = useUser();
-  const { companyInfo } = useCompanyInfo(user?.company_id ?? '');
+  const { companyInfo } = useCompanyInfo();
   const formId = 'org-general-settings';
 
   return (

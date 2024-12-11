@@ -52,11 +52,18 @@ const InfoIcon = () => (
   </svg>
 );
 
-const WarningIcon = () => (
+export const WarningIcon = ({
+  className,
+  strokeWidth,
+}: {
+  className?: string;
+  strokeWidth?: number | string;
+}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 22 20"
-    className="w-6 h-6"
+    className={cn('w-6 h-6', className)}
+    strokeWidth={strokeWidth}
     fill="currentColor">
     <path
       fillRule="evenodd"

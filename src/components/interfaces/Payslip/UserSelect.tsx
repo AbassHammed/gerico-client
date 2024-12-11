@@ -1,24 +1,26 @@
+/* eslint-disable indent */
 'use client';
 
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 
 import Image from 'next/image';
 
-import { Table } from '@/components/ui';
+import { Loading, Table } from '@/components/ui';
 import { Button } from '@/components/ui/button';
 import { Button as Button_Shadcn } from '@/components/ui/shadcn/ui/button';
 import { Command, CommandInput, CommandItem, CommandList } from '@/components/ui/shadcn/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/shadcn/ui/popover';
+import { useEmployees } from '@/hooks/useEmployees';
 import { IUser } from '@/types';
-import { ChevronDown, X } from 'lucide-react';
-
-import { mockUsers } from './data';
+import { AlertCircle, ChevronDown, X } from 'lucide-react';
 
 interface UserSelectProps {
   onUsersChange: (users: string) => void;
+  setSelectedUser: Dispatch<SetStateAction<IUser | undefined>>;
+  selectedUser: IUser | undefined;
 }
 
-export function MyUser({ user, removeUser }: { user: IUser; removeUser: (id: string) => void }) {
+export function MyUser({ user, removeUser }: { user: IUser; removeUser: () => void }) {
   return (
     <Table.tr>
       <Table.td>
@@ -41,7 +43,7 @@ export function MyUser({ user, removeUser }: { user: IUser; removeUser: (id: str
         <Button
           size={'small'}
           type={'default'}
-          onClick={() => removeUser(user.uid)}
+          onClick={() => removeUser()}
           aria-label={`Remove ${user.last_name}`}>
           <X className="h-4 w-4" />
         </Button>
@@ -50,19 +52,22 @@ export function MyUser({ user, removeUser }: { user: IUser; removeUser: (id: str
   );
 }
 
-export default function UserSelect({ onUsersChange }: UserSelectProps) {
-  const [users] = useState<IUser[]>(mockUsers);
+export default function UserSelect({
+  onUsersChange,
+  selectedUser,
+  setSelectedUser,
+}: UserSelectProps) {
+  const { employees: members, isLoading: isLoadingMembers } = useEmployees();
   const [open, setOpen] = useState(false);
-  const [selectedUsers, setSelectedUsers] = useState<IUser[]>([]);
 
-  const removeUser = (id: string) => {
+  const removeUser = () => {
     onUsersChange('');
-    setSelectedUsers(selectedUsers.filter(user => user.uid !== id));
+    setSelectedUser(undefined);
   };
 
   const addUser = (user: IUser) => {
     onUsersChange(user.uid);
-    setSelectedUsers([...selectedUsers, user]);
+    setSelectedUser(user);
     setOpen(false);
   };
 
@@ -74,26 +79,26 @@ export default function UserSelect({ onUsersChange }: UserSelectProps) {
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            disabled={selectedUsers.length >= 1}
+            disabled={selectedUser !== undefined}
             className="w-full justify-between bg-alternative dark:bg-muted  hover:bg-selection
           border-strong hover:border-stronger">
             Search for a User to link to...
             <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button_Shadcn>
         </PopoverTrigger>
-        <PopoverContent className="w-[calc(100vw-6rem)]  p-0">
-          <Command>
-            <CommandInput placeholder="Search for a User to link to..." />
-            <CommandList>
-              {users
-                .filter(user => !selectedUsers.some(su => su.uid === user.uid))
-                .map(user => (
+        <PopoverContent className="w-[calc(100vw-40rem)]  p-0">
+          <Loading active={isLoadingMembers}>
+            <Command>
+              <CommandInput placeholder="Search for a User to link to..." />
+              <CommandList>
+                {members?.map(user => (
                   <CommandItem key={user.uid} onSelect={() => addUser(user)}>
                     {user.first_name} {user.last_name}
                   </CommandItem>
                 ))}
-            </CommandList>
-          </Command>
+              </CommandList>
+            </Command>
+          </Loading>
         </PopoverContent>
       </Popover>
 
@@ -102,17 +107,18 @@ export default function UserSelect({ onUsersChange }: UserSelectProps) {
           <Table
             head={[<Table.th key="header-user">User</Table.th>, <Table.th key="header-action" />]}
             body={[
-              ...selectedUsers.map(user => (
-                <MyUser key={user.uid} user={user} removeUser={removeUser} />
-              )),
-
-              <Table.tr key="footer" className="bg-panel-secondary-light">
-                <Table.td colSpan={12}>
-                  <p className="text-foreground-light">
-                    {selectedUsers.length || '0'} {selectedUsers.length === 1 ? 'user' : 'users'}
-                  </p>
-                </Table.td>
-              </Table.tr>,
+              ...(selectedUser === undefined
+                ? [
+                    <Table.tr key="no-results" className="bg-panel-secondary-light">
+                      <Table.td colSpan={12}>
+                        <div className="flex items-center space-x-3 opacity-75">
+                          <AlertCircle size={16} strokeWidth={2} />
+                          <p className="text-foreground-light">No users is selected</p>
+                        </div>
+                      </Table.td>
+                    </Table.tr>,
+                  ]
+                : [<MyUser key={selectedUser.uid} user={selectedUser} removeUser={removeUser} />]),
             ]}
           />
         </div>

@@ -2,9 +2,7 @@
 
 import React from 'react';
 
-import { useCalculations } from '@/hooks/payslip/useCalculations';
-import { usePayrollCalculations } from '@/hooks/payslip/usePayrollCalculations';
-import { ICompanyInfo, IDeduction, ISSThreshold, IUser } from '@/types';
+import { ICompanyInfo, IUser } from '@/types';
 import { Document, Page, View } from '@react-pdf/renderer';
 
 import EnterpriseAndUserInfo from './components/EnterpriseAndUserInfo';
@@ -17,29 +15,30 @@ import PaySlipHeader from './components/TableHeader';
 import PaySlipTitleSection from './components/TitleSection';
 import { PaySlip, PaySlipItem } from './interface';
 import { styles } from './styles';
-import { calculateTotals } from './utils/misc';
 
 interface PaySlipPDFProps {
   user: IUser;
   company: ICompanyInfo;
-  paySlip: PaySlip;
-  thresholds: ISSThreshold[];
-  deductions: IDeduction[];
+  paySlip: Omit<
+    PaySlip,
+    'pid' | 'uid' | 'path_to_pdf' | 'total_hours_worked' | 'gross_salary' | 'net_salary'
+  >;
+  payslipData: PaySlipItem[];
+  grossSalary: number;
+  totals: {
+    totalSalarial: string;
+    totalPatronal: string;
+  };
 }
 
 const PaySlipPDF: React.FC<PaySlipPDFProps> = ({
   user,
   company,
   paySlip,
-  thresholds,
-  deductions,
+  totals,
+  grossSalary,
+  payslipData,
 }) => {
-  const { calculateGrossSalary } = usePayrollCalculations(thresholds);
-  const { generatePaySlipData, deductionsConfig } = useCalculations(thresholds, deductions);
-  const grossSalary = calculateGrossSalary(paySlip);
-  const paySlipData = generatePaySlipData(grossSalary, deductionsConfig);
-  const totals = calculateTotals(paySlipData);
-
   const paySlipTotalDeductions: PaySlipItem[] = [
     //TOTAL DES COTISATIONS
     {
@@ -76,7 +75,7 @@ const PaySlipPDF: React.FC<PaySlipPDFProps> = ({
           <PaySlipHeader />
           {/* Affichage des lignes de cotisations */}
           <View style={styles.paySlipContainer}>
-            {paySlipData.map((row, index) => (
+            {payslipData.map((row, index) => (
               <PaySlipRow
                 key={index}
                 isCotisationTitle={row.isCotisationTitle}

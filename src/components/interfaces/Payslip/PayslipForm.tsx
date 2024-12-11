@@ -1,6 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
+import crypto from 'crypto';
+import React from 'react';
+
+import { getSignedURL } from '@/app/actions';
 import {
+  AlertError,
   Button,
   FormPanel,
   FormSection,
@@ -15,13 +21,24 @@ import {
   FormItem,
   FormMessage,
 } from '@/components/ui/shadcn/ui/form';
+import { GenericSkeletonLoaderList } from '@/components/ui/ShimmeringLoader';
+import { useCompanyInfo } from '@/hooks/company-mutations';
+import { useCalculations } from '@/hooks/payslip/useCalculations';
+import { useGetDeductions, useGetThresholds } from '@/hooks/useHooks';
+import { IUser } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { pdf } from '@react-pdf/renderer';
 import { CircleMinus, CirclePlus } from 'lucide-react';
 import { useFieldArray, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
+import PaySlipPDF from '../PayslipPDF/PayslipPDF';
+import { calculateTotals } from '../PayslipPDF/utils/misc';
 import { DatePickerField } from './DatePicker';
 import UserSelect from './UserSelect';
+
+const FILE_TYPE = 'application/pdf';
 
 const timeEntrySchema = z.object({
   week: z.number(),
@@ -41,9 +58,15 @@ const PayslipSchema = z.object({
 });
 
 type FormValues = z.infer<typeof PayslipSchema>;
+const formId = 'payslip-form';
 
 const PayslipForm = () => {
-  const formId = 'payslip-form';
+  const { companyInfo, loading: companyInfoLoading, error: companyInfoError } = useCompanyInfo();
+  const { deductions, isLoading: isDeductionsLoading, error: deductionsError } = useGetDeductions();
+  const { thresholds, isLoading: isThresholdsLoading, error: thresholdsError } = useGetThresholds();
+  const [netSalary, setNetSalary] = React.useState<number>(0);
+  const [seletedUser, setUser] = React.useState<IUser | undefined>(undefined);
+  let toastId: string | null | number = null;
 
   const initialValues: FormValues = {
     hourly_rate: 0,
@@ -60,6 +83,66 @@ const PayslipForm = () => {
     resolver: zodResolver(PayslipSchema),
     defaultValues: initialValues,
   });
+
+  const computeSHA256 = async (blob: Blob) => {
+    const buffer = await blob.arrayBuffer();
+    const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return hashHex;
+  };
+
+  const handlePayslipGeneration = async (): Promise<Blob> => {
+    toast.loading('Generating Payslip...', { id: toastId! });
+    if (!thresholds || !deductions || !seletedUser || !companyInfo) {
+      throw new Error('Failed to load deductions, thresholds, user or company info');
+    }
+
+    const { generatePaySlipData, deductionsConfig } = useCalculations(thresholds, deductions);
+    const grossSalary = calculateGrossSalary();
+    const paySlipData = generatePaySlipData(grossSalary, deductionsConfig);
+    const totals = calculateTotals(paySlipData);
+    setNetSalary(grossSalary - Number(totals.totalSalarial));
+
+    const blob = await pdf(
+      <PaySlipPDF
+        totals={totals}
+        paySlip={form.getValues()}
+        user={seletedUser}
+        company={companyInfo}
+        payslipData={paySlipData}
+        grossSalary={grossSalary}
+      />,
+    ).toBlob();
+
+    toast.info('Payslip generated successfully', { id: toastId! });
+
+    return blob;
+  };
+
+  const handleFileUpload = async (): Promise<string> => {
+    const blob = await handlePayslipGeneration();
+    toast.info('Uploading Payslip...', { id: toastId! });
+    const signedURLResult = await getSignedURL({
+      fileSize: blob.size,
+      fileType: FILE_TYPE,
+      checksum: await computeSHA256(blob),
+    });
+    if (signedURLResult.failure !== undefined) {
+      throw new Error(signedURLResult.failure);
+    }
+    const { signedUrl, fileUrl } = signedURLResult.success;
+    await fetch(signedUrl, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': FILE_TYPE,
+      },
+      body: blob,
+    });
+    toast.success('Payslip uploaded successfully', { id: toastId! });
+
+    return fileUrl;
+  };
 
   function calculateGrossSalary(): number {
     const hourlyRate = Math.max(form.getValues().hourly_rate, 0);
@@ -100,6 +183,7 @@ const PayslipForm = () => {
   }
 
   function onSubmit(values: FormValues) {
+    toastId = toast.loading('Calculating Overtime...', { id: toastId });
     const dataWithOvertime = {
       ...values,
       time_entries: values.time_entries.map(entry => ({
@@ -115,6 +199,19 @@ const PayslipForm = () => {
       `time_entries.${idx}.overtime`,
       calculateOvertime(form.watch(`time_entries.${idx}.worked_hours`)),
     );
+
+  if (isDeductionsLoading || isThresholdsLoading || companyInfoLoading) {
+    return <GenericSkeletonLoaderList />;
+  }
+
+  if (deductionsError || thresholdsError || companyInfoError) {
+    return (
+      <AlertError
+        subject="Failed to load deductions and thresholds"
+        error={deductionsError || thresholdsError || companyInfoError}
+      />
+    );
+  }
 
   return (
     <Form {...form}>
@@ -256,7 +353,11 @@ const PayslipForm = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <UserSelect onUsersChange={field.onChange} />
+                      <UserSelect
+                        onUsersChange={field.onChange}
+                        setSelectedUser={setUser}
+                        selectedUser={seletedUser}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -301,6 +402,8 @@ const PayslipForm = () => {
                           {...field}
                           size="small"
                           layout="vertical"
+                          disabled
+                          value={netSalary}
                         />
                       </FormControl>
                       <FormMessage />

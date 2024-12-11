@@ -83,9 +83,9 @@ async function fetcher(url: string) {
   }
 }
 
-export function useCompanyInfo(siret: string) {
+export function useCompanyInfo() {
   const { data, error, isLoading, isValidating, mutate } = useSWR<ICompanyInfo>(
-    `${API_URL}/company/${siret}`,
+    `${API_URL}/company`,
     fetcher,
   );
 

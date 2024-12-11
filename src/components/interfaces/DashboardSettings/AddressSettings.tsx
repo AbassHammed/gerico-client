@@ -4,7 +4,6 @@
 import { useEffect } from 'react';
 
 import { useCompanyInfo, useUpdateCompanyInfo } from '@/hooks/company-mutations';
-import { useUser } from '@/hooks/useUser';
 import { ICompanyInfo } from '@/types';
 import {
   Form,
@@ -25,13 +24,12 @@ import { toast } from 'sonner';
 import { COUNTRIES } from './DashboardSettings.constants';
 
 const AddressSettings = () => {
-  const { user, isLoading, error } = useUser();
   const {
     companyInfo,
     loading: stillLoading,
     error: companyError,
     mutateCompanyInfo,
-  } = useCompanyInfo(user?.company_id ?? '');
+  } = useCompanyInfo();
 
   const { updateCompany, loading } = useUpdateCompanyInfo();
   const formId = 'billing-address-form';
@@ -86,15 +84,14 @@ const AddressSettings = () => {
         </div>
       </ScaffoldSectionDetail>
       <ScaffoldSectionContent>
-        {stillLoading ||
-          (isLoading && (
-            <div className="space-y-2">
-              <ShimmeringLoader />
-              <ShimmeringLoader className="w-3/4" />
-              <ShimmeringLoader className="w-1/2" />
-            </div>
-          ))}
-        {!error && !companyError && companyInfo && (
+        {stillLoading && (
+          <div className="space-y-2">
+            <ShimmeringLoader />
+            <ShimmeringLoader className="w-3/4" />
+            <ShimmeringLoader className="w-1/2" />
+          </div>
+        )}
+        {!companyError && companyInfo && (
           <Form
             validateOnBlur
             id={formId}

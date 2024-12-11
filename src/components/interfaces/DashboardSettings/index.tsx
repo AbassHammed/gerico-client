@@ -11,14 +11,12 @@ import {
   ShimmeringLoader,
 } from '@/components/ui';
 import { useCompanyInfo } from '@/hooks/company-mutations';
-import { useUser } from '@/hooks/useUser';
 
 import AddressSettings from './AddressSettings';
 import GeneralSettings from './GeneralSettings';
 
 const Settings = () => {
-  const { user } = useUser();
-  const { companyInfo, loading } = useCompanyInfo(user?.company_id ?? '');
+  const { companyInfo, loading } = useCompanyInfo();
 
   return (
     <React.Fragment>

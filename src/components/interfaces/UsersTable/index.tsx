@@ -4,13 +4,11 @@ import React from 'react';
 
 import { ScaffoldContainer, ScaffoldDivider, ScaffoldHeader, ScaffoldTitle } from '@/components/ui';
 import { useCompanyInfo } from '@/hooks/company-mutations';
-import { useUser } from '@/hooks/useUser';
 
 import UsersTable from './UsersTable';
 
 const Users = () => {
-  const { user } = useUser();
-  const { companyInfo } = useCompanyInfo(user?.company_id ?? '');
+  const { companyInfo } = useCompanyInfo();
 
   return (
     <React.Fragment>
