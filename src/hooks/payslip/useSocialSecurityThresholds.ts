@@ -6,7 +6,7 @@ import { ThresholdValue } from '@/components/interfaces/PayslipPDF/interface';
 import { createThresholdMap } from '@/lib/utils';
 import { ISSThreshold } from '@/types';
 
-export function useSocialSecurityThresholds(thresholds: ISSThreshold[]) {
+export function useSocialSecurityThresholds(thresholds?: ISSThreshold[]) {
   const result = useMemo(() => {
     const map = createThresholdMap(thresholds);
 

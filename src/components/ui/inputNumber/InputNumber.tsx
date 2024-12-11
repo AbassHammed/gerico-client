@@ -77,7 +77,7 @@ function InputNumber({
     }
     // run field level validation
     if (validation) {
-      fieldLevelValidation(id, validation(e.target.value));
+      fieldLevelValidation(id, validation(e.target.valueAsNumber));
     }
   }
 

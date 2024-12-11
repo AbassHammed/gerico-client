@@ -6,7 +6,10 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function createThresholdMap(thresholds: ISSThreshold[]) {
+export function createThresholdMap(thresholds?: ISSThreshold[]) {
+  if (!thresholds) {
+    return {};
+  }
   return thresholds.reduce(
     (acc, threshold) => {
       const key = threshold.threshold_name.toLowerCase().replace(/\s+/g, '_');
@@ -18,10 +21,13 @@ export function createThresholdMap(thresholds: ISSThreshold[]) {
 }
 
 export function createMap<T, U>(
-  arr: T[],
+  arr: T[] | undefined,
   keyCallback: (item: T) => string,
   valueCallback: (item: T) => U,
 ) {
+  if (!arr) {
+    return {};
+  }
   return arr.reduce(
     (acc, item) => {
       acc[keyCallback(item)] = valueCallback(item);

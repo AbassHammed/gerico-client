@@ -1,6 +1,5 @@
 'use client';
 
-import crypto from 'crypto';
 import React from 'react';
 
 import { getSignedURL } from '@/app/actions';
@@ -42,20 +41,20 @@ import UserSelect from './UserSelect';
 const FILE_TYPE = 'application/pdf';
 
 const timeEntrySchema = z.object({
-  week: z.number(),
-  worked_hours: z.number(),
-  overtime: z.number(),
+  week: z.coerce.number(),
+  worked_hours: z.coerce.number(),
+  overtime: z.coerce.number(),
 });
 
 const PayslipSchema = z.object({
-  hourly_rate: z.number(),
+  hourly_rate: z.coerce.number(),
   pay_date: z.string(),
   start_period: z.string(),
   end_period: z.string(),
   time_entries: z.array(timeEntrySchema),
   employee: z.string(),
-  gross_salary: z.number(),
-  net_salary: z.number(),
+  gross_salary: z.coerce.number(),
+  net_salary: z.coerce.number(),
 });
 
 type FormValues = z.infer<typeof PayslipSchema>;
@@ -65,6 +64,7 @@ const PayslipForm = () => {
   const { companyInfo, loading: companyInfoLoading, error: companyInfoError } = useCompanyInfo();
   const { deductions, isLoading: isDeductionsLoading, error: deductionsError } = useGetDeductions();
   const { thresholds, isLoading: isThresholdsLoading, error: thresholdsError } = useGetThresholds();
+  const { generatePaySlipData, deductionsConfig } = useCalculations(thresholds!, deductions!);
   const [netSalary, setNetSalary] = React.useState<number>(0);
   const [seletedUser, setUser] = React.useState<IUser | undefined>(undefined);
   const { createPayslip, loading: payslipLoading } = useCreatePayslip();
@@ -89,7 +89,7 @@ const PayslipForm = () => {
 
   const computeSHA256 = async (blob: Blob) => {
     const buffer = await blob.arrayBuffer();
-    const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
+    const hashBuffer = await window.crypto.subtle.digest('SHA-256', buffer);
     const hashArray = Array.from(new Uint8Array(hashBuffer));
     const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
     return hashHex;
@@ -101,7 +101,6 @@ const PayslipForm = () => {
       throw new Error('Failed to load deductions, thresholds, user or company info');
     }
 
-    const { generatePaySlipData, deductionsConfig } = useCalculations(thresholds, deductions);
     const grossSalary = calculateGrossSalary();
     const paySlipData = generatePaySlipData(grossSalary, deductionsConfig);
     const totals = calculateTotals(paySlipData);
@@ -216,6 +215,7 @@ const PayslipForm = () => {
       toast.success(message, { id: toastId! });
       form.reset();
     } catch (error: any) {
+      console.error(error);
       toast.error(error.message, { id: toastId! });
     } finally {
       setLoading(false);
@@ -320,7 +320,7 @@ const PayslipForm = () => {
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
                         <FormControl>
-                          <Input
+                          <InputNumber
                             type="number"
                             label="Week"
                             placeholder="1"

@@ -10,7 +10,7 @@ import { IDeduction, ISSThreshold } from '@/types';
 import { usePayrollCalculations } from './usePayrollCalculations';
 import { useSocialSecurityThresholds } from './useSocialSecurityThresholds';
 
-export function useCalculations(thresholds: ISSThreshold[], deductions: IDeduction[]) {
+export function useCalculations(thresholds?: ISSThreshold[], deductions?: IDeduction[]) {
   const { socialSecurityThresholdMap, CSG_CRDS_percentage } =
     useSocialSecurityThresholds(thresholds);
 

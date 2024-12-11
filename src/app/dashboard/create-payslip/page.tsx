@@ -1,9 +1,10 @@
 'use client';
 
-import React from 'react';
+import React, { Suspense } from 'react';
 
 import PayslipForm from '@/components/interfaces/Payslip/PayslipForm';
 import {
+  LoadingV2,
   ScaffoldContainer,
   ScaffoldContainerLegacy,
   ScaffoldDivider,
@@ -21,7 +22,9 @@ const CreatePayslipPage = () => (
 
     <ScaffoldDivider />
     <ScaffoldContainerLegacy>
-      <PayslipForm />
+      <Suspense fallback={<LoadingV2 />}>
+        <PayslipForm />
+      </Suspense>
     </ScaffoldContainerLegacy>
   </React.Fragment>
 );

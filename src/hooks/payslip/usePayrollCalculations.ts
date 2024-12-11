@@ -5,7 +5,7 @@ import { ISSThreshold } from '@/types';
 
 import { useSocialSecurityThresholds } from './useSocialSecurityThresholds';
 
-export function usePayrollCalculations(thresholds: ISSThreshold[]) {
+export function usePayrollCalculations(thresholds?: ISSThreshold[]) {
   const {
     social_security_ceiling_min,
     tranche_A_max,
