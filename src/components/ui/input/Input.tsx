@@ -1,7 +1,7 @@
 /* eslint-disable space-before-function-paren */
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { forwardRef, useEffect, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 import { Copy } from 'lucide-react';
@@ -25,7 +25,6 @@ export interface Props
   disabled?: boolean;
   error?: string;
   icon?: any;
-  inputRef?: React.LegacyRef<HTMLInputElement>;
   label?: string | React.ReactNode;
   afterLabel?: string;
   beforeLabel?: string;
@@ -38,186 +37,191 @@ export interface Props
   validation?: (x: any) => void;
 }
 
-function Input({
-  autoComplete,
-  autoFocus,
-  className,
-  inputClassName,
-  iconContainerClassName,
-  copy,
-  defaultValue,
-  descriptionText,
-  disabled,
-  error,
-  icon,
-  id = '',
-  name = '',
-  inputRef,
-  label,
-  afterLabel,
-  beforeLabel,
-  labelOptional,
-  layout,
-  onChange,
-  onBlur,
-  onCopy,
-  placeholder,
-  type = 'text',
-  value = undefined,
-  style,
-  reveal = false,
-  actions,
-  size = 'medium',
-  validation,
-  ...props
-}: Props) {
-  const [copyLabel, setCopyLabel] = useState('Copy');
-  const [hidden, setHidden] = useState(true);
+const Input = forwardRef<HTMLInputElement, Props>(
+  (
+    {
+      autoComplete,
+      autoFocus,
+      className,
+      inputClassName,
+      iconContainerClassName,
+      copy,
+      defaultValue,
+      descriptionText,
+      disabled,
+      error,
+      icon,
+      id = '',
+      name = '',
+      label,
+      afterLabel,
+      beforeLabel,
+      labelOptional,
+      layout,
+      onChange,
+      onBlur,
+      onCopy,
+      placeholder,
+      type = 'text',
+      value = undefined,
+      style,
+      reveal = false,
+      actions,
+      size = 'medium',
+      validation,
+      ...props
+    },
+    ref,
+  ) => {
+    const [copyLabel, setCopyLabel] = useState('Copy');
+    const [hidden, setHidden] = useState(true);
 
-  const __styles = styleHandler('input');
+    const __styles = styleHandler('input');
 
-  const { formContextOnChange, values, errors, handleBlur, touched, fieldLevelValidation } =
-    useFormContext();
+    const { formContextOnChange, values, errors, handleBlur, touched, fieldLevelValidation } =
+      useFormContext();
 
-  if (values && !value) {
-    value = values[id || name];
-  }
-
-  function handleBlurEvent(e: React.FocusEvent<HTMLInputElement>) {
-    if (handleBlur) {
-      setTimeout(() => {
-        handleBlur(e);
-      }, 100);
+    if (values && !value) {
+      value = values[id || name];
     }
-    if (onBlur) {
-      onBlur(e);
-    }
-  }
 
-  if (!error) {
-    if (errors && !error) {
-      error = errors[id || name];
+    function handleBlurEvent(e: React.FocusEvent<HTMLInputElement>) {
+      if (handleBlur) {
+        setTimeout(() => {
+          handleBlur(e);
+        }, 100);
+      }
+      if (onBlur) {
+        onBlur(e);
+      }
     }
-    error = touched && touched[id] ? error : undefined;
-  }
 
-  function onInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-    // console.log('input event', e)
-    if (onChange) {
-      onChange(e);
+    if (!error) {
+      if (errors && !error) {
+        error = errors[id || name];
+      }
+      error = touched && touched[id] ? error : undefined;
     }
-    // update form
-    if (formContextOnChange) {
-      formContextOnChange(e);
-    }
-    // run field level validation
-    if (validation) {
-      fieldLevelValidation(id, validation(e.target.value));
-    }
-  }
 
-  useEffect(() => {
-    if (validation) {
-      fieldLevelValidation(id, validation(value));
+    function onInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+      // console.log('input event', e)
+      if (onChange) {
+        onChange(e);
+      }
+      // update form
+      if (formContextOnChange) {
+        formContextOnChange(e);
+      }
+      // run field level validation
+      if (validation) {
+        fieldLevelValidation(id, validation(e.target.value));
+      }
     }
-  }, []);
 
-  function _onCopy(value: any) {
-    navigator.clipboard.writeText(value)?.then(
-      function () {
-        /* clipboard successfully set */
-        setCopyLabel('Copied');
-        setTimeout(function () {
-          setCopyLabel('Copy');
-        }, 3000);
-        onCopy?.();
-      },
-      function () {
-        /* clipboard write failed */
-        setCopyLabel('Failed to copy');
-      },
+    useEffect(() => {
+      if (validation) {
+        fieldLevelValidation(id, validation(value));
+      }
+    }, []);
+
+    function _onCopy(value: any) {
+      navigator.clipboard.writeText(value)?.then(
+        function () {
+          /* clipboard successfully set */
+          setCopyLabel('Copied');
+          setTimeout(function () {
+            setCopyLabel('Copy');
+          }, 3000);
+          onCopy?.();
+        },
+        function () {
+          /* clipboard write failed */
+          setCopyLabel('Failed to copy');
+        },
+      );
+    }
+
+    function onReveal() {
+      setHidden(false);
+    }
+
+    const inputClasses = ['peer/input', __styles.base];
+
+    if (error) {
+      inputClasses.push(__styles.variants.error);
+    }
+    if (!error) {
+      inputClasses.push(__styles.variants.standard);
+    }
+    if (size) {
+      inputClasses.push(__styles.size[size]);
+    }
+    if (icon) {
+      inputClasses.push(__styles.with_icon);
+    }
+    if (disabled) {
+      inputClasses.push(__styles.disabled);
+    }
+    if (inputClassName) {
+      inputClasses.push(inputClassName);
+    }
+
+    return (
+      <FormLayout
+        label={label}
+        afterLabel={afterLabel}
+        beforeLabel={beforeLabel}
+        labelOptional={labelOptional}
+        layout={layout}
+        id={id}
+        error={error}
+        descriptionText={descriptionText}
+        style={style}
+        size={size}
+        className={className}>
+        <div className={__styles.container}>
+          <input
+            data-size={size}
+            autoComplete={autoComplete}
+            autoFocus={autoFocus}
+            defaultValue={defaultValue}
+            disabled={disabled}
+            id={id}
+            ref={ref}
+            name={name}
+            onChange={onInputChange}
+            onBlur={handleBlurEvent}
+            onCopy={onCopy}
+            placeholder={placeholder}
+            type={type}
+            value={reveal && hidden ? HIDDEN_PLACEHOLDER : value}
+            className={cn(inputClasses)}
+            {...props}
+          />
+          {icon && (
+            <InputIconContainer size={size} icon={icon} className={iconContainerClassName} />
+          )}
+          {copy || error || actions ? (
+            <div className={__styles.actions_container}>
+              {error && <InputErrorIcon size={size} />}
+              {copy && !(reveal && hidden) ? (
+                <Button size="tiny" type="default" icon={<Copy />} onClick={() => _onCopy(value)}>
+                  {copyLabel}
+                </Button>
+              ) : null}
+              {reveal && hidden ? (
+                <Button size="tiny" type="default" onClick={onReveal}>
+                  Reveal
+                </Button>
+              ) : null}
+              {actions && actions}
+            </div>
+          ) : null}
+        </div>
+      </FormLayout>
     );
-  }
-
-  function onReveal() {
-    setHidden(false);
-  }
-
-  const inputClasses = ['peer/input', __styles.base];
-
-  if (error) {
-    inputClasses.push(__styles.variants.error);
-  }
-  if (!error) {
-    inputClasses.push(__styles.variants.standard);
-  }
-  if (size) {
-    inputClasses.push(__styles.size[size]);
-  }
-  if (icon) {
-    inputClasses.push(__styles.with_icon);
-  }
-  if (disabled) {
-    inputClasses.push(__styles.disabled);
-  }
-  if (inputClassName) {
-    inputClasses.push(inputClassName);
-  }
-
-  return (
-    <FormLayout
-      label={label}
-      afterLabel={afterLabel}
-      beforeLabel={beforeLabel}
-      labelOptional={labelOptional}
-      layout={layout}
-      id={id}
-      error={error}
-      descriptionText={descriptionText}
-      style={style}
-      size={size}
-      className={className}>
-      <div className={__styles.container}>
-        <input
-          data-size={size}
-          autoComplete={autoComplete}
-          autoFocus={autoFocus}
-          defaultValue={defaultValue}
-          disabled={disabled}
-          id={id}
-          name={name}
-          onChange={onInputChange}
-          onBlur={handleBlurEvent}
-          onCopy={onCopy}
-          placeholder={placeholder}
-          ref={inputRef}
-          type={type}
-          value={reveal && hidden ? HIDDEN_PLACEHOLDER : value}
-          className={cn(inputClasses)}
-          {...props}
-        />
-        {icon && <InputIconContainer size={size} icon={icon} className={iconContainerClassName} />}
-        {copy || error || actions ? (
-          <div className={__styles.actions_container}>
-            {error && <InputErrorIcon size={size} />}
-            {copy && !(reveal && hidden) ? (
-              <Button size="tiny" type="default" icon={<Copy />} onClick={() => _onCopy(value)}>
-                {copyLabel}
-              </Button>
-            ) : null}
-            {reveal && hidden ? (
-              <Button size="tiny" type="default" onClick={onReveal}>
-                Reveal
-              </Button>
-            ) : null}
-            {actions && actions}
-          </div>
-        ) : null}
-      </div>
-    </FormLayout>
-  );
-}
-
+  },
+);
 export interface TextAreaProps
   extends Omit<React.InputHTMLAttributes<HTMLTextAreaElement>, 'size' | 'onCopy'> {
   textAreaClassName?: string;
@@ -239,170 +243,174 @@ export interface TextAreaProps
   actions?: React.ReactNode;
 }
 
-function TextArea({
-  className,
-  textAreaClassName,
-  descriptionText,
-  disabled,
-  error,
-  icon,
-  id = '',
-  name = '',
-  label,
-  afterLabel,
-  beforeLabel,
-  labelOptional,
-  layout,
-  onChange,
-  onBlur,
-  placeholder,
-  value,
-  style,
-  rows = 4,
-  limit,
-  size,
-  validation,
-  copy = false,
-  onCopy,
-  actions,
-  ...props
-}: TextAreaProps) {
-  const [, setCharLength] = useState(0);
-  const [copyLabel, setCopyLabel] = useState('Copy');
+const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
+  (
+    {
+      className,
+      textAreaClassName,
+      descriptionText,
+      disabled,
+      error,
+      icon,
+      id = '',
+      name = '',
+      label,
+      afterLabel,
+      beforeLabel,
+      labelOptional,
+      layout,
+      onChange,
+      onBlur,
+      placeholder,
+      value,
+      style,
+      rows = 4,
+      limit,
+      size,
+      validation,
+      copy = false,
+      onCopy,
+      actions,
+      ...props
+    },
+    ref,
+  ) => {
+    const [, setCharLength] = useState(0);
+    const [copyLabel, setCopyLabel] = useState('Copy');
 
-  function _onCopy(value: any) {
-    navigator.clipboard.writeText(value).then(
-      function () {
-        /* clipboard successfully set */
-        setCopyLabel('Copied');
-        setTimeout(function () {
-          setCopyLabel('Copy');
-        }, 3000);
-        onCopy?.();
-      },
-      function () {
-        /* clipboard write failed */
-        setCopyLabel('Failed to copy');
-      },
-    );
-  }
-
-  const { formContextOnChange, values, errors, handleBlur, touched, fieldLevelValidation } =
-    useFormContext();
-
-  if (values && !value) {
-    value = values[id || name];
-  }
-
-  function handleBlurEvent(e: React.FocusEvent<HTMLTextAreaElement>) {
-    if (handleBlur) {
-      setTimeout(() => {
-        handleBlur(e);
-      }, 100);
+    function _onCopy(value: any) {
+      navigator.clipboard.writeText(value).then(
+        function () {
+          /* clipboard successfully set */
+          setCopyLabel('Copied');
+          setTimeout(function () {
+            setCopyLabel('Copy');
+          }, 3000);
+          onCopy?.();
+        },
+        function () {
+          /* clipboard write failed */
+          setCopyLabel('Failed to copy');
+        },
+      );
     }
-    if (onBlur) {
-      onBlur(e);
+
+    const { formContextOnChange, values, errors, handleBlur, touched, fieldLevelValidation } =
+      useFormContext();
+
+    if (values && !value) {
+      value = values[id || name];
     }
-  }
 
-  if (!error) {
-    if (errors && !error) {
-      error = errors[id || name];
+    function handleBlurEvent(e: React.FocusEvent<HTMLTextAreaElement>) {
+      if (handleBlur) {
+        setTimeout(() => {
+          handleBlur(e);
+        }, 100);
+      }
+      if (onBlur) {
+        onBlur(e);
+      }
     }
-    error = touched && touched[id || name] ? error : undefined;
-  }
 
-  function onInputChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
-    setCharLength(e.target.value.length);
-    if (onChange) {
-      onChange(e);
+    if (!error) {
+      if (errors && !error) {
+        error = errors[id || name];
+      }
+      error = touched && touched[id || name] ? error : undefined;
     }
-    // update form
-    if (formContextOnChange) {
-      formContextOnChange(e);
+
+    function onInputChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
+      setCharLength(e.target.value.length);
+      if (onChange) {
+        onChange(e);
+      }
+      // update form
+      if (formContextOnChange) {
+        formContextOnChange(e);
+      }
+      // run field level validation
+      if (validation) {
+        fieldLevelValidation(id, validation(e.target.value));
+      }
     }
-    // run field level validation
-    if (validation) {
-      fieldLevelValidation(id, validation(e.target.value));
+
+    useEffect(() => {
+      if (validation) {
+        fieldLevelValidation(id, validation(value));
+      }
+    }, []);
+
+    const __styles = styleHandler('input');
+
+    const classes = [__styles.base];
+
+    if (error) {
+      classes.push(__styles.variants.error);
     }
-  }
-
-  useEffect(() => {
-    if (validation) {
-      fieldLevelValidation(id, validation(value));
+    if (!error) {
+      classes.push(__styles.variants.standard);
     }
-  }, []);
+    if (icon) {
+      classes.push(__styles.with_icon);
+    }
+    if (size) {
+      classes.push(__styles.size[size]);
+    }
+    if (disabled) {
+      classes.push(__styles.disabled);
+    }
+    if (textAreaClassName) {
+      classes.push(textAreaClassName);
+    }
 
-  const __styles = styleHandler('input');
-
-  const classes = [__styles.base];
-
-  if (error) {
-    classes.push(__styles.variants.error);
-  }
-  if (!error) {
-    classes.push(__styles.variants.standard);
-  }
-  if (icon) {
-    classes.push(__styles.with_icon);
-  }
-  if (size) {
-    classes.push(__styles.size[size]);
-  }
-  if (disabled) {
-    classes.push(__styles.disabled);
-  }
-  if (textAreaClassName) {
-    classes.push(textAreaClassName);
-  }
-
-  return (
-    <FormLayout
-      className={className}
-      label={label}
-      afterLabel={afterLabel}
-      beforeLabel={beforeLabel}
-      labelOptional={labelOptional}
-      layout={layout}
-      id={id}
-      error={error}
-      descriptionText={descriptionText}
-      style={style}
-      size={size}>
-      <div className={__styles.container}>
-        <textarea
-          disabled={disabled}
-          id={id}
-          name={name}
-          rows={rows}
-          cols={100}
-          placeholder={placeholder}
-          onChange={onInputChange}
-          onBlur={handleBlurEvent}
-          onCopy={onCopy}
-          value={value}
-          className={classes.join(' ')}
-          maxLength={limit}
-          {...props}
-        />
-        {copy || error || actions ? (
-          <div className={__styles['textarea_actions_container']}>
-            <div className={__styles['textarea_actions_container_items']}>
-              {error && <InputErrorIcon size={size} />}
-              {copy && (
-                <Button size="tiny" type="default" onClick={() => _onCopy(value)} icon={<Copy />}>
-                  {copyLabel}
-                </Button>
-              )}
-              {actions && actions}
+    return (
+      <FormLayout
+        className={className}
+        label={label}
+        afterLabel={afterLabel}
+        beforeLabel={beforeLabel}
+        labelOptional={labelOptional}
+        layout={layout}
+        id={id}
+        error={error}
+        descriptionText={descriptionText}
+        style={style}
+        size={size}>
+        <div className={__styles.container}>
+          <textarea
+            disabled={disabled}
+            id={id}
+            name={name}
+            rows={rows}
+            cols={100}
+            ref={ref}
+            placeholder={placeholder}
+            onChange={onInputChange}
+            onBlur={handleBlurEvent}
+            onCopy={onCopy}
+            value={value}
+            className={classes.join(' ')}
+            maxLength={limit}
+            {...props}
+          />
+          {copy || error || actions ? (
+            <div className={__styles['textarea_actions_container']}>
+              <div className={__styles['textarea_actions_container_items']}>
+                {error && <InputErrorIcon size={size} />}
+                {copy && (
+                  <Button size="tiny" type="default" onClick={() => _onCopy(value)} icon={<Copy />}>
+                    {copyLabel}
+                  </Button>
+                )}
+                {actions && actions}
+              </div>
             </div>
-          </div>
-        ) : null}
-      </div>
-    </FormLayout>
-  );
-}
+          ) : null}
+        </div>
+      </FormLayout>
+    );
+  },
+);
 
-Input.TextArea = TextArea;
-
-export default Input;
+export { Input, TextArea };

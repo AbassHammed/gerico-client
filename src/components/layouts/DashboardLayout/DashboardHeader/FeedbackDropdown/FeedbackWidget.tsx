@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { Button, Input } from '@ui';
+import { Button, TextArea } from '@ui';
 import { toast } from 'sonner';
 
 interface FeedbackWidgetProps {
@@ -44,7 +44,7 @@ const FeedbackWidget = ({ feedback, onClose, setFeedback }: FeedbackWidgetProps)
 
   return (
     <div className="text-area-text-sm">
-      <Input.TextArea
+      <TextArea
         className="w-80 p-3"
         size="small"
         placeholder="Ideas on how to improve this page.&#10;Use the Support Form for technical issues."

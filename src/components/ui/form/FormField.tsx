@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 
 import type { Enum } from '@/types';
-import { Button, DatePickerV2, Input, InputNumber, Listbox, Toggle } from '@ui';
+import { Button, DatePickerV2, Input, InputNumber, Listbox, TextArea, Toggle } from '@ui';
 import { Eye, EyeOff } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 
@@ -159,7 +159,7 @@ const FormField = ({
       );
     case 'multiline-string':
       return (
-        <Input.TextArea
+        <TextArea
           size="small"
           layout="vertical"
           className={className}

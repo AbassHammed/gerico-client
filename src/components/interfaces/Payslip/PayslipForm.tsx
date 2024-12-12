@@ -65,7 +65,6 @@ const PayslipForm = () => {
   const { deductions, isLoading: isDeductionsLoading, error: deductionsError } = useGetDeductions();
   const { thresholds, isLoading: isThresholdsLoading, error: thresholdsError } = useGetThresholds();
   const { generatePaySlipData, deductionsConfig } = useCalculations(thresholds!, deductions!);
-  const [netSalary, setNetSalary] = React.useState<number>(0);
   const [seletedUser, setUser] = React.useState<IUser | undefined>(undefined);
   const { createPayslip, loading: payslipLoading } = useCreatePayslip();
   const [loading, setLoading] = React.useState<boolean>(false);
@@ -87,6 +86,9 @@ const PayslipForm = () => {
     defaultValues: initialValues,
   });
 
+  const handleGrossSalaryChange = () => form.setValue('gross_salary', calculateGrossSalary());
+  const handleNetSalaryChange = (x: number) => form.setValue('net_salary', x);
+
   const computeSHA256 = async (blob: Blob) => {
     const buffer = await blob.arrayBuffer();
     const hashBuffer = await window.crypto.subtle.digest('SHA-256', buffer);
@@ -104,7 +106,7 @@ const PayslipForm = () => {
     const grossSalary = calculateGrossSalary();
     const paySlipData = generatePaySlipData(grossSalary, deductionsConfig);
     const totals = calculateTotals(paySlipData);
-    setNetSalary(grossSalary - Number(totals.totalSalarial));
+    handleNetSalaryChange(grossSalary - Number(totals.totalSalarial));
 
     const blob = await pdf(
       <PaySlipPDF
@@ -214,10 +216,8 @@ const PayslipForm = () => {
       const message = await createPayslip(data);
       toast.success(message, { id: toastId! });
       form.reset();
-      setNetSalary(0);
       setUser(undefined);
     } catch (error: any) {
-      console.error(error);
       toast.error(error.message, { id: toastId! });
     } finally {
       setLoading(false);
@@ -283,6 +283,10 @@ const PayslipForm = () => {
                           label="Hourly Rate"
                           placeholder="0.00"
                           {...field}
+                          onChange={e => {
+                            field.onChange(e);
+                            handleGrossSalaryChange();
+                          }}
                           size="small"
                           layout="vertical"
                           disabled={loading || payslipLoading}
@@ -449,7 +453,6 @@ const PayslipForm = () => {
                           size="small"
                           layout="vertical"
                           disabled
-                          value={calculateGrossSalary()}
                         />
                       </FormControl>
                       <FormMessage />
@@ -470,7 +473,6 @@ const PayslipForm = () => {
                           size="small"
                           layout="vertical"
                           disabled
-                          value={netSalary}
                         />
                       </FormControl>
                       <FormMessage />

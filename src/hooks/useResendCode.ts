@@ -1,46 +1,24 @@
 'use client';
 
 import { getCookie } from 'cookies-next';
-import useSWRMutation from 'swr/mutation';
 
-import { API_URL } from './useApi';
-
-async function sendReset_Code(url: string) {
-  try {
-    const uid = getCookie('t_uid');
-
-    if (!uid) {
-      throw new Error('An error occured while sending info to the server, kindly retry the reset');
-    }
-
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ uid }),
-    });
-
-    if (!response.ok) {
-      const { error } = await response.json();
-      throw new Error(error);
-    }
-
-    const { sent } = (await response.json()) as { sent: boolean };
-    return sent;
-  } catch (error: any) {
-    throw new Error(error.message);
-  }
-}
+import { useApiMutation } from './useApi';
 
 export function useResendCode() {
-  const { trigger, isMutating: loading } = useSWRMutation(
-    `${API_URL}/users/resend-password-code`,
-    sendReset_Code,
+  const { trigger, isMutating: loading } = useApiMutation<{ sent: boolean }, { uid: string }>(
+    '/users/resend-password-code',
   );
 
   const sendResetCode = async () => {
     try {
-      const res = await trigger();
-      return res;
+      const uid = getCookie('t_uid');
+      if (!uid) {
+        throw new Error(
+          'An error occurred while sending info to the server, kindly retry the reset',
+        );
+      }
+      const res = await trigger({ uid });
+      return res?.data?.sent;
     } catch (error: any) {
       throw new Error(error.message);
     }

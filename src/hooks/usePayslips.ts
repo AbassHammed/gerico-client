@@ -1,49 +1,18 @@
-/* eslint-disable quotes */
 'use client';
 
 import { ICreatePayslip } from '@/types';
-import { getCookie } from 'cookies-next';
-import useSWRMutation from 'swr/mutation';
 
-import { API_URL } from './useApi';
-
-async function create(url: string, { arg }: { arg: ICreatePayslip }) {
-  try {
-    const auth_token = getCookie('auth_token');
-    if (!auth_token) {
-      throw new Error("Looks like you're not connected");
-    }
-
-    const headers = {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${auth_token}`,
-    };
-
-    const response = await fetch(url, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify(arg),
-    });
-
-    if (!response.ok) {
-      const { error } = await response.json();
-      throw new Error(error);
-    }
-
-    const { message } = (await response.json()) as { message: string };
-    return message;
-  } catch (error: any) {
-    throw new Error(error.message);
-  }
-}
+import { useApiMutationWithAuth } from './useApi';
 
 export function useCreatePayslip() {
-  const { trigger, isMutating: loading } = useSWRMutation(`${API_URL}/payslip`, create);
+  const { trigger, isMutating: loading } = useApiMutationWithAuth<undefined, ICreatePayslip>(
+    '/payslip',
+  );
 
   const createPayslip = async (inputs: ICreatePayslip) => {
     try {
       const res = await trigger(inputs);
-      return res;
+      return res?.message;
     } catch (error: any) {
       throw new Error(error.message);
     }

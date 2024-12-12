@@ -64,6 +64,7 @@ export const ResetPasswordForm = () => {
 
       const res = await resetPassword(inputs);
       if (res) {
+        toast.success('Mot de passe réinitialisé avec succès');
         router.push('/auth/sign-in');
         return;
       }

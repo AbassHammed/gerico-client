@@ -2,7 +2,7 @@
 export { Button, buttonVariants } from './button';
 export type { ButtonProps } from './button';
 export * from './form';
-export { Input } from './input';
+export { Input, TextArea } from './input';
 export { default as InformationBox } from './InformationBox';
 export { default as CalendarDateIcon } from './icons/CalendarDateIcon';
 export { default as User } from './icons/user';
