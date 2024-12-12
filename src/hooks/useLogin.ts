@@ -51,10 +51,10 @@ export default function useLogin() {
     try {
       const newInput = { ...inputs, ...parseUserAgent(window.navigator.userAgent) };
       const res = await trigger(newInput);
-      if (res?.token) {
-        setCookie('auth_token', res.token);
+      if (res?.data?.token) {
+        setCookie('auth_token', res?.data?.token);
       }
-      return { code: res?.code || null, user: res?.user || null };
+      return { code: res?.data?.code || null, user: res?.data?.user || null };
     } catch (error: any) {
       throw new Error(error.message);
     }

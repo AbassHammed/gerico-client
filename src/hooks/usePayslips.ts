@@ -5,7 +5,7 @@ import { ICreatePayslip } from '@/types';
 import { getCookie } from 'cookies-next';
 import useSWRMutation from 'swr/mutation';
 
-import { API_URL } from './useUser';
+import { API_URL } from './useApi';
 
 async function create(url: string, { arg }: { arg: ICreatePayslip }) {
   try {

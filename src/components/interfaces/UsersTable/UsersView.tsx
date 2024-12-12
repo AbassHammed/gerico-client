@@ -7,7 +7,7 @@ import { useEmployees } from '@/hooks/useEmployees';
 import { useUser } from '@/hooks/useUser';
 import { IUser } from '@/types';
 import * as Tooltip from '@radix-ui/react-tooltip';
-import { Button, GenericSkeletonLoader, Loading, Table } from '@ui';
+import { AlertError, Button, GenericSkeletonLoader, Loading, Table } from '@ui';
 import { AlertCircle, ArrowDown, ArrowUp } from 'lucide-react';
 
 import { UserRow } from './UserRow';
@@ -46,9 +46,9 @@ const UsersView = ({ searchString }: MembersViewProps) => {
     <>
       {isLoadingMembers && <GenericSkeletonLoader />}
 
-      {/* {isErrorMembers && (
+      {membersError && (
         <AlertError error={membersError} subject="Failed to retrieve organization members" />
-      )} */}
+      )}
 
       {!membersError && !isLoadingMembers && profile && (
         <div className="rounded w-full">

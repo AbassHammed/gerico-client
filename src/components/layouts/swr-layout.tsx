@@ -10,6 +10,7 @@ const SWRLayout: React.FC<SWRLayoutProps> = ({ children }) => (
   <SWRConfig
     value={{
       fetcher: (url: string) => fetch(url, { credentials: 'include' }).then(res => res.json()),
+      revalidateOnFocus: false,
     }}>
     {children}
   </SWRConfig>

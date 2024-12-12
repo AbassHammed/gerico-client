@@ -12,7 +12,7 @@ export function useMarkIssueAsResolved(issueId: string) {
   const markAsSolved = async () => {
     try {
       const res = await trigger();
-      return res?.result;
+      return res?.data?.result;
     } catch (error: any) {
       throw new Error(error.message);
     }

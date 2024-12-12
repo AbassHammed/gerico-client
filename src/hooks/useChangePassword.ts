@@ -4,7 +4,7 @@ import { IChangePasswordInput } from '@/types';
 import { getCookie, setCookie } from 'cookies-next';
 import useSWRMutation from 'swr/mutation';
 
-import { API_URL } from './useUser';
+import { API_URL } from './useApi';
 
 async function changePassword(url: string, { arg }: { arg: IChangePasswordInput }) {
   try {

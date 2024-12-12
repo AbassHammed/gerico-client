@@ -5,36 +5,11 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 import type { IUser } from '@/types';
-import { getCookie } from 'cookies-next';
-import useSWR from 'swr';
 
-export const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api/v1';
-
-async function fetchUser(url: string) {
-  const token = getCookie('auth_token');
-  if (!token) {
-    throw new Error('User is not authenticated');
-  }
-
-  const res = await fetch(url, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  if (!res.ok) {
-    const { error } = await res.json();
-    throw new Error(error);
-  }
-
-  return res.json();
-}
+import { useApiGet } from './useApi';
 
 export function useUser() {
-  const { data, error, isLoading, isValidating } = useSWR<{ user: IUser }>(
-    `${API_URL}/users/me`,
-    fetchUser,
-  );
+  const { data, error, isLoading } = useApiGet<IUser>('/users/me');
   const router = useRouter();
 
   useEffect(() => {
@@ -46,20 +21,17 @@ export function useUser() {
   }, [error, router]);
 
   return {
-    user: data?.user,
-    isLoading: isValidating || isLoading,
+    user: data,
+    isLoading,
     error,
   };
 }
 
 export function useProfile(slug: string) {
-  const { data, error, isValidating, isLoading, mutate } = useSWR<{ user: IUser }>(
-    `${API_URL}/users/${slug}`,
-    fetchUser,
-  );
+  const { data, error, isLoading, mutate } = useApiGet<IUser>(`/users/${slug}`);
   return {
-    user: data?.user,
-    isLoading: isValidating || isLoading,
+    user: data,
+    isLoading,
     error,
     mutate,
   };

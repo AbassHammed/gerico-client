@@ -19,7 +19,7 @@ const AlertError = ({ subject, error, className }: AlertErrorProps) => {
       <AlertTitle_Shadcn>{subject}</AlertTitle_Shadcn>
       <AlertDescription_Shadcn className="flex flex-col gap-3 break-words">
         <div>
-          {error?.message && <p className="text-left">Error: {formattedErrorMessage}</p>}
+          {error?.message && <p className="text-left">Erreur: {formattedErrorMessage}</p>}
           <p className="text-left">
             Try refreshing your browser, but if the issue persists, please reach out to us via
             support.
@@ -27,7 +27,7 @@ const AlertError = ({ subject, error, className }: AlertErrorProps) => {
         </div>
         <div>
           <Button asChild type="warning">
-            <Link href={'/support'}>Contact support</Link>
+            <Link href={'/support'}>Support</Link>
           </Button>
         </div>
       </AlertDescription_Shadcn>

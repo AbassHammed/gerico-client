@@ -1,45 +1,30 @@
 'use client';
 
 import { setCookie } from 'cookies-next';
-import useSWRMutation from 'swr/mutation';
 
-import { API_URL } from './useUser';
+import { useApiMutation } from './useApi';
 
-async function forgotPassword(url: string, { arg }: { arg: { email: string } }) {
-  try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(arg),
-    });
-
-    if (!response.ok) {
-      const { error } = await response.json();
-      throw new Error(error);
-    }
-
-    const { uid, sent } = (await response.json()) as { uid: string; sent: boolean };
-    setCookie('t_uid', uid);
-    return sent;
-  } catch (error: any) {
-    throw new Error(error.message);
-  }
+interface ForgotPasswordResponse {
+  uid: string;
+  sent: boolean;
 }
 
 export function useForgotPassword() {
-  const { trigger, isMutating: loading } = useSWRMutation(
-    `${API_URL}/users/forgot-password`,
-    forgotPassword,
-  );
+  const {
+    trigger,
+    isMutating: loading,
+    isSuccess,
+  } = useApiMutation<ForgotPasswordResponse, { email: string }>('/users/forgot-password');
 
   const sendMail = async (inputs: { email: string }) => {
     try {
-      const sent = await trigger(inputs);
-      return sent;
+      const res = await trigger(inputs);
+      setCookie('t_uid', res?.data?.uid);
+      return res?.data?.sent;
     } catch (error: any) {
       throw new Error(error.message);
     }
   };
 
-  return { sendMail, loading };
+  return { sendMail, loading, isSuccess };
 }

@@ -2,45 +2,27 @@
 
 import { ResetPasswordType } from '@/types';
 import { deleteCookie } from 'cookies-next';
-import useSWRMutation from 'swr/mutation';
 
-import { API_URL } from './useUser';
-
-async function resetPass(url: string, { arg }: { arg: ResetPasswordType }) {
-  try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(arg),
-    });
-
-    if (!response.ok) {
-      const { error } = await response.json();
-      throw new Error(error);
-    }
-
-    const { result } = (await response.json()) as { result: true };
-    deleteCookie('t_uid');
-    return result;
-  } catch (error: any) {
-    throw new Error(error.message);
-  }
-}
+import { useApiMutation } from './useApi';
 
 export function useResetPassword() {
-  const { trigger, isMutating: loading } = useSWRMutation(
-    `${API_URL}/users/reset-password`,
-    resetPass,
-  );
+  const {
+    trigger,
+    isMutating: loading,
+    isSuccess,
+  } = useApiMutation<{ result: true }, ResetPasswordType>('/users/reset-password');
 
   const resetPassword = async (inputs: ResetPasswordType) => {
     try {
       const res = await trigger(inputs);
-      return res;
+      if (res?.data?.result) {
+        deleteCookie('t_uid');
+      }
+      return res?.data?.result;
     } catch (error: any) {
       throw new Error(error.message);
     }
   };
 
-  return { resetPassword, loading };
+  return { resetPassword, loading, isSuccess };
 }

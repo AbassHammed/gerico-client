@@ -27,7 +27,11 @@ export const UserRow = ({ member }: { member: IUser }) => {
           <div className="flex item-center gap-x-2">
             <p className="text-foreground-light truncate">{`${member.last_name} ${member.first_name}`}</p>
 
-            {member.email === user?.email && <Badge color="scale">Vous</Badge>}
+            {member.email === user?.email && (
+              <Badge className="hidden lg:flex" color="scale">
+                Vous
+              </Badge>
+            )}
           </div>
         </div>
       </Table.td>
@@ -41,7 +45,7 @@ export const UserRow = ({ member }: { member: IUser }) => {
           <p>
             {new Intl.DateTimeFormat('fr-FR', {
               day: '2-digit',
-              month: 'long',
+              month: 'short',
               year: '2-digit',
             }).format(new Date(member.hire_date))}
           </p>

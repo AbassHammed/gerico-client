@@ -10,7 +10,7 @@ export interface ApiResponse<T> {
   statusCode: number;
 }
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+export const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 async function fetcher<T>(url: string): Promise<ApiResponse<T>> {
   const authToken = getCookie('auth_token');
@@ -35,6 +35,24 @@ async function fetcher<T>(url: string): Promise<ApiResponse<T>> {
 }
 
 async function poster<T, A>(url: string, { arg }: { arg: A }): Promise<ApiResponse<T>> {
+  const response = await fetch(`${API_URL}${url}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(arg),
+  });
+
+  const apiResponse: ApiResponse<T> = await response.json();
+
+  if (!apiResponse.success) {
+    throw new Error(apiResponse.error || 'An unexpected error occurred');
+  }
+
+  return apiResponse;
+}
+
+async function posterWithAuth<T, A>(url: string, { arg }: { arg: A }): Promise<ApiResponse<T>> {
   const authToken = getCookie('auth_token');
   if (!authToken) {
     throw new Error('User is not authenticated');
@@ -42,6 +60,30 @@ async function poster<T, A>(url: string, { arg }: { arg: A }): Promise<ApiRespon
 
   const response = await fetch(`${API_URL}${url}`, {
     method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${authToken}`,
+    },
+    body: JSON.stringify(arg),
+  });
+
+  const apiResponse: ApiResponse<T> = await response.json();
+
+  if (!apiResponse.success) {
+    throw new Error(apiResponse.error || 'An unexpected error occurred');
+  }
+
+  return apiResponse;
+}
+
+async function patcher<T, A>(url: string, { arg }: { arg: A }): Promise<ApiResponse<T>> {
+  const authToken = getCookie('auth_token');
+  if (!authToken) {
+    throw new Error('User is not authenticated');
+  }
+
+  const response = await fetch(`${API_URL}${url}`, {
+    method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${authToken}`,
@@ -77,7 +119,35 @@ export function useApiMutation<T, A>(
 
   return {
     ...mutation,
-    trigger: mutation.trigger as (arg: A) => Promise<T | undefined>,
+    trigger: mutation.trigger as (arg: A) => Promise<ApiResponse<T> | undefined>,
+    data: mutation.data?.data,
+    isSuccess: mutation.data?.success,
+  };
+}
+
+export function useApiMutationWithAuth<T, A>(
+  url: string,
+  config?: SWRMutationConfiguration<ApiResponse<T>, Error, string, A>,
+) {
+  const mutation = useSWRMutation<ApiResponse<T>, Error, string, A>(url, posterWithAuth, config);
+
+  return {
+    ...mutation,
+    trigger: mutation.trigger as (arg: A) => Promise<ApiResponse<T> | undefined>,
+    data: mutation.data?.data,
+    isSuccess: mutation.data?.success,
+  };
+}
+
+export function useApiMutationWithAuthAndPatch<T, A>(
+  url: string,
+  config?: SWRMutationConfiguration<ApiResponse<T>, Error, string, A>,
+) {
+  const mutation = useSWRMutation<ApiResponse<T>, Error, string, A>(url, patcher, config);
+
+  return {
+    ...mutation,
+    trigger: mutation.trigger as (arg: A) => Promise<ApiResponse<T> | undefined>,
     data: mutation.data?.data,
     isSuccess: mutation.data?.success,
   };
