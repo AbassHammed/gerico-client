@@ -159,7 +159,6 @@ function _DatePicker({
             children
           ) : (
             <>
-              {/* Custom */}
               {selectsRange &&
               appliedStartDate &&
               appliedEndDate &&

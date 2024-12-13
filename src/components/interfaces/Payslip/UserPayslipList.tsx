@@ -5,6 +5,7 @@ import { useState } from 'react';
 import {
   AlertError,
   Button,
+  FormHeader,
   GenericSkeletonLoader,
   ScaffoldContainerLegacy,
   Table,
@@ -36,7 +37,10 @@ const UserPayslipList = () => {
   const payslips = data || [];
 
   return (
-    <ScaffoldContainerLegacy>
+    <ScaffoldContainerLegacy className="gap-0">
+      <div className="flex items-center justify-between">
+        <FormHeader title="Fiches de paie" description="Retrouvez ici toutes vos fiches de paie." />
+      </div>
       {(userLoading || payslipLoading) && <GenericSkeletonLoader />}
 
       {(userError || payslipError) && (
@@ -89,7 +93,11 @@ const UserPayslipList = () => {
                     <Table.td className="align-right">
                       <div className="flex items-center justify-end space-x-2">
                         <Button type="outline" icon={<Eye size={16} strokeWidth={1.5} />} />
-                        <Button type="outline" icon={<Download size={16} strokeWidth={1.5} />} />
+                        <Button
+                          type="outline"
+                          icon={<Download size={16} strokeWidth={1.5} />}
+                          onClick={() => window.open(payslip.path_to_pdf, '_blank')}
+                        />
                       </div>
                     </Table.td>
                   </Table.tr>

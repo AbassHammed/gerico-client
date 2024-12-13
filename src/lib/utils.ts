@@ -1,4 +1,5 @@
 import { ISSThreshold } from '@/types';
+import * as chrono from 'chrono-node';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -85,3 +86,32 @@ export const toKebabCase = (string: string): string =>
     .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
     .toLowerCase()
     .trim();
+
+// Function to parse a date string into a Date object
+export const parseDateTime = (str: Date | string) => {
+  if (str instanceof Date) {
+    return str;
+  }
+  return chrono.fr.parseDate(str);
+};
+
+export const formatDateTime = (dateTime: Date | string) =>
+  new Date(dateTime).toLocaleTimeString('fr-FR', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+  });
+
+export const getDateTimeLocal = (timestamp?: Date): string => {
+  const d = timestamp ? new Date(timestamp) : new Date();
+  if (d.toString() === 'Invalid Date') {
+    return '';
+  }
+  return new Date(d.getTime() - d.getTimezoneOffset() * 60000)
+    .toISOString()
+    .split(':')
+    .slice(0, 2)
+    .join(':');
+};

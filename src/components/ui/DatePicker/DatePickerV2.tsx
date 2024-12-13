@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 
+import { formatDateTime, parseDateTime } from '@/lib/utils';
 import {
   Button,
   ButtonProps,
@@ -12,7 +13,7 @@ import {
   PopoverTrigger_Shadcn,
   Separator,
 } from '@ui';
-import { format, isValid, parse } from 'date-fns';
+import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import dayjs from 'dayjs';
 import { Calendar as CalendarIcon } from 'lucide-react';
@@ -46,34 +47,8 @@ function _DatePicker({
   const [time, setTime] = useState<any>(TIME_DEFAULT);
   const [date, setDate] = useState<Date | undefined>(DATE_DEFAULT);
   const [month, setMonth] = React.useState(new Date());
+  const inputRef = React.useRef<HTMLInputElement>(null);
   // Hold the selected date in state
-
-  // Hold the input value in state
-  const [inputValue, setInputValue] = React.useState('');
-
-  const handleDayPickerSelect = (date: Date | undefined) => {
-    if (!date) {
-      setInputValue('');
-      setDate(undefined);
-    } else {
-      setDate(date);
-      setMonth(date);
-      setInputValue(format(date, 'MM/dd/yyyy'));
-    }
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value); // keep the input value in sync
-
-    const parsedDate = parse(e.target.value, 'MM/dd/yyyy', new Date());
-
-    if (isValid(parsedDate)) {
-      setDate(parsedDate);
-      setMonth(parsedDate);
-    } else {
-      setDate(undefined);
-    }
-  };
 
   function handleSubmit() {
     setOpen(false);
@@ -121,11 +96,34 @@ function _DatePicker({
               </div>
             </>
           )}
-          <Input_Shadcn value={inputValue} placeholder="MM/DD/YYYY" onChange={handleInputChange} />
+          <Input_Shadcn
+            ref={inputRef}
+            defaultValue={date ? formatDateTime(date) : ''}
+            placeholder="i.e 'demain' ou 'il y a deux ans'"
+            onBlur={e => {
+              if (e.target.value.length > 0) {
+                const parsedDateTime = parseDateTime(e.target.value);
+                if (parsedDateTime) {
+                  setDate(parsedDateTime);
+                  setMonth(parsedDateTime);
+                  e.target.value = formatDateTime(parsedDateTime);
+                }
+              }
+            }}
+          />
           <div className="rounded-md border">
             <Calendar
               mode="single"
-              onSelect={handleDayPickerSelect}
+              onSelect={e => {
+                if (e) {
+                  const selectedDate = new Date(e);
+                  setDate(selectedDate);
+                  setMonth(selectedDate);
+                  if (inputRef.current) {
+                    inputRef.current.value = formatDateTime(selectedDate);
+                  }
+                }
+              }}
               selected={date}
               month={month}
               onMonthChange={setMonth}
