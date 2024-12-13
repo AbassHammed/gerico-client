@@ -1,8 +1,8 @@
 'use client';
 
-import { ICreatePayslip } from '@/types';
+import { ICreatePayslip, IPayslip, PaginatedResult, PaginationParams } from '@/types';
 
-import { useApiMutationWithAuth } from './useApi';
+import { useApiGet, useApiMutationWithAuth } from './useApi';
 
 export function useCreatePayslip() {
   const { trigger, isMutating: loading } = useApiMutationWithAuth<undefined, ICreatePayslip>(
@@ -19,4 +19,32 @@ export function useCreatePayslip() {
   };
 
   return { createPayslip, loading };
+}
+
+export function useInvoicesQuery(params?: PaginationParams) {
+  const { data, error, isLoading, success } = useApiGet<PaginatedResult<IPayslip>>(
+    `/payslip?page=${params?.page}&limit=${params?.limit}&offset=${params?.offset}`,
+  );
+
+  return {
+    payslips: data?.data,
+    pagination: data?.pagination,
+    error,
+    isLoading,
+    isSuccess: success,
+  };
+}
+
+export function useInvoicesQueryForUser(uid: string, params?: PaginationParams) {
+  const { data, error, isLoading, success } = useApiGet<PaginatedResult<IPayslip>>(
+    `/payslip/${uid}?page=${params?.page}&limit=${params?.limit}&offset=${params?.offset}`,
+  );
+
+  return {
+    payslips: data?.data,
+    pagination: data?.pagination,
+    error,
+    isLoading,
+    isSuccess: success,
+  };
 }
