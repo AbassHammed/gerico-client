@@ -1,6 +1,6 @@
 import { CalendarDateIcon } from '@/components/ui';
 import { IRoute } from '@/types';
-import { FilePen, Plus, Settings, Users } from 'lucide-react';
+import { FilePen, Files, Plus, Settings, Users } from 'lucide-react';
 
 export const ICON_SIZE = 20;
 export const ICON_STROKE_WIDTH = 1.5;
@@ -46,6 +46,12 @@ export const generateToolRoutes = (): IRoute[] => [
     label: 'Create payslip',
     icon: <FilePen size={ICON_SIZE} strokeWidth={ICON_STROKE_WIDTH} />,
     link: '/dashboard/create-payslip',
+  },
+  {
+    key: 'all:payslip',
+    label: 'Payslip list',
+    icon: <Files size={ICON_SIZE} strokeWidth={ICON_STROKE_WIDTH} />,
+    link: '/dashboard/payslips',
   },
 ];
 

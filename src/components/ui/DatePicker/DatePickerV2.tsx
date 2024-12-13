@@ -99,7 +99,7 @@ function _DatePicker({
           <Input_Shadcn
             ref={inputRef}
             defaultValue={date ? formatDateTime(date) : ''}
-            placeholder="i.e 'demain' ou 'il y a deux ans'"
+            placeholder="i.e 'demain' ou 'il y a 2 ans'"
             onBlur={e => {
               if (e.target.value.length > 0) {
                 const parsedDateTime = parseDateTime(e.target.value);

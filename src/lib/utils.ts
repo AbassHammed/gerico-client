@@ -115,3 +115,35 @@ export const getDateTimeLocal = (timestamp?: Date): string => {
     .slice(0, 2)
     .join(':');
 };
+
+/**
+ * Formats the last name of a user.
+ * If the last name is 3 or more characters, it returns the first letter capitalized followed by a point.
+ * Otherwise, it returns the last name without modification.
+ *
+ * @param lastName - The last name of the user
+ * @returns The formatted last name
+ */
+export function formatLastName(lastName: string): string {
+  if (lastName.length >= 3) {
+    return `${lastName.charAt(0).toUpperCase()}.`;
+  }
+  return lastName;
+}
+
+/**
+ * Shortens the civility (Monsieur or Madame) to their respective abbreviated forms.
+ *
+ * @param civility - The civility string ('Monsieur' or 'Madame')
+ * @returns The shortened civility ('M.' for Monsieur, 'Mme' for Madame, or the original string if not recognized)
+ */
+export function shortenCivility(civility: string): string {
+  switch (civility.toLowerCase()) {
+    case 'monsieur':
+      return 'M.';
+    case 'madame':
+      return 'Mme';
+    default:
+      return civility;
+  }
+}
