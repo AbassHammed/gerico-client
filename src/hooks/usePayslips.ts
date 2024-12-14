@@ -21,7 +21,7 @@ export function useCreatePayslip() {
   return { createPayslip, loading };
 }
 
-export function useInvoicesQuery(params?: PaginationParams) {
+export function usePayslipsQuery(params?: PaginationParams) {
   const { data, error, isLoading, success } = useApiGet<PaginatedResult<IPayslip>>(
     `/payslip?page=${params?.page}&limit=${params?.limit}&offset=${params?.offset}`,
   );
@@ -35,7 +35,7 @@ export function useInvoicesQuery(params?: PaginationParams) {
   };
 }
 
-export function useInvoicesQueryForUser(uid: string, params?: PaginationParams) {
+export function usePayslipsQueryForUser(uid: string, params?: PaginationParams) {
   const { data, error, isLoading, success } = useApiGet<PaginatedResult<IPayslip>>(
     `/payslip/${uid}?page=${params?.page}&limit=${params?.limit}&offset=${params?.offset}`,
   );

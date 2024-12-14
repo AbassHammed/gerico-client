@@ -15,7 +15,7 @@ export const DatePickerContext = createContext<{
 });
 
 const isBrowserLocaleClockType24h = () => {
-  const language = typeof window !== 'undefined' ? window.navigator.language : 'en-US';
+  const language = typeof window !== 'undefined' ? window.navigator.language : 'fr-FR';
 
   const hr = new Intl.DateTimeFormat(language, {
     hour: 'numeric',

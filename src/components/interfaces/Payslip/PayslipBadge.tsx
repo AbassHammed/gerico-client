@@ -30,7 +30,7 @@ const PaySlipBadge = ({ status }: { status: PayslipStatus }) => {
       <Tooltip.Trigger>
         <Badge
           size="small"
-          className="capitalize"
+          className={`capitalize ${status === PayslipStatus.PAID ? 'text-white' : ''}`}
           variant={statusMapping?.badgeVariant || 'default'}>
           {statusMapping?.label}
         </Badge>
@@ -41,7 +41,7 @@ const PaySlipBadge = ({ status }: { status: PayslipStatus }) => {
           <div
             className={[
               'rounded bg-alternative py-1 px-2 leading-none shadow',
-              'w-[300px] space-y-2 border border-background',
+              'space-y-2 border border-background',
             ].join(' ')}>
             {status === PayslipStatus.NOTPAID && (
               <p className="text-xs text-foreground">

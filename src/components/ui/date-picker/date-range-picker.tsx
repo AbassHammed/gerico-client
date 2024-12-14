@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { useMediaQuery } from '@/hooks/misc/use-media-query';
 import { cn } from '@/lib/utils';
-import { enUS } from 'date-fns/locale';
+import { fr } from 'date-fns/locale';
 import { SelectRangeEventHandler } from 'react-day-picker';
 
 import { Calendar as CalendarPrimitive } from './calendar';
@@ -32,7 +32,7 @@ const DateRangePickerInner = ({
   disableNavigation,
   disabledDays,
   showYearNavigation = false,
-  locale = enUS,
+  locale = fr,
   placeholder = 'Select date range',
   hasError,
   align = 'center',
