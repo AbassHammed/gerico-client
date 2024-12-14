@@ -1,8 +1,9 @@
-import { cn } from '@dub/utils';
+'use client';
+
+import { cn } from '@/lib/utils';
 import { Command } from 'cmdk';
 import { Lock } from 'lucide-react';
 
-import { Tooltip } from '../tooltip';
 import { DatePreset, DateRange, DateRangePreset, Preset } from './types';
 
 type PresetsProps<TPreset extends Preset, TValue> = {
@@ -101,11 +102,6 @@ const Presets = <TPreset extends Preset, TValue>({
                 {preset.shortcut.toUpperCase()}
               </kbd>
             ) : null}
-            {preset.requiresUpgrade && preset.tooltipContent && (
-              <Tooltip side="bottom" content={preset.tooltipContent}>
-                <div className="absolute inset-0 cursor-not-allowed"></div>
-              </Tooltip>
-            )}
           </Command.Item>
         ))}
       </Command.List>

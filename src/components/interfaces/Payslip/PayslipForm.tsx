@@ -35,7 +35,7 @@ import { z } from 'zod';
 
 import PaySlipPDF from '../PayslipPDF/PayslipPDF';
 import { calculateTotals } from '../PayslipPDF/utils/misc';
-import { DatePickerField } from './DatePicker';
+import { DatePickerField } from './FormDatePicker';
 import UserSelect from './UserSelect';
 
 const FILE_TYPE = 'application/pdf';

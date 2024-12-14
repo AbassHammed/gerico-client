@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useMemo, useState } from 'react';
 
 import { useMediaQuery } from '@/hooks/misc/use-media-query';
@@ -71,7 +73,6 @@ const DateRangePickerInner = ({
   }, [open]);
 
   const onCalendarSelect: SelectRangeEventHandler = (selectedRange, selectedDay) => {
-    // We can hopefully simplify this in the future (see https://dub.sh/ueboa6U)
     const newRange = range?.from && range?.to ? { from: selectedDay } : selectedRange;
 
     setRange(newRange);
