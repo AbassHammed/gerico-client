@@ -155,5 +155,5 @@ export interface IPayslip {
   pay_date: Date;
   total_hours_worked: string;
   hourly_rate: number;
-  path_to_pdf?: string;
+  path_to_pdf: string;
 }

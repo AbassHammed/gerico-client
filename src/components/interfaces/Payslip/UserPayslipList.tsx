@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { useSearchParams } from 'next/navigation';
 
@@ -24,12 +24,14 @@ import { ChevronLeft, ChevronRight, Download, Eye, FileText } from 'lucide-react
 import PayslipListHeader from './Header';
 import { filterPayslips } from './Payslip.utils';
 import PaySlipBadge, { PayslipStatus } from './PayslipBadge';
+import PdfViewerModal from './PayslipPDFModal';
 
 const PAGE_LIMIT = 10;
 
 const UserPayslipList = () => {
   const { user, isLoading: userLoading, error: userError } = useUser();
   const [page, setPage] = useState(1);
+  const [pdfModal, setPdfModal] = useState({ isOpen: false, filePath: '' });
 
   const offset = (page - 1) * PAGE_LIMIT;
 
@@ -42,6 +44,10 @@ const UserPayslipList = () => {
   } = usePayslipsQueryForUser(user?.uid!, { page, limit: PAGE_LIMIT, offset });
 
   const searchParams = useSearchParams();
+
+  const showPdf = useCallback((filePath: string) => {
+    setPdfModal({ isOpen: true, filePath });
+  }, []);
 
   const { start, end } = useMemo(() => {
     const hasRange = searchParams?.has('start') && searchParams?.has('end');
@@ -64,6 +70,18 @@ const UserPayslipList = () => {
     () => filterPayslips(payslips, start, end, interval),
     [payslips, start, end, interval],
   );
+
+  const handlePrint = (pdfUrl: string) => {
+    // Open the PDF in a new window
+    const printWindow = window.open(pdfUrl, '_blank')!;
+
+    // Wait for the PDF to load, then trigger the print dialog
+    printWindow.onload = () => {
+      printWindow.print();
+      // Optionally, close the window after printing
+      // printWindow.onafterprint = () => printWindow.close();
+    };
+  };
 
   return (
     <ScaffoldContainerLegacy className="gap-0">
@@ -126,11 +144,15 @@ const UserPayslipList = () => {
                         </Table.td>
                         <Table.td className="align-right">
                           <div className="flex items-center justify-end space-x-2">
-                            <Button type="outline" icon={<Eye size={16} strokeWidth={1.5} />} />
+                            <Button
+                              type="outline"
+                              icon={<Eye size={16} strokeWidth={1.5} />}
+                              onClick={() => showPdf(payslip.path_to_pdf)}
+                            />
                             <Button
                               type="outline"
                               icon={<Download size={16} strokeWidth={1.5} />}
-                              onClick={() => window.open(payslip.path_to_pdf, '_blank')}
+                              onClick={() => handlePrint(payslip.path_to_pdf)}
                             />
                           </div>
                         </Table.td>
@@ -140,9 +162,9 @@ const UserPayslipList = () => {
                       <Table.td colSpan={6}>
                         <div className="flex items-center justify-between">
                           <p className="text-sm opacity-50">
-                            {`Showing ${offset + 1} to ${
-                              offset + payslips.length
-                            } out of ${pagination?.totalItems} payslips`}
+                            {pagination?.totalItems
+                              ? `Showing ${Math.min(offset + 1, pagination.totalItems)} to ${Math.min(offset + payslips.length, pagination.totalItems)} out of ${pagination.totalItems} payslips`
+                              : 'No payslips to display'}
                           </p>
                           <div className="flex items-center space-x-2">
                             <Button
@@ -170,6 +192,11 @@ const UserPayslipList = () => {
           </ScaffoldSectionContent>
         </ScaffoldFilterAndContent>
       )}
+      <PdfViewerModal
+        isOpen={pdfModal.isOpen}
+        setOpen={isOpen => setPdfModal(prev => ({ ...prev, isOpen }))}
+        filePath={pdfModal.filePath}
+      />
     </ScaffoldContainerLegacy>
   );
 };

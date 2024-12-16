@@ -4,14 +4,17 @@ import { Alert_Shadcn, AlertDescription_Shadcn, AlertTitle_Shadcn, Button, Warni
 
 export interface AlertErrorProps {
   subject?: string;
-  error?: Error | null;
+  error?: Error | null | string;
   className?: string;
 }
 
 const AlertError = ({ subject, error, className }: AlertErrorProps) => {
-  const formattedErrorMessage = error?.message?.includes('503')
-    ? '503 Service Temporarily Unavailable'
-    : error?.message;
+  const formattedErrorMessage =
+    error instanceof Error
+      ? error?.message?.includes('503')
+        ? '503 Service Temporarily Unavailable'
+        : error?.message
+      : error;
 
   return (
     <Alert_Shadcn className={className} variant="warning" title={subject}>
@@ -19,7 +22,7 @@ const AlertError = ({ subject, error, className }: AlertErrorProps) => {
       <AlertTitle_Shadcn>{subject}</AlertTitle_Shadcn>
       <AlertDescription_Shadcn className="flex flex-col gap-3 break-words">
         <div>
-          {error?.message && <p className="text-left">Erreur: {formattedErrorMessage}</p>}
+          {error && <p className="text-left">Erreur: {formattedErrorMessage}</p>}
           <p className="text-left">
             Try refreshing your browser, but if the issue persists, please reach out to us via
             support.
