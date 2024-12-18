@@ -31,7 +31,11 @@ const PAGE_LIMIT = 10;
 const UserPayslipList = () => {
   const { user, isLoading: userLoading, error: userError } = useUser();
   const [page, setPage] = useState(1);
-  const [pdfModal, setPdfModal] = useState({ isOpen: false, filePath: '' });
+  const [pdfModal, setPdfModal] = useState<{
+    isOpen: boolean;
+    filePath: string;
+    startPeriod: string | Date;
+  }>({ isOpen: false, filePath: '', startPeriod: '' });
 
   const offset = (page - 1) * PAGE_LIMIT;
 
@@ -45,9 +49,12 @@ const UserPayslipList = () => {
 
   const searchParams = useSearchParams();
 
-  const showPdf = useCallback((filePath: string) => {
-    setPdfModal({ isOpen: true, filePath });
-  }, []);
+  const showPdf = useCallback(
+    ({ filePath, startPeriod }: { filePath: string; startPeriod: string | Date }) => {
+      setPdfModal({ isOpen: true, filePath, startPeriod });
+    },
+    [],
+  );
 
   const { start, end } = useMemo(() => {
     const hasRange = searchParams?.has('start') && searchParams?.has('end');
@@ -147,7 +154,12 @@ const UserPayslipList = () => {
                             <Button
                               type="outline"
                               icon={<Eye size={16} strokeWidth={1.5} />}
-                              onClick={() => showPdf(payslip.path_to_pdf)}
+                              onClick={() =>
+                                showPdf({
+                                  filePath: payslip.path_to_pdf,
+                                  startPeriod: payslip.pay_date,
+                                })
+                              }
                             />
                             <Button
                               type="outline"
@@ -190,13 +202,14 @@ const UserPayslipList = () => {
               }
             />
           </ScaffoldSectionContent>
+          <PdfViewerModal
+            isOpen={pdfModal.isOpen}
+            setOpen={isOpen => setPdfModal(prev => ({ ...prev, isOpen }))}
+            filePath={pdfModal.filePath}
+            startPeriod={pdfModal.startPeriod}
+          />
         </ScaffoldFilterAndContent>
       )}
-      <PdfViewerModal
-        isOpen={pdfModal.isOpen}
-        setOpen={isOpen => setPdfModal(prev => ({ ...prev, isOpen }))}
-        filePath={pdfModal.filePath}
-      />
     </ScaffoldContainerLegacy>
   );
 };

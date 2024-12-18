@@ -88,6 +88,7 @@ export { Input as Input_Shadcn } from './shadcn/ui/input';
 
 export { Button as Button_Shadcn } from './shadcn/ui/button';
 
+export * from './shadcn/ui/scroll-area';
 export {
   Breadcrumb as Breadcrumb_Shadcn,
   BreadcrumbItem as BreadcrumbItem_Shadcn,

@@ -11,31 +11,25 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui';
-import {
-  ChevronLeft,
-  ChevronRight,
-  Download,
-  FileText,
-  Maximize2,
-  Minus,
-  Plus,
-  X,
-} from 'lucide-react';
+import { ChevronLeft, ChevronRight, Download, FileText, Minus, Plus, X } from 'lucide-react';
 import { Document, Page, pdfjs } from 'react-pdf';
 
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
+
+import { format } from 'date-fns';
+import { fr } from 'date-fns/locale';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 interface PdfViewerModalProps {
   isOpen: boolean;
   setOpen: (open: boolean) => void;
-  fileName?: string;
   filePath: string;
+  startPeriod: string | Date;
 }
 
-const PdfViewerModal = ({ isOpen, setOpen, fileName, filePath }: PdfViewerModalProps) => {
+const PdfViewerModal = ({ isOpen, setOpen, startPeriod, filePath }: PdfViewerModalProps) => {
   const [numPages, setNumPages] = useState<number | null>(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [scale, setScale] = useState(1.0);
@@ -67,21 +61,19 @@ const PdfViewerModal = ({ isOpen, setOpen, fileName, filePath }: PdfViewerModalP
   return (
     <Dialog open={isOpen} onOpenChange={setOpen}>
       <DialogContent
-        className="max-w-4xl h-[90vh] flex flex-col p-0 bg-white"
-        hideClose={false}
+        className="!max-w-5xl h-[90vh] flex flex-col p-0 bg-white"
+        hideClose={true}
         centered={true}>
         <DialogHeader className="px-4 py-2 flex flex-row items-center justify-between border-b">
           <FileText className="h-6 w-6" />
-          <DialogTitle className="text-lg font-medium">{fileName || filePath}</DialogTitle>
+          <DialogTitle className="text-lg font-medium">{`Bulletin de paie pour la période du ${format(new Date(startPeriod || 0), 'MMMM yyyy', { locale: fr })}`}</DialogTitle>
           <div className="flex items-center space-x-2">
-            <Button type={'default'} size="tiny" icon={<Maximize2 />} />
-
             <Button type={'default'} size="tiny" icon={<Download />} />
 
             <Button type={'default'} size="tiny" icon={<X />} onClick={() => setOpen(false)} />
           </div>
         </DialogHeader>
-        <div className="flex-grow overflow-auto">
+        <div className="flex-grow overflow-auto bg-studio">
           {error ? (
             <AlertError error={error} subject={`Erreur lors d'affichage du pdf.`} />
           ) : (

@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { useSearchParams } from 'next/navigation';
 
@@ -26,6 +26,7 @@ import { ChevronLeft, ChevronRight, Download, Eye, FileText } from 'lucide-react
 import PayslipListHeader from './Header';
 import { filterPayslips } from './Payslip.utils';
 import PaySlipBadge, { PayslipStatus } from './PayslipBadge';
+import PdfViewerModal from './PayslipPDFModal';
 
 const PAGE_LIMIT = 10;
 
@@ -38,6 +39,11 @@ type PayslipWithUserInfo = IPayslip & {
 const DashboardPayslipList = () => {
   const { employees, isLoading: employeesLoading, error: employeesError } = useEmployees();
   const [page, setPage] = useState(1);
+  const [pdfModal, setPdfModal] = useState<{
+    isOpen: boolean;
+    filePath: string;
+    startPeriod: string | Date;
+  }>({ isOpen: false, filePath: '', startPeriod: '' });
 
   const offset = (page - 1) * PAGE_LIMIT;
 
@@ -48,6 +54,13 @@ const DashboardPayslipList = () => {
     error: payslipError,
     isSuccess,
   } = usePayslipsQuery({ page, limit: PAGE_LIMIT, offset });
+
+  const showPdf = useCallback(
+    ({ filePath, startPeriod }: { filePath: string; startPeriod: string | Date }) => {
+      setPdfModal({ isOpen: true, filePath, startPeriod });
+    },
+    [],
+  );
 
   const searchParams = useSearchParams();
 
@@ -158,7 +171,16 @@ const DashboardPayslipList = () => {
                         </Table.td>
                         <Table.td className="align-right">
                           <div className="flex items-center justify-end space-x-2">
-                            <Button type="outline" icon={<Eye size={16} strokeWidth={1.5} />} />
+                            <Button
+                              type="outline"
+                              icon={<Eye size={16} strokeWidth={1.5} />}
+                              onClick={() =>
+                                showPdf({
+                                  filePath: payslip.path_to_pdf,
+                                  startPeriod: payslip.start_period,
+                                })
+                              }
+                            />
                             <Button
                               type="outline"
                               icon={<Download size={16} strokeWidth={1.5} />}
@@ -198,6 +220,12 @@ const DashboardPayslipList = () => {
                   </>
                 )
               }
+            />
+            <PdfViewerModal
+              isOpen={pdfModal.isOpen}
+              setOpen={isOpen => setPdfModal(prev => ({ ...prev, isOpen }))}
+              filePath={pdfModal.filePath}
+              startPeriod={pdfModal.startPeriod}
             />
           </ScaffoldSectionContent>
         </ScaffoldFilterAndContent>
