@@ -14,24 +14,11 @@ export const DatePickerContext = createContext<{
   setIsOpen: () => {},
 });
 
-const isBrowserLocaleClockType24h = () => {
-  const language = typeof window !== 'undefined' ? window.navigator.language : 'fr-FR';
-
-  const hr = new Intl.DateTimeFormat(language, {
-    hour: 'numeric',
-  }).format();
-
-  return Number.isInteger(Number(hr));
-};
-
 export const formatDate = (date: Date, locale: Locale, includeTime = false): string => {
-  const usesAmPm = !isBrowserLocaleClockType24h();
   let dateString: string;
 
   if (includeTime) {
-    dateString = usesAmPm
-      ? format(date, `d MMM, yyyy h:mm a`, { locale })
-      : format(date, `d MMM, yyyy HH:mm`, { locale });
+    dateString = format(date, `d MMMM, yyyy HH:mm`, { locale });
   } else {
     dateString = format(date, `d MMM, yyyy`, { locale });
   }

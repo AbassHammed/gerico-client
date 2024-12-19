@@ -7,9 +7,11 @@ import { usePathname } from 'next/navigation';
 
 import { Logo } from '@/components/shared/Logo';
 import { siteConfig } from '@/config/site';
+import { useUser } from '@/hooks/useUser';
 import { cn } from '@/lib/utils';
 
 export function MainNav() {
+  const { user } = useUser();
   const pathname = usePathname();
   const [currentPath, setCurrentPath] = useState(pathname);
 
@@ -34,6 +36,13 @@ export function MainNav() {
                 ? 'Prise de congés'
                 : null}
           </Link>
+          {user && user.is_admin && (
+            <Link
+              href="/dashboard"
+              className="transition-colors hover:text-foreground/80 text-foreground/80">
+              Tableau de bord
+            </Link>
+          )}
         </nav>
       )}
     </div>

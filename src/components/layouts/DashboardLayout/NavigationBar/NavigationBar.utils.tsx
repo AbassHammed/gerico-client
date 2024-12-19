@@ -1,6 +1,6 @@
 import { CalendarDateIcon } from '@/components/ui';
 import { IRoute } from '@/types';
-import { FilePen, Files, Plus, Settings, Users } from 'lucide-react';
+import { ArrowLeft, FilePen, Files, Plus, Settings, Users } from 'lucide-react';
 
 export const ICON_SIZE = 20;
 export const ICON_STROKE_WIDTH = 1.5;
@@ -56,6 +56,12 @@ export const generateToolRoutes = (): IRoute[] => [
 ];
 
 export const generateSettingsRoutes = (): IRoute[] => [
+  {
+    key: 'homepage',
+    label: 'Homepage',
+    icon: <ArrowLeft size={ICON_SIZE} strokeWidth={ICON_STROKE_WIDTH} />,
+    link: `/home`,
+  },
   {
     key: 'settings',
     label: 'Org Settings',
