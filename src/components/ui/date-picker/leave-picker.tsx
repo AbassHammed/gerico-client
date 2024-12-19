@@ -41,18 +41,8 @@ const LeavePicker = ({
     onChange(newRange);
   };
 
-  // const displayRange = useMemo(() => {
-  //   if (!range) {
-  //     return null;
-  //   }
-
-  //   return `${range.from ? formatDate(range.from, locale) : ''} - ${
-  //     range.to ? formatDate(range.to, locale) : ''
-  //   }`;
-  // }, [range, locale]);
-
   return (
-    <div className="flex w-full bg-white rounded-md">
+    <div className="flex w-full rounded-md">
       <div className="scrollbar-hide flex w-full flex-row items-center justify-center">
         <div
           className={cn(
