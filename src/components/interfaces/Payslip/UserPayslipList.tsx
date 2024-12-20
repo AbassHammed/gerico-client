@@ -17,6 +17,7 @@ import {
 } from '@/components/ui';
 import { usePayslipsQueryForUser } from '@/hooks/usePayslips';
 import { useUser } from '@/hooks/useUser';
+import { downloadFile } from '@/lib/utils';
 import { endOfDay, isAfter, startOfDay, subDays } from 'date-fns';
 import dayjs from 'dayjs';
 import { ChevronLeft, ChevronRight, Download, Eye, FileText } from 'lucide-react';
@@ -77,18 +78,6 @@ const UserPayslipList = () => {
     () => filterPayslips(payslips, start, end, interval),
     [payslips, start, end, interval],
   );
-
-  const handlePrint = (pdfUrl: string) => {
-    // Open the PDF in a new window
-    const printWindow = window.open(pdfUrl, '_blank')!;
-
-    // Wait for the PDF to load, then trigger the print dialog
-    printWindow.onload = () => {
-      printWindow.print();
-      // Optionally, close the window after printing
-      // printWindow.onafterprint = () => printWindow.close();
-    };
-  };
 
   return (
     <ScaffoldContainerLegacy className="gap-0">
@@ -164,7 +153,7 @@ const UserPayslipList = () => {
                             <Button
                               type="outline"
                               icon={<Download size={16} strokeWidth={1.5} />}
-                              onClick={() => handlePrint(payslip.path_to_pdf)}
+                              onClick={() => downloadFile(payslip.path_to_pdf)}
                             />
                           </div>
                         </Table.td>

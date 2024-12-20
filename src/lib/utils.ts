@@ -147,3 +147,17 @@ export function shortenCivility(civility: string): string {
       return civility;
   }
 }
+
+export async function downloadFile(filePath: string, fileName: string = 'bulletin.pdf') {
+  const response = await fetch(filePath);
+  const blob = await response.blob();
+  const a = document.createElement('a');
+  document.body.appendChild(a);
+  a.style.display = 'none';
+
+  const url = window.URL.createObjectURL(blob);
+  a.href = url;
+  a.download = fileName;
+  a.click();
+  window.URL.revokeObjectURL(url);
+}

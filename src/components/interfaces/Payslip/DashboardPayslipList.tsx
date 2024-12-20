@@ -17,7 +17,7 @@ import {
 } from '@/components/ui';
 import { useEmployees } from '@/hooks/useEmployees';
 import { usePayslipsQuery } from '@/hooks/usePayslips';
-import { formatLastName, shortenCivility } from '@/lib/utils';
+import { downloadFile, formatLastName, shortenCivility } from '@/lib/utils';
 import { IPayslip } from '@/types';
 import { endOfDay, isAfter, startOfDay, subDays } from 'date-fns';
 import dayjs from 'dayjs';
@@ -184,7 +184,7 @@ const DashboardPayslipList = () => {
                             <Button
                               type="outline"
                               icon={<Download size={16} strokeWidth={1.5} />}
-                              onClick={() => window.open(payslip.path_to_pdf, '_blank')}
+                              onClick={() => downloadFile(payslip.path_to_pdf)}
                             />
                           </div>
                         </Table.td>

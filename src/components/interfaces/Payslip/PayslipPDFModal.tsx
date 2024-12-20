@@ -17,6 +17,7 @@ import { Document, Page, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 
+import { downloadFile } from '@/lib/utils';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 
@@ -68,7 +69,12 @@ const PdfViewerModal = ({ isOpen, setOpen, startPeriod, filePath }: PdfViewerMod
           <FileText className="h-6 w-6" />
           <DialogTitle className="text-lg font-medium">{`Bulletin de paie pour la période du ${format(new Date(startPeriod || 0), 'MMMM yyyy', { locale: fr })}`}</DialogTitle>
           <div className="flex items-center space-x-2">
-            <Button type={'default'} size="tiny" icon={<Download />} />
+            <Button
+              type={'default'}
+              size="tiny"
+              icon={<Download />}
+              onClick={() => downloadFile(filePath)}
+            />
 
             <Button type={'default'} size="tiny" icon={<X />} onClick={() => setOpen(false)} />
           </div>

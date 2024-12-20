@@ -25,12 +25,12 @@ export function MainNav() {
         <Logo className="h-6 w-6" />
         <span className="font-bold inline-block">{siteConfig.name}</span>
       </Link>
-      {(currentPath === '/home/leave' || currentPath === '/home/payslip') && (
+      {(currentPath.includes('/home/leave') || currentPath === '/home/payslip') && (
         <nav className="flex items-center gap-4 text-sm xl:gap-6">
           <Link
-            href={currentPath === '/home/leave' ? '/home/payslip' : '/home/leave'}
+            href={currentPath.includes('/home/leave') ? '/home/payslip' : '/home/leave'}
             className={cn('transition-colors hover:text-foreground/80', 'text-foreground/80')}>
-            {currentPath === '/home/leave'
+            {currentPath.includes('/home/leave')
               ? 'Fiche de paie'
               : currentPath === '/home/payslip'
                 ? 'Prise de congés'
