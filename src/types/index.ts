@@ -17,18 +17,6 @@ export type ISiteConfig = {
   creator: string;
 };
 
-export type ICreatePayslip = {
-  uid: string;
-  gross_salary: number;
-  net_salary: number;
-  start_period: string;
-  end_period: string;
-  pay_date: string;
-  total_hours_worked: string;
-  hourly_rate: number;
-  path_to_pdf: string;
-};
-
 export type IChangePasswordInput = {
   password: string;
   confirmPassword: string;
@@ -157,3 +145,18 @@ export interface IPayslip {
   hourly_rate: number;
   path_to_pdf: string;
 }
+
+export type ICreatePayslip = Omit<IPayslip, 'pid'>;
+
+export interface ILeaveRequest {
+  leave_request_id: string;
+  request_status: string;
+  start_date: Date;
+  end_date: Date;
+  created_at: Date;
+  reason?: string;
+  leave_type: string;
+  uid: string;
+}
+
+export type ILeaveRequestInput = Omit<ILeaveRequest, 'leave_request_id' | 'created_at'>;

@@ -23,6 +23,7 @@ export { default as LoadingV2 } from './Loader/LoadingV2';
 export { default as AlertError } from './AlertError';
 export * from './date-picker';
 export * from './NavMenu';
+export * from './FilteredPopover';
 
 // Shadcn
 export * from './shadcn/ui/dropdown-menu';
@@ -35,6 +36,7 @@ export * from './shadcn/ui/skeleton';
 export * from './shadcn/ui/textarea';
 
 export * from './shadcn/ui/dialog';
+export * from './shadcn/ui/checkbox';
 
 export {
   Command as Command_Shadcn,
