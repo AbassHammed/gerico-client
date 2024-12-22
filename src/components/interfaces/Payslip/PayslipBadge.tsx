@@ -45,12 +45,12 @@ const PaySlipBadge = ({ status }: { status: PayslipStatus }) => {
             ].join(' ')}>
             {status === PayslipStatus.NOTPAID && (
               <p className="text-xs text-foreground">
-                The invoice will soon be finalized and charged for.
+                Votre bulletin de paie est en cours de traitement.
               </p>
             )}
 
             {status === PayslipStatus.PAID && (
-              <p className="text-xs text-foreground">The invoice has been paid successfully.</p>
+              <p className="text-xs text-foreground">Votre bulletin de paie est disponible.</p>
             )}
           </div>
         </Tooltip.Content>

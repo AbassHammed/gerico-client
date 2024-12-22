@@ -16,7 +16,7 @@ import {
 interface FilterPopoverProps {
   title?: string;
   options: any[];
-  activeOptions: any[];
+  activeOption?: string;
   valueKey: string;
   labelKey: string;
   iconKey?: string;
@@ -27,13 +27,13 @@ interface FilterPopoverProps {
   labelClass?: string;
   maxHeightClass?: string;
   clearButtonText?: string;
-  onSaveFilters: (options: string[]) => void;
+  onSaveFilter: (options: string | undefined) => void;
 }
 
 export const FilterPopover = ({
   title,
   options = [],
-  activeOptions = [],
+  activeOption,
   valueKey,
   labelKey,
   iconKey = 'icon',
@@ -44,24 +44,24 @@ export const FilterPopover = ({
   labelClass,
   maxHeightClass = 'h-[205px]',
   clearButtonText = 'Clear',
-  onSaveFilters,
+  onSaveFilter,
 }: FilterPopoverProps) => {
   const [open, setOpen] = useState(false);
-  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+  const [selectedOption, setSelectedOption] = useState<string>();
 
-  const formattedOptions = activeOptions.map(option => {
-    const base = options.find(x => x[valueKey] === option);
+  const formattedOption = () => {
+    const base = options.find(x => x[valueKey] === activeOption);
     if (!base || !base[labelKey]) {
       return '';
     }
     return base[labelKey];
-  });
+  };
 
   useEffect(() => {
-    if (!open && activeOptions.length > 0) {
-      setSelectedOptions(activeOptions);
+    if (!open && activeOption) {
+      setSelectedOption(activeOption);
     }
-  }, [open, activeOptions]);
+  }, [open, activeOption]);
 
   return (
     <Popover_Shadcn open={open} onOpenChange={setOpen}>
@@ -69,19 +69,13 @@ export const FilterPopover = ({
         <Button
           asChild
           disabled={disabled}
-          type={buttonType ?? (activeOptions.length > 0 ? 'default' : 'dashed')}
+          type={buttonType ?? (activeOption ? 'default' : 'dashed')}
           onClick={() => setOpen(false)}
           className={variant === 'rounded' ? 'rounded-full' : ''}>
           <div>
             <span>{name}</span>
-            {activeOptions.length > 0 && <span className="mr-1">:</span>}
-            {activeOptions.length >= 3 ? (
-              <span>
-                {formattedOptions[0]} and {activeOptions.length - 1} others
-              </span>
-            ) : activeOptions.length > 0 ? (
-              <span>{formattedOptions.join(', ')}</span>
-            ) : null}
+            {activeOption && <span className="mr-1">:</span>}
+            {activeOption && <span>{formattedOption()}</span>}
           </div>
         </Button>
       </PopoverTrigger_Shadcn>
@@ -101,12 +95,12 @@ export const FilterPopover = ({
                 <div key={value} className="flex items-center gap-x-2">
                   <Checkbox
                     id={value}
-                    checked={selectedOptions.includes(value)}
+                    checked={activeOption === value}
                     onCheckedChange={() => {
-                      if (selectedOptions.includes(value)) {
-                        setSelectedOptions(selectedOptions.filter(x => x !== value));
+                      if (selectedOption === value) {
+                        setSelectedOption(undefined);
                       } else {
-                        setSelectedOptions(selectedOptions.concat(value));
+                        setSelectedOption(value);
                       }
                     }}
                   />
@@ -132,8 +126,8 @@ export const FilterPopover = ({
             size="tiny"
             type="default"
             onClick={() => {
-              onSaveFilters([]);
-              setSelectedOptions([]);
+              onSaveFilter(undefined);
+              setSelectedOption(undefined);
               setOpen(false);
             }}>
             {clearButtonText}
@@ -141,12 +135,7 @@ export const FilterPopover = ({
           <Button
             type="primary"
             onClick={() => {
-              // Order the selection based on the options provided
-              const sortingOrder = options.map(option => option[valueKey]);
-              const sortedSelection = selectedOptions.sort(
-                (a, b) => sortingOrder.indexOf(a) - sortingOrder.indexOf(b),
-              );
-              onSaveFilters(sortedSelection);
+              onSaveFilter(selectedOption);
               setOpen(false);
             }}>
             Save

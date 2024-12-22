@@ -1,6 +1,8 @@
 import { ISSThreshold } from '@/types';
 import * as chrono from 'chrono-node';
 import { clsx, type ClassValue } from 'clsx';
+import { differenceInHours, eachDayOfInterval, endOfDay, isWeekend, startOfDay } from 'date-fns';
+import Holidays from 'date-holidays';
 import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
@@ -160,4 +162,37 @@ export async function downloadFile(filePath: string, fileName: string = 'bulleti
   a.download = fileName;
   a.click();
   window.URL.revokeObjectURL(url);
+}
+
+export function getWorkingDaysBetweenDates(startDate: Date, endDate: Date): number {
+  const hd = new Holidays('FR');
+
+  const startDateObj = new Date(startDate);
+  const endDateObj = new Date(endDate);
+
+  const allDays = eachDayOfInterval({
+    start: new Date(startOfDay(startDateObj)),
+    end: new Date(endOfDay(endDateObj)),
+  });
+
+  const workingDays = allDays.reduce((total, day) => {
+    if (isWeekend(day) || hd.isHoliday(day)) {
+      return total;
+    }
+
+    const isStartDay = day.getTime() === startOfDay(startDateObj).getTime();
+    const isEndDay = day.getTime() === startOfDay(endDateObj).getTime();
+
+    let dayFraction = 1;
+
+    if (isStartDay) {
+      dayFraction = (24 - differenceInHours(startOfDay(startDateObj), startDateObj)) / 24;
+    } else if (isEndDay) {
+      dayFraction = differenceInHours(endDateObj, startOfDay(endDateObj)) / 24;
+    }
+
+    return total + dayFraction;
+  }, 0);
+
+  return workingDays;
 }

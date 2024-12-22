@@ -1,12 +1,6 @@
 'use client';
 
-import {
-  ILeaveRequest,
-  ILeaveRequestInput,
-  IPayslip,
-  PaginatedResult,
-  PaginationParams,
-} from '@/types';
+import { ILeaveRequest, ILeaveRequestInput, PaginatedResult, PaginationParams } from '@/types';
 
 import { useApiGet, useApiMutationWithAuth, useApiMutationWithAuthAndPatch } from './useApi';
 
@@ -41,9 +35,9 @@ export function useLeaveRequestQuery(params?: PaginationParams, status?: string)
   };
 }
 
-export function useLeaveRequestForUser(uid: string, params?: PaginationParams) {
-  const { data, error, isLoading, success } = useApiGet<PaginatedResult<IPayslip>>(
-    `/leave-request/${uid}?page=${params?.page}&limit=${params?.limit}&offset=${params?.offset}`,
+export function useLeaveRequestForUser(uid: string, params?: PaginationParams, status?: string) {
+  const { data, error, isLoading, success } = useApiGet<PaginatedResult<ILeaveRequest>>(
+    `/leave-requests/me?page=${params?.page}&limit=${params?.limit}&offset=${params?.offset}&status=${status}`,
   );
 
   return {

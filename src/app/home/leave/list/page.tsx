@@ -1,4 +1,6 @@
 import React from 'react';
 
-const page: React.FC = () => <div>Have a good coding</div>;
+import UserLeaveTable from '@/components/interfaces/LeaveRequest/UserLeaveTable';
+
+const page: React.FC = () => <UserLeaveTable />;
 export default page;
