@@ -1,12 +1,12 @@
 import { UserSchemaType } from '@/components/interfaces/User/UserForm.utils';
 
-import { useApiMutationWithAuth, useApiMutationWithAuthAndPatch } from './useApi';
+import { useApiMutation } from './useApi';
 
 export function useCreateUser() {
-  const { trigger, isMutating: loading } = useApiMutationWithAuth<
+  const { trigger, isMutating: loading } = useApiMutation<
     undefined,
     UserSchemaType & { company_id: string }
-  >('/users');
+  >('/users', undefined, 'POST', true);
 
   const createUser = async (inputs: UserSchemaType & { company_id: string }) => {
     try {
@@ -21,10 +21,10 @@ export function useCreateUser() {
 }
 
 export function useUpdateUser(userId: string) {
-  const { trigger, isMutating: loading } = useApiMutationWithAuthAndPatch<
+  const { trigger, isMutating: loading } = useApiMutation<
     undefined,
     UserSchemaType & { company_id: string }
-  >(`/users/${userId}`);
+  >(`/users/${userId}`, undefined, 'PATCH', true);
 
   const update = async (inputs: UserSchemaType & { company_id: string }) => {
     try {

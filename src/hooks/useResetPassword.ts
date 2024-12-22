@@ -10,7 +10,11 @@ export function useResetPassword() {
     trigger,
     isMutating: loading,
     isSuccess,
-  } = useApiMutation<{ result: true }, ResetPasswordType>('/users/reset-password');
+  } = useApiMutation<{ result: true }, ResetPasswordType>(
+    '/users/reset-password',
+    undefined,
+    'POST',
+  );
 
   const resetPassword = async (inputs: ResetPasswordType) => {
     try {

@@ -2,11 +2,14 @@
 
 import { ILeaveRequest, ILeaveRequestInput, PaginatedResult, PaginationParams } from '@/types';
 
-import { useApiGet, useApiMutationWithAuth, useApiMutationWithAuthAndPatch } from './useApi';
+import { useApiGet, useApiMutation } from './useApi';
 
 export function useCreateLeaveRequest() {
-  const { trigger, isMutating: loading } = useApiMutationWithAuth<undefined, ILeaveRequestInput>(
+  const { trigger, isMutating: loading } = useApiMutation<undefined, ILeaveRequestInput>(
     '/leave-requests',
+    undefined,
+    'POST',
+    true,
   );
 
   const createLeave = async (inputs: ILeaveRequestInput) => {
@@ -24,6 +27,8 @@ export function useCreateLeaveRequest() {
 export function useLeaveRequestQuery(params?: PaginationParams, status?: string) {
   const { data, error, isLoading, success } = useApiGet<PaginatedResult<ILeaveRequest>>(
     `/leave-requests?page=${params?.page}&limit=${params?.limit}&offset=${params?.offset}&status=${status}`,
+    undefined,
+    true,
   );
 
   return {
@@ -35,13 +40,11 @@ export function useLeaveRequestQuery(params?: PaginationParams, status?: string)
   };
 }
 
-export function useLeaveRequestForUser(
-  uid: string,
-  params?: PaginationParams,
-  status: string = '',
-) {
+export function useLeaveRequestForUser(params?: PaginationParams, status: string = '') {
   const { data, error, isLoading, success } = useApiGet<PaginatedResult<ILeaveRequest>>(
-    `/leave-requests/me?page=${params?.page}&limit=${params?.limit}&offset=${params?.offset}&status=${status}`,
+    `/leave-requests/me?page=${params?.page}&limit=${params?.limit}&offset=${params?.offset}&status=${status ?? ''}`,
+    undefined,
+    true,
   );
 
   return {
@@ -54,8 +57,11 @@ export function useLeaveRequestForUser(
 }
 
 export function useUpdateLeaveRequest(leaveRequestId: string) {
-  const { trigger, isMutating: loading } = useApiMutationWithAuthAndPatch<undefined, ILeaveRequest>(
+  const { trigger, isMutating: loading } = useApiMutation<undefined, ILeaveRequest>(
     `/leave-requests/${leaveRequestId}`,
+    undefined,
+    'PATCH',
+    true,
   );
 
   const updateLeave = async (inputs: ILeaveRequest) => {

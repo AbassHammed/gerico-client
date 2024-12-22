@@ -25,8 +25,11 @@ export function useIsMobile() {
 }
 
 export function useGetThresholds() {
-  const { data, error, isLoading, success, mutate, isValidating } =
-    useApiGet<ISSThreshold[]>(`/common/thresholds`);
+  const { data, error, isLoading, success, mutate, isValidating } = useApiGet<ISSThreshold[]>(
+    `/common/thresholds`,
+    undefined,
+    true,
+  );
   return {
     thresholds: data,
     isLoading: isValidating || isLoading,
@@ -37,8 +40,11 @@ export function useGetThresholds() {
 }
 
 export function useGetDeductions() {
-  const { data, error, isLoading, mutate, isValidating, success } =
-    useApiGet<IDeduction[]>(`/common/deductions`);
+  const { data, error, isLoading, mutate, isValidating, success } = useApiGet<IDeduction[]>(
+    `/common/deductions`,
+    undefined,
+    true,
+  );
   return {
     deductions: data,
     isLoading: isValidating || isLoading,

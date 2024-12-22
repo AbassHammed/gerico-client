@@ -12,17 +12,34 @@ export interface ApiResponse<T> {
 
 export const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-async function fetcher<T>(url: string): Promise<ApiResponse<T>> {
-  const authToken = getCookie('auth_token');
-  if (!authToken) {
-    throw new Error('User is not authenticated');
+// https://httpwg.org/specs/rfc9110.html
+
+// Generic request handler
+async function request<T>(
+  url: string,
+  options: {
+    method?: 'GET' | 'POST' | 'PATCH' | 'DELETE';
+    body?: any;
+    requiresAuth?: boolean;
+  } = {},
+): Promise<ApiResponse<T>> {
+  const { method = 'GET', body, requiresAuth = true } = options;
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  };
+
+  if (requiresAuth) {
+    const authToken = getCookie('auth_token');
+    if (!authToken) {
+      throw new Error('User is not authenticated');
+    }
+    headers.Authorization = `Bearer ${authToken}`;
   }
 
   const response = await fetch(`${API_URL}${url}`, {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${authToken}`,
-    },
+    method,
+    headers,
+    body: body ? JSON.stringify(body) : undefined,
   });
 
   const apiResponse: ApiResponse<T> = await response.json();
@@ -34,74 +51,26 @@ async function fetcher<T>(url: string): Promise<ApiResponse<T>> {
   return apiResponse;
 }
 
-async function poster<T, A>(url: string, { arg }: { arg: A }): Promise<ApiResponse<T>> {
-  const response = await fetch(`${API_URL}${url}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(arg),
-  });
-
-  const apiResponse: ApiResponse<T> = await response.json();
-
-  if (!apiResponse.success) {
-    throw new Error(apiResponse.error || 'An unexpected error occurred');
-  }
-
-  return apiResponse;
+// SWR fetcher using the generic request handler
+async function fetcher<T>(url: string, requiresAuth: boolean = true): Promise<ApiResponse<T>> {
+  return request(url, { requiresAuth });
 }
 
-async function posterWithAuth<T, A>(url: string, { arg }: { arg: A }): Promise<ApiResponse<T>> {
-  const authToken = getCookie('auth_token');
-  if (!authToken) {
-    throw new Error('User is not authenticated');
-  }
-
-  const response = await fetch(`${API_URL}${url}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${authToken}`,
-    },
-    body: JSON.stringify(arg),
-  });
-
-  const apiResponse: ApiResponse<T> = await response.json();
-
-  if (!apiResponse.success) {
-    throw new Error(apiResponse.error || 'An unexpected error occurred');
-  }
-
-  return apiResponse;
+// SWR mutation functions using the generic request handler
+async function mutationHandler<T, A>(
+  url: string,
+  {
+    arg,
+    method,
+    requiresAuth,
+  }: { arg: A; method: 'GET' | 'POST' | 'PATCH' | 'DELETE'; requiresAuth: boolean },
+): Promise<ApiResponse<T>> {
+  return request(url, { method, body: arg, requiresAuth });
 }
 
-async function patcher<T, A>(url: string, { arg }: { arg: A }): Promise<ApiResponse<T>> {
-  const authToken = getCookie('auth_token');
-  if (!authToken) {
-    throw new Error('User is not authenticated');
-  }
-
-  const response = await fetch(`${API_URL}${url}`, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${authToken}`,
-    },
-    body: JSON.stringify(arg),
-  });
-
-  const apiResponse: ApiResponse<T> = await response.json();
-
-  if (!apiResponse.success) {
-    throw new Error(apiResponse.error || 'An unexpected error occurred');
-  }
-
-  return apiResponse;
-}
-
-export function useApiGet<T>(url: string, config?: SWRConfiguration) {
-  const swr = useSWR<ApiResponse<T>>(url, fetcher, config);
+// Custom hooks
+export function useApiGet<T>(url: string, config?: SWRConfiguration, requiresAuth: boolean = true) {
+  const swr = useSWR<ApiResponse<T>>(url, () => fetcher(url, requiresAuth), config);
 
   return {
     ...swr,
@@ -114,36 +83,14 @@ export function useApiGet<T>(url: string, config?: SWRConfiguration) {
 export function useApiMutation<T, A>(
   url: string,
   config?: SWRMutationConfiguration<ApiResponse<T>, Error, string, A>,
+  method: 'GET' | 'POST' | 'PATCH' | 'DELETE' = 'POST',
+  requiresAuth: boolean = false,
 ) {
-  const mutation = useSWRMutation<ApiResponse<T>, Error, string, A>(url, poster, config);
-
-  return {
-    ...mutation,
-    trigger: mutation.trigger as (arg: A) => Promise<ApiResponse<T> | undefined>,
-    data: mutation.data?.data,
-    isSuccess: mutation.data?.success,
-  };
-}
-
-export function useApiMutationWithAuth<T, A>(
-  url: string,
-  config?: SWRMutationConfiguration<ApiResponse<T>, Error, string, A>,
-) {
-  const mutation = useSWRMutation<ApiResponse<T>, Error, string, A>(url, posterWithAuth, config);
-
-  return {
-    ...mutation,
-    trigger: mutation.trigger as (arg: A) => Promise<ApiResponse<T> | undefined>,
-    data: mutation.data?.data,
-    isSuccess: mutation.data?.success,
-  };
-}
-
-export function useApiMutationWithAuthAndPatch<T, A>(
-  url: string,
-  config?: SWRMutationConfiguration<ApiResponse<T>, Error, string, A>,
-) {
-  const mutation = useSWRMutation<ApiResponse<T>, Error, string, A>(url, patcher, config);
+  const mutation = useSWRMutation<ApiResponse<T>, Error, string, A>(
+    url,
+    (url, { arg }) => mutationHandler(url, { arg, method, requiresAuth }),
+    config,
+  );
 
   return {
     ...mutation,

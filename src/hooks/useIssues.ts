@@ -7,6 +7,9 @@ import { useApiGet, useApiMutation } from './useApi';
 export function useMarkIssueAsResolved(issueId: string) {
   const { trigger, isMutating: loading } = useApiMutation<{ result: true }, void>(
     `/issues/${issueId}/solved`,
+    undefined,
+    'PATCH',
+    true,
   );
 
   const markAsSolved = async () => {
@@ -36,6 +39,8 @@ export function useGetIssues(query?: PaginationParams) {
 export function useGetNotSolvedIssues(params?: PaginationParams) {
   const { data, isLoading, error } = useApiGet<IIssue[]>(
     `/issues/get-not-solved?page=${params?.page}?limit=${params?.limit}?offset=${params?.offset}`,
+    undefined,
+    true,
   );
 
   return {
@@ -50,7 +55,7 @@ export function useReportIssue() {
     trigger,
     isMutating: loading,
     isSuccess,
-  } = useApiMutation<undefined, IIssueInput>('/issues');
+  } = useApiMutation<undefined, IIssueInput>('/issues', undefined, 'POST');
 
   const reportIssue = async (inputs: IIssueInput) => {
     try {

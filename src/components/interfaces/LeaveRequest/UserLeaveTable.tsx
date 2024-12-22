@@ -3,8 +3,14 @@
 import { useState } from 'react';
 
 import { AlertError, Button, FilterPopover, ShimmeringLoader, Table } from '@/components/ui';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/shadcn/ui/select';
 import { useLeaveRequestForUser } from '@/hooks/useFetchLeave';
-import { useUser } from '@/hooks/useUser';
 import { getWorkingDaysBetweenDates } from '@/lib/utils';
 import { ILeaveRequest } from '@/types';
 import * as Tooltip from '@radix-ui/react-tooltip';
@@ -22,14 +28,14 @@ const LeaveStatus = [
 const PAGE_LIMIT = 10;
 
 const UserLeaveTable = () => {
-  const { user, isLoading: userLoading, error: userError } = useUser();
   const [dateSortDesc, setDateSortDesc] = useState(true);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selectedLeave, setSelectedLeave] = useState<ILeaveRequest>();
   const [filter, setFilter] = useState<string>();
   const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(PAGE_LIMIT);
 
-  const offset = (page - 1) * PAGE_LIMIT;
+  const offset = (page - 1) * pageSize;
 
   const {
     leaves: data,
@@ -37,7 +43,7 @@ const UserLeaveTable = () => {
     isLoading: leaveLoading,
     error: leaveError,
     isSuccess,
-  } = useLeaveRequestForUser(user?.uid!, { page: page, limit: PAGE_LIMIT, offset });
+  } = useLeaveRequestForUser({ page: page, limit: pageSize, offset });
 
   const leaves = data || [];
   const sortedLeaves = leaves
@@ -56,7 +62,7 @@ const UserLeaveTable = () => {
   return (
     <>
       <div className="space-y-4 flex flex-col">
-        <div className="flex items-center justify-center">
+        <div className="flex items-center justify-start">
           <div className="flex items-center space-x-2">
             <p className="text-xs prose">Filter by</p>
             <FilterPopover
@@ -70,7 +76,7 @@ const UserLeaveTable = () => {
           </div>
         </div>
 
-        {(userLoading || leaveLoading) && (
+        {leaveLoading && (
           <div className="space-y-2">
             <ShimmeringLoader />
             <ShimmeringLoader className="w-3/4" />
@@ -78,9 +84,7 @@ const UserLeaveTable = () => {
           </div>
         )}
 
-        {(userError || leaveError) && (
-          <AlertError error={userError || leaveError} subject="Failed to retrieve leaves" />
-        )}
+        {leaveError && <AlertError error={leaveError} subject="Failed to retrieve leaves" />}
 
         {isSuccess && (
           <>
@@ -185,21 +189,40 @@ const UserLeaveTable = () => {
                               ? `Showing ${Math.min(offset + 1, pagination.totalItems)} to ${Math.min(offset + leaves.length, pagination.totalItems)} out of ${pagination.totalItems} payslips`
                               : 'No payslips to display'}
                           </p>
-                          <div className="flex items-center space-x-2">
-                            <Button
-                              icon={<ChevronLeft />}
-                              type="default"
-                              size="tiny"
-                              disabled={page === 1}
-                              onClick={async () => setPage(page - 1)}
-                            />
-                            <Button
-                              icon={<ChevronRight />}
-                              type="default"
-                              size="tiny"
-                              disabled={page * PAGE_LIMIT >= (pagination?.totalItems ?? 0)}
-                              onClick={async () => setPage(page + 1)}
-                            />
+                          <div className="flex items-center space-x-6 lg:space-x-8">
+                            <div className="flex items-center space-x-2">
+                              <p className="text-sm opacity-50">Lignes par page</p>
+                              <Select
+                                onValueChange={e => setPageSize(Number(e))}
+                                value={pageSize.toString()}>
+                                <SelectTrigger size="tiny" className="w-16">
+                                  <SelectValue placeholder={pageSize.toString()} />
+                                </SelectTrigger>
+                                <SelectContent side="top">
+                                  {[10, 20, 50, 100].map(size => (
+                                    <SelectItem key={size} value={size.toString()}>
+                                      {size}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <Button
+                                icon={<ChevronLeft />}
+                                type="default"
+                                size="tiny"
+                                disabled={page === 1}
+                                onClick={async () => setPage(page - 1)}
+                              />
+                              <Button
+                                icon={<ChevronRight />}
+                                type="default"
+                                size="tiny"
+                                disabled={page * pageSize >= (pagination?.totalItems ?? 0)}
+                                onClick={async () => setPage(page + 1)}
+                              />
+                            </div>
                           </div>
                         </div>
                       </Table.td>

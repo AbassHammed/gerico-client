@@ -1,47 +1,19 @@
 'use client';
 
-import { getCookie } from 'cookies-next';
-import useSWRMutation from 'swr/mutation';
-
-import { API_URL } from './useApi';
-
-async function resendWelcomeEmail(url: string) {
-  try {
-    const authToken = getCookie('auth_token');
-
-    if (!authToken) {
-      throw new Error('User is not authenticated');
-    }
-
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${authToken}`,
-      },
-    });
-
-    if (!res.ok) {
-      const { error } = await res.json();
-      throw new Error(error);
-    }
-
-    const { message } = (await res.json()) as { message: string };
-    return message;
-  } catch (error: any) {
-    throw new Error(error.message);
-  }
-}
+import { useApiMutation } from './useApi';
 
 export const useResendWelcomeEmail = (userId: string) => {
-  const { trigger, isMutating } = useSWRMutation(
-    `${API_URL}/users/resend-welcome-email/${userId}`,
-    resendWelcomeEmail,
+  const { trigger, isMutating } = useApiMutation<{ sent: true }, undefined>(
+    `/users/resend-welcome-email/${userId}`,
+    undefined,
+    'POST',
+    true,
   );
 
   const resendEmail = async () => {
     try {
-      const res = await trigger();
-      return res;
+      const res = await trigger(undefined);
+      return res?.message;
     } catch (error: any) {
       throw new Error(error.message);
     }
@@ -50,40 +22,18 @@ export const useResendWelcomeEmail = (userId: string) => {
   return { resendEmail, loading: isMutating };
 };
 
-async function archiveUser(url: string) {
-  try {
-    const authToken = getCookie('auth_token');
-
-    if (!authToken) {
-      throw new Error('User is not authenticated');
-    }
-
-    const res = await fetch(url, {
-      method: 'PATCH',
-      headers: {
-        Authorization: `Bearer ${authToken}`,
-      },
-    });
-
-    if (!res.ok) {
-      const { error } = await res.json();
-      throw new Error(error);
-    }
-
-    const { message } = (await res.json()) as { message: string };
-    return message;
-  } catch (error: any) {
-    throw new Error(error.message);
-  }
-}
-
 export const useArchiveUser = (userId: string) => {
-  const { trigger, isMutating } = useSWRMutation(`${API_URL}/users/archive/${userId}`, archiveUser);
+  const { trigger, isMutating } = useApiMutation<{ result: true }, undefined>(
+    `/users/archive/${userId}`,
+    undefined,
+    'PATCH',
+    true,
+  );
 
   const archive = async () => {
     try {
-      const res = await trigger();
-      return res;
+      const res = await trigger(undefined);
+      return res?.message;
     } catch (error: any) {
       throw new Error(error.message);
     }

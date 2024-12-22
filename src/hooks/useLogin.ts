@@ -45,7 +45,11 @@ export default function useLogin() {
     trigger,
     isMutating: loading,
     isSuccess,
-  } = useApiMutation<LoginResponse, ILoginInputs & { browser: string; os: string }>('/users/login');
+  } = useApiMutation<LoginResponse, ILoginInputs & { browser: string; os: string }>(
+    '/users/login',
+    undefined,
+    'POST',
+  );
 
   const login = async (inputs: ILoginInputs) => {
     try {

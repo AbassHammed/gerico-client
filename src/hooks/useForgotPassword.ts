@@ -14,7 +14,11 @@ export function useForgotPassword() {
     trigger,
     isMutating: loading,
     isSuccess,
-  } = useApiMutation<ForgotPasswordResponse, { email: string }>('/users/forgot-password');
+  } = useApiMutation<ForgotPasswordResponse, { email: string }>(
+    '/users/forgot-password',
+    undefined,
+    'POST',
+  );
 
   const sendMail = async (inputs: { email: string }) => {
     try {

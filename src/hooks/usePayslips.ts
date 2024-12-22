@@ -2,11 +2,14 @@
 
 import { ICreatePayslip, IPayslip, PaginatedResult, PaginationParams } from '@/types';
 
-import { useApiGet, useApiMutationWithAuth } from './useApi';
+import { useApiGet, useApiMutation } from './useApi';
 
 export function useCreatePayslip() {
-  const { trigger, isMutating: loading } = useApiMutationWithAuth<undefined, ICreatePayslip>(
+  const { trigger, isMutating: loading } = useApiMutation<undefined, ICreatePayslip>(
     '/payslip',
+    undefined,
+    'POST',
+    true,
   );
 
   const createPayslip = async (inputs: ICreatePayslip) => {
@@ -24,6 +27,8 @@ export function useCreatePayslip() {
 export function usePayslipsQuery(params?: PaginationParams) {
   const { data, error, isLoading, success } = useApiGet<PaginatedResult<IPayslip>>(
     `/payslip?page=${params?.page}&limit=${params?.limit}&offset=${params?.offset}`,
+    undefined,
+    true,
   );
 
   return {
@@ -38,6 +43,8 @@ export function usePayslipsQuery(params?: PaginationParams) {
 export function usePayslipsQueryForUser(uid: string, params?: PaginationParams) {
   const { data, error, isLoading, success } = useApiGet<PaginatedResult<IPayslip>>(
     `/payslip/${uid}?page=${params?.page}&limit=${params?.limit}&offset=${params?.offset}`,
+    undefined,
+    true,
   );
 
   return {

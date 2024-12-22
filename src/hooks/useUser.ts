@@ -9,7 +9,7 @@ import type { IUser } from '@/types';
 import { useApiGet } from './useApi';
 
 export function useUser() {
-  const { data, error, isLoading } = useApiGet<IUser>('/users/me');
+  const { data, error, isLoading } = useApiGet<IUser>('/users/me', undefined, true);
   const router = useRouter();
 
   useEffect(() => {
@@ -28,7 +28,7 @@ export function useUser() {
 }
 
 export function useProfile(slug: string) {
-  const { data, error, isLoading, mutate } = useApiGet<IUser>(`/users/${slug}`);
+  const { data, error, isLoading, mutate } = useApiGet<IUser>(`/users/${slug}`, undefined, true);
   return {
     user: data,
     isLoading,

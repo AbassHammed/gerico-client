@@ -3,15 +3,17 @@
 import { IChangePasswordInput, IUser } from '@/types';
 import { setCookie } from 'cookies-next';
 
-import { useApiMutationWithAuth } from './useApi';
+import { useApiMutation } from './useApi';
 
 export default function useChangeDefaultPassword() {
   const {
     trigger,
     isMutating: loading,
     isSuccess,
-  } = useApiMutationWithAuth<{ token: string; user: IUser }, IChangePasswordInput>(
+  } = useApiMutation<{ token: string; user: IUser }, IChangePasswordInput>(
     '/users/change-default-password',
+    undefined,
+    'POST',
   );
 
   const change = async (inputs: IChangePasswordInput) => {

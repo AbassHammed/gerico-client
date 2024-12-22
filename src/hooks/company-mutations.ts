@@ -2,11 +2,14 @@
 
 import { ICompanyInfo } from '@/types';
 
-import { useApiGet, useApiMutationWithAuthAndPatch } from './useApi';
+import { useApiGet, useApiMutation } from './useApi';
 
 export function useUpdateCompanyInfo() {
-  const { trigger, isMutating: loading } = useApiMutationWithAuthAndPatch<undefined, ICompanyInfo>(
+  const { trigger, isMutating: loading } = useApiMutation<undefined, ICompanyInfo>(
     `/company`,
+    undefined,
+    'PATCH',
+    true,
   );
 
   const updateCompany = async (arg: ICompanyInfo) => {
@@ -22,10 +25,11 @@ export function useUpdateCompanyInfo() {
 }
 
 export function useCompanyInfo() {
-  const { data, error, isLoading, isValidating, mutate } = useApiGet<ICompanyInfo>('/company', {
-    revalidateOnFocus: false,
-    revalidateOnReconnect: false,
-  });
+  const { data, error, isLoading, isValidating, mutate } = useApiGet<ICompanyInfo>(
+    '/company',
+    undefined,
+    true,
+  );
 
   return {
     companyInfo: data,

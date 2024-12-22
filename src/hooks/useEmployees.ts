@@ -7,6 +7,8 @@ import { useApiGet } from './useApi';
 export function useEmployees(params?: PaginationParams) {
   const { data, error, isLoading, success } = useApiGet<PaginatedResult<IUser>>(
     `/users?page=${params?.page}&limit=${params?.limit}&offset=${params?.offset}`,
+    undefined,
+    true,
   );
 
   return {

@@ -7,6 +7,8 @@ import { useApiMutation } from './useApi';
 export function useResendCode() {
   const { trigger, isMutating: loading } = useApiMutation<{ sent: boolean }, { uid: string }>(
     '/users/resend-password-code',
+    undefined,
+    'POST',
   );
 
   const sendResetCode = async () => {
