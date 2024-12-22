@@ -35,7 +35,11 @@ export function useLeaveRequestQuery(params?: PaginationParams, status?: string)
   };
 }
 
-export function useLeaveRequestForUser(uid: string, params?: PaginationParams, status?: string) {
+export function useLeaveRequestForUser(
+  uid: string,
+  params?: PaginationParams,
+  status: string = '',
+) {
   const { data, error, isLoading, success } = useApiGet<PaginatedResult<ILeaveRequest>>(
     `/leave-requests/me?page=${params?.page}&limit=${params?.limit}&offset=${params?.offset}&status=${status}`,
   );

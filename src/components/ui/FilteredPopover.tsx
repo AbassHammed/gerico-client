@@ -5,11 +5,12 @@ import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import {
   Button,
-  Checkbox,
   Label_Shadcn,
   Popover_Shadcn,
   PopoverContent_Shadcn,
   PopoverTrigger_Shadcn,
+  RadioGroup,
+  RadioGroupItem,
   ScrollArea,
 } from '@ui';
 
@@ -87,38 +88,30 @@ export const FilterPopover = ({
         </div>
         <ScrollArea className={options.length > 7 ? maxHeightClass : ''}>
           <div className="p-3 flex flex-col gap-y-2">
-            {options.map(option => {
-              const value = option[valueKey];
-              const icon = iconKey ? option[iconKey] : undefined;
+            <RadioGroup defaultValue={activeOption} onValueChange={setSelectedOption}>
+              {options.map(option => {
+                const value = option[valueKey];
+                const icon = iconKey ? option[iconKey] : undefined;
 
-              return (
-                <div key={value} className="flex items-center gap-x-2">
-                  <Checkbox
-                    id={value}
-                    checked={activeOption === value}
-                    onCheckedChange={() => {
-                      if (selectedOption === value) {
-                        setSelectedOption(undefined);
-                      } else {
-                        setSelectedOption(value);
-                      }
-                    }}
-                  />
-                  <Label_Shadcn
-                    htmlFor={option[valueKey]}
-                    className={cn('flex items-center gap-x-2', labelClass)}>
-                    {icon && (
-                      <img
-                        src={icon}
-                        alt={option[labelKey]}
-                        className={cn('w-4 h-4', option.iconClass)}
-                      />
-                    )}
-                    <span>{option[labelKey]}</span>
-                  </Label_Shadcn>
-                </div>
-              );
-            })}
+                return (
+                  <div key={value} className="flex items-center gap-x-2">
+                    <RadioGroupItem value={value} disabled={disabled} />
+                    <Label_Shadcn
+                      htmlFor={option[valueKey]}
+                      className={cn('flex items-center gap-x-2', labelClass)}>
+                      {icon && (
+                        <img
+                          src={icon}
+                          alt={option[labelKey]}
+                          className={cn('w-4 h-4', option.iconClass)}
+                        />
+                      )}
+                      <span>{option[labelKey]}</span>
+                    </Label_Shadcn>
+                  </div>
+                );
+              })}
+            </RadioGroup>
           </div>
         </ScrollArea>
         <div className="flex items-center justify-end gap-2 border-t border-overlay bg-surface-200 py-2 px-3">

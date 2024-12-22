@@ -24,6 +24,7 @@ export { default as AlertError } from './AlertError';
 export * from './date-picker';
 export * from './NavMenu';
 export * from './FilteredPopover';
+export { RadioGroup, RadioGroupItem, RadioGroupLargeItem } from './RadioGroup';
 
 // Shadcn
 export * from './shadcn/ui/dropdown-menu';

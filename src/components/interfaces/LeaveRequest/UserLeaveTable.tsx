@@ -37,7 +37,7 @@ const UserLeaveTable = () => {
     isLoading: leaveLoading,
     error: leaveError,
     isSuccess,
-  } = useLeaveRequestForUser(user?.uid!, { page: page, limit: PAGE_LIMIT, offset }, filter ?? '');
+  } = useLeaveRequestForUser(user?.uid!, { page: page, limit: PAGE_LIMIT, offset });
 
   const leaves = data || [];
   const sortedLeaves = leaves
