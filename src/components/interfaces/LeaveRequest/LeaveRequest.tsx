@@ -68,12 +68,12 @@ const LeaveRequest = () => {
   }, [range]);
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    setIsSubmitting(true);
-    if (!range?.from || !range?.to) {
-      toast.error('La période de congé est invalide.');
-      return;
-    }
     try {
+      setIsSubmitting(true);
+      if (!range?.from || !range?.to) {
+        toast.error('La période de congé est invalide.');
+        return;
+      }
       toast(JSON.stringify({ data, range }));
     } catch (error: any) {
       toast.error("Une erreur s'est produite lors de l'envoi de la demande.", {

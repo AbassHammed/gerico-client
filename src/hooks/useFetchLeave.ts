@@ -75,3 +75,23 @@ export function useUpdateLeaveRequest(leaveRequestId: string) {
 
   return { updateLeave, loading };
 }
+
+export function useDeleteLeaveRequest(leaveRequestId: string) {
+  const { trigger, isMutating: loading } = useApiMutation<undefined, undefined>(
+    `/leave-requests/${leaveRequestId}`,
+    undefined,
+    'DELETE',
+    true,
+  );
+
+  const deleteLeave = async () => {
+    try {
+      const res = await trigger(undefined);
+      return res?.message;
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  };
+
+  return { deleteLeave, loading };
+}

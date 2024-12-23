@@ -18,6 +18,7 @@ import dayjs from 'dayjs';
 import { ArrowDown, ArrowUp, ChevronLeft, ChevronRight } from 'lucide-react';
 
 import LeaveStatusBadge, { LeaveStatusEnum } from './LeaveStatusBadge';
+import UserDeleteLeaveRequestModal from './UserDeleteModal';
 
 const LeaveStatus = [
   { label: 'Pending', value: 'pending' },
@@ -29,11 +30,11 @@ const PAGE_LIMIT = 10;
 
 const UserLeaveTable = () => {
   const [dateSortDesc, setDateSortDesc] = useState(true);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selectedLeave, setSelectedLeave] = useState<ILeaveRequest>();
   const [filter, setFilter] = useState<string>();
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(PAGE_LIMIT);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const offset = (page - 1) * pageSize;
 
@@ -160,7 +161,10 @@ const UserLeaveTable = () => {
                     {sortedLeaves.map(leave => (
                       <Table.tr
                         key={leave.leave_request_id}
-                        onClick={() => setSelectedLeave(leave)}
+                        onClick={() => {
+                          setSelectedLeave(leave);
+                          setIsModalOpen(true);
+                        }}
                         className="cursor-pointer hover:!bg-alternative transition duration-100">
                         <Table.td>{dayjs(leave.created_at).format('DD MMM YYYY, HH:mm')}</Table.td>
                         <Table.td>{dayjs(leave.start_date).format('DD MMM YYYY, HH:mm')}</Table.td>
@@ -234,6 +238,13 @@ const UserLeaveTable = () => {
           </>
         )}
       </div>
+      {selectedLeave && (
+        <UserDeleteLeaveRequestModal
+          leaveRequest={selectedLeave!}
+          isOpen={isModalOpen}
+          setIsDeleteModalOpen={setIsModalOpen}
+        />
+      )}
     </>
   );
 };
