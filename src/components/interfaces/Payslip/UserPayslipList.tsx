@@ -164,8 +164,8 @@ const UserPayslipList = () => {
                         <div className="flex items-center justify-between">
                           <p className="text-sm opacity-50">
                             {pagination?.totalItems
-                              ? `Showing ${Math.min(offset + 1, pagination.totalItems)} to ${Math.min(offset + payslips.length, pagination.totalItems)} out of ${pagination.totalItems} payslips`
-                              : 'No payslips to display'}
+                              ? `Affichage de ${Math.min(offset + 1, pagination.totalItems)} à ${Math.min(offset + payslips.length, pagination.totalItems)} sur un total de ${pagination.totalItems} bulletins de paie`
+                              : 'Aucun bulletin de paie à afficher'}
                           </p>
                           <div className="flex items-center space-x-2">
                             <Button

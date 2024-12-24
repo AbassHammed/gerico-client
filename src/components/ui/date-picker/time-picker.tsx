@@ -1,5 +1,3 @@
-'use client';
-
 import React, { useEffect, useLayoutEffect } from 'react';
 
 import { buttonVariants } from '@/components/ui/shadcn/ui/button';
@@ -8,8 +6,7 @@ import { cn, parseDateTime } from '@/lib/utils';
 
 import { DateRange } from './types';
 
-const DEFAULT_SIZE = 96;
-const TIMESTAMP = 15;
+const AVAILABLE_TIMES = ['00:00', '12:00'];
 
 interface TimePickerProps {
   value?: DateRange;
@@ -24,24 +21,17 @@ const TimePicker: React.FC<TimePickerProps> = ({ value, onValueChange, rangeType
     if (!value || !value?.[rangeType]) {
       return '';
     }
-    const hours = value?.[rangeType].getHours();
-    const minutes = value?.[rangeType].getMinutes();
-    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+    return value?.[rangeType].toTimeString().slice(0, 5);
   }, [value]);
 
   const formatSelectedTime = React.useCallback(
-    (hour: number, part: number) => {
-      const newVal = parseDateTime(value?.[rangeType] ?? new Date());
-
-      if (!newVal) {
-        return;
-      }
-
-      newVal.setHours(hour, part === 0 ? 0 : TIMESTAMP * part);
-
+    (time: string) => {
+      const newDate = parseDateTime(value?.[rangeType] ?? new Date());
+      const [hours, minutes] = time.split(':').map(Number);
+      newDate.setHours(hours, minutes, 0);
       onValueChange({
         ...value!,
-        [rangeType]: newVal,
+        [rangeType]: newDate,
       });
     },
     [value, onValueChange],
@@ -55,7 +45,7 @@ const TimePicker: React.FC<TimePickerProps> = ({ value, onValueChange, rangeType
         return;
       }
 
-      const totalItems = DEFAULT_SIZE;
+      const totalItems = AVAILABLE_TIMES.length;
 
       const moveNext = () => {
         setActiveIndex(prevIndex => (prevIndex + 1) % totalItems);
@@ -69,17 +59,11 @@ const TimePicker: React.FC<TimePickerProps> = ({ value, onValueChange, rangeType
         const currentElm = document.getElementById(`time-${activeIndex}`);
         if (currentElm) {
           currentElm.focus();
-          const timeValue = currentElm.textContent ?? '';
-          const [hourStr, minuteStr] = timeValue.split(':');
-          const hour = parseInt(hourStr);
-          const part = Math.floor(parseInt(minuteStr) / TIMESTAMP);
-          formatSelectedTime(hour, part);
+          formatSelectedTime(AVAILABLE_TIMES[activeIndex]);
         }
       };
 
       const reset = () => {
-        const currentElm = document.getElementById(`time-${activeIndex}`);
-        currentElm?.blur();
         setActiveIndex(-1);
       };
 
@@ -102,9 +86,9 @@ const TimePicker: React.FC<TimePickerProps> = ({ value, onValueChange, rangeType
   );
 
   const handleClick = React.useCallback(
-    (hour: number, part: number, currentIndex: number) => {
-      formatSelectedTime(hour, part);
-      setActiveIndex(currentIndex);
+    (index: number) => {
+      formatSelectedTime(AVAILABLE_TIMES[index]);
+      setActiveIndex(index);
     },
     [formatSelectedTime],
   );
@@ -113,28 +97,20 @@ const TimePicker: React.FC<TimePickerProps> = ({ value, onValueChange, rangeType
     if (!value || !value[rangeType]) {
       return;
     }
-
-    const hours = value?.[rangeType].getHours();
-    const minutes = value?.[rangeType].getMinutes();
-    const part = Math.floor(minutes / TIMESTAMP);
-    const trueIndex = hours * 4 + part;
-    setActiveIndex(trueIndex);
-
-    setTimeout(() => {
-      const currentElm = document.getElementById(`time-${trueIndex}`);
-      currentElm?.scrollIntoView({ block: 'center', behavior: 'smooth' });
-    }, 0);
+    const time = value[rangeType].toTimeString().slice(0, 5);
+    const index = AVAILABLE_TIMES.indexOf(time);
+    if (index !== -1) {
+      setActiveIndex(index);
+    }
   }, [value]);
 
   useEffect(() => {
-    if (activeIndex === -1) {
-      return;
+    if (activeIndex !== -1) {
+      setTimeout(() => {
+        const currentElm = document.getElementById(`time-${activeIndex}`);
+        currentElm?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      }, 0);
     }
-
-    setTimeout(() => {
-      const currentElm = document.getElementById(`time-${activeIndex}`);
-      currentElm?.scrollIntoView({ block: 'center', behavior: 'smooth' });
-    }, 0);
   }, [activeIndex]);
 
   return (
@@ -144,30 +120,22 @@ const TimePicker: React.FC<TimePickerProps> = ({ value, onValueChange, rangeType
         onKeyDown={handleKeydown}
         className="h-[90%] w-full focus-visible:outline-0 focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-0 py-0.5">
         <ul className={cn('flex items-center flex-col gap-1 h-full max-h-56 w-28 px-1 py-0.5')}>
-          {Array.from({ length: 24 }).map((_, i) =>
-            Array.from({ length: 4 }).map((_, part) => {
-              const trueIndex = i * 4 + part;
-              const currentValue = `${i.toString().padStart(2, '0')}:${(part === 0 ? '00' : TIMESTAMP * part).toString().padStart(2, '0')}`;
-              const isSelected = currentValue === formattedTime;
-
-              return (
-                <li
-                  key={`time-${trueIndex}`}
-                  id={`time-${trueIndex}`}
-                  aria-label="currentTime"
-                  className={cn(
-                    buttonVariants({
-                      variant: isSelected ? 'default' : 'outline',
-                    }),
-                    'h-8 px-3 w-full text-sm focus-visible:outline-0 outline-0 focus-visible:border-0 cursor-default ring-0',
-                    isSelected && 'bg-primary text-primary-foreground',
-                  )}
-                  onClick={() => handleClick(i, part, trueIndex)}>
-                  {currentValue}
-                </li>
-              );
-            }),
-          )}
+          {AVAILABLE_TIMES.map((time, index) => (
+            <li
+              key={`time-${index}`}
+              id={`time-${index}`}
+              aria-label="currentTime"
+              className={cn(
+                buttonVariants({
+                  variant: formattedTime === time ? 'default' : 'outline',
+                }),
+                'h-8 px-3 w-full text-sm focus-visible:outline-0 outline-0 focus-visible:border-0 cursor-default ring-0',
+                formattedTime === time && 'bg-primary text-primary-foreground',
+              )}
+              onClick={() => handleClick(index)}>
+              {time}
+            </li>
+          ))}
         </ul>
       </ScrollArea>
     </div>

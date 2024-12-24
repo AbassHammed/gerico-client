@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 import { IDeduction, IPayslip, ISSThreshold } from '@/types';
 import { isAfter, isBefore, isWithinInterval } from 'date-fns';
 
@@ -5,39 +6,24 @@ import { PaySlipItem } from '../PayslipPDF/interface';
 
 export const INTERVAL_DISPLAYS = [
   {
-    display: 'Last 24 hours',
-    value: '24h',
-    shortcut: 'd',
-  },
-  {
-    display: 'Last 7 days',
-    value: '7d',
-    shortcut: 'w',
-  },
-  {
-    display: 'Last 30 days',
+    display: 'Les 30 derniers jours',
     value: '30d',
-    shortcut: 'm',
   },
   {
-    display: 'Last 3 months',
+    display: 'Les 3 derniers mois',
     value: '90d',
-    shortcut: 't',
   },
   {
-    display: 'Year to Date',
+    display: "Depuis le début de l'année",
     value: 'ytd',
-    shortcut: 'y',
   },
   {
-    display: 'Last 12 months',
+    display: 'Les 12 derniers mois',
     value: '1y',
-    shortcut: 'l',
   },
   {
-    display: 'All Time',
+    display: 'Tout le temps',
     value: 'all',
-    shortcut: 'a',
   },
 ];
 
@@ -48,14 +34,6 @@ export const INTERVAL_DATA: Record<
     granularity: 'minute' | 'hour' | 'day' | 'month';
   }
 > = {
-  '24h': {
-    startDate: new Date(Date.now() - 86400000),
-    granularity: 'hour',
-  },
-  '7d': {
-    startDate: new Date(Date.now() - 604800000),
-    granularity: 'day',
-  },
   '30d': {
     startDate: new Date(Date.now() - 2592000000),
     granularity: 'day',
