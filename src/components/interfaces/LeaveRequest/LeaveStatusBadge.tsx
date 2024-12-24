@@ -4,9 +4,9 @@ import { Badge } from '@/components/ui';
 import * as Tooltip from '@radix-ui/react-tooltip';
 
 export enum LeaveStatusEnum {
-  ACCEPTED = 'accepted',
-  WAITING = 'waiting',
-  REFUSED = 'refused',
+  ACCEPTED = 'approved',
+  WAITING = 'pending',
+  REFUSED = 'rejected',
 }
 
 const leaveStatusMapping: Record<

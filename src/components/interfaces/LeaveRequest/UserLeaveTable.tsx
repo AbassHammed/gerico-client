@@ -21,9 +21,9 @@ import LeaveStatusBadge, { LeaveStatusEnum } from './LeaveStatusBadge';
 import UserDeleteLeaveRequestModal from './UserDeleteModal';
 
 const LeaveStatus = [
-  { label: 'Pending', value: 'pending' },
-  { label: 'Approved', value: 'approved' },
-  { label: 'Rejected', value: 'rejected' },
+  { label: 'Pending', value: LeaveStatusEnum.WAITING },
+  { label: 'Approved', value: LeaveStatusEnum.ACCEPTED },
+  { label: 'Rejected', value: LeaveStatusEnum.REFUSED },
 ];
 
 const PAGE_LIMIT = 10;

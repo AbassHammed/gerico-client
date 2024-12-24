@@ -41,6 +41,8 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
+import { LeaveStatusEnum } from './LeaveStatusBadge';
+
 const FormSchema = z.object({
   leave_type: z.string({
     required_error: 'Please select a leave type to display.',
@@ -86,7 +88,7 @@ const LeaveRequest = () => {
         start_date: range.from,
         end_date: range.to,
         uid: user.uid,
-        request_status: 'waiting',
+        request_status: LeaveStatusEnum.WAITING,
       };
       const message = await createLeave(inputs);
       toast.success(message);
