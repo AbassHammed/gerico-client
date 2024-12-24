@@ -35,7 +35,7 @@ const LeaveStatusEnumBadge = ({ status }: { status: LeaveStatusEnum }) => {
       <Tooltip.Trigger>
         <Badge
           size="small"
-          className={`capitalize ${status === LeaveStatusEnum.ACCEPTED ? 'text-white' : ''}`}
+          className={`${status === LeaveStatusEnum.ACCEPTED ? 'text-white' : ''}`}
           variant={statusMapping?.badgeVariant || 'default'}>
           {statusMapping?.label}
         </Badge>
@@ -50,7 +50,7 @@ const LeaveStatusEnumBadge = ({ status }: { status: LeaveStatusEnum }) => {
             ].join(' ')}>
             {status === LeaveStatusEnum.WAITING && (
               <p className="text-xs text-foreground">
-                Votre demande de congé est en cours de traitement.
+                Votre demande de congé est en attente d'approbation.
               </p>
             )}
 

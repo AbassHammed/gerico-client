@@ -3,6 +3,7 @@
 import { useState } from 'react';
 
 import { AlertError, Button, FilterPopover, ShimmeringLoader, Table } from '@/components/ui';
+import { formatDate } from '@/components/ui/date-picker/shared';
 import {
   Select,
   SelectContent,
@@ -14,7 +15,7 @@ import { useLeaveRequestForUser } from '@/hooks/useFetchLeave';
 import { getWorkingDaysBetweenDates } from '@/lib/utils';
 import { ILeaveRequest } from '@/types';
 import * as Tooltip from '@radix-ui/react-tooltip';
-import dayjs from 'dayjs';
+import { fr } from 'date-fns/locale';
 import { ArrowDown, ArrowUp, ChevronLeft, ChevronRight } from 'lucide-react';
 
 import LeaveStatusBadge, { LeaveStatusEnum } from './LeaveStatusBadge';
@@ -65,7 +66,7 @@ const UserLeaveTable = () => {
       <div className="space-y-4 flex flex-col">
         <div className="flex items-center justify-start">
           <div className="flex items-center space-x-2">
-            <p className="text-xs prose">Filter by</p>
+            <p className="text-xs prose">Filtrer par</p>
             <FilterPopover
               name="Statut"
               options={LeaveStatus}
@@ -95,7 +96,9 @@ const UserLeaveTable = () => {
               </div>
             ) : leaves.length > 0 && sortedLeaves.length === 0 ? (
               <div className="bg-surface-100 border rounded p-4 flex items-center justify-center">
-                <p className="prose text-sm">No leave request found for the filter applied</p>
+                <p className="prose text-sm">
+                  Aucune demande de congé trouvée pour le filtre appliqué
+                </p>
               </div>
             ) : (
               <Table
@@ -166,9 +169,9 @@ const UserLeaveTable = () => {
                           setIsModalOpen(true);
                         }}
                         className="cursor-pointer hover:!bg-alternative transition duration-100">
-                        <Table.td>{dayjs(leave.created_at).format('DD MMM YYYY, HH:mm')}</Table.td>
-                        <Table.td>{dayjs(leave.start_date).format('DD MMM YYYY, HH:mm')}</Table.td>
-                        <Table.td>{dayjs(leave.end_date).format('DD MMM YYYY, HH:mm')}</Table.td>
+                        <Table.td>{formatDate(leave.created_at, fr, true, true)}</Table.td>
+                        <Table.td>{formatDate(leave.start_date, fr, true, true)}</Table.td>
+                        <Table.td>{formatDate(leave.end_date, fr, true, true)}</Table.td>
                         <Table.td>{`${getWorkingDaysBetweenDates(leave.start_date, leave.end_date)} jours`}</Table.td>
                         <Table.td>
                           <LeaveStatusBadge

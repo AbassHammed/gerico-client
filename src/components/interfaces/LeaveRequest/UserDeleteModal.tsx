@@ -49,18 +49,10 @@ const UserDeleteLeaveRequestModal: React.FC<
             <ul className="list-disc pl-4 my-2">
               <li>Date de début : {dayjs(leaveRequest.start_date).format('DD MMM YYYY, HH:mm')}</li>
               <li>Date de fin : {dayjs(leaveRequest.end_date).format('DD MMM YYYY, HH:mm')}</li>
-              <li>Motif : {leaveRequest.reason}</li>
+              <li>Raison : {leaveRequest.reason ?? 'Non spécifié'}</li>
               <li>
                 Statut :{' '}
-                <LeaveStatusBadge
-                  status={
-                    leaveRequest.request_status === 'approved'
-                      ? LeaveStatusEnum.ACCEPTED
-                      : leaveRequest.request_status === 'rejected'
-                        ? LeaveStatusEnum.REFUSED
-                        : LeaveStatusEnum.WAITING
-                  }
-                />
+                <LeaveStatusBadge status={leaveRequest.request_status as LeaveStatusEnum} />
               </li>
             </ul>
             <p className="mt-4 text-foreground-lighter">

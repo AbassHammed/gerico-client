@@ -15,12 +15,21 @@ export const DatePickerContext = createContext<{
   setIsOpen: () => {},
 });
 
-export const formatDate = (date: Date, locale: Locale = fr, includeTime = false): string => {
+export const formatDate = (
+  date: Date,
+  locale: Locale = fr,
+  includeTime = false,
+  differentFormat = false,
+): string => {
   let dateString: string;
   const dateObj = new Date(date);
 
   if (includeTime) {
-    dateString = format(dateObj, `d MMMM, yyyy HH:mm`, { locale });
+    if (differentFormat) {
+      dateString = format(dateObj, `d MMM, yyyy HH:mm`, { locale });
+    } else {
+      dateString = format(dateObj, `d MMMM, yyyy HH:mm`, { locale });
+    }
   } else {
     dateString = format(dateObj, `d MMM, yyyy`, { locale });
   }
