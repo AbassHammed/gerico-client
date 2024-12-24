@@ -40,7 +40,7 @@ const SignInForm = () => {
       }
 
       toast.success(`Connexion réussie !`, { id: toastId });
-      const redirectTo = searchParams.get('redirect') || '/dashboard';
+      const redirectTo = searchParams.get('redirect') || PagesRoutes.Admin_Dashboard;
       router.push(decodeURIComponent(redirectTo));
     } catch (error: any) {
       toast.error(`Échec de la connexion : ${error.message}`, { id: toastId });

@@ -59,7 +59,7 @@ export const UserActions = ({ member }: { member: IUser }) => {
           </DropdownMenuTrigger>
           <DropdownMenuContent side="bottom" align="end" className="w-60">
             <DropdownMenuItem>
-              <Link href={`/dashboard/employees/${member.uid}/update`} className="flex flex-col">
+              <Link href={`/admin/employes/${member.uid}/maj`} className="flex flex-col">
                 <p>Modifier les informations</p>
                 <p className="text-foreground-lighter">Mettre à jour les données de l'employé</p>
               </Link>

@@ -2,7 +2,7 @@ import { getCookie } from 'cookies-next';
 import useSWR, { SWRConfiguration } from 'swr';
 import useSWRMutation, { SWRMutationConfiguration } from 'swr/mutation';
 
-export interface ApiResponse<T> {
+interface ApiResponse<T> {
   success: boolean;
   data?: T;
   error?: string;
@@ -10,7 +10,7 @@ export interface ApiResponse<T> {
   statusCode: number;
 }
 
-export const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 // https://httpwg.org/specs/rfc9110.html
 

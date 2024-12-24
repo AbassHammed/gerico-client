@@ -35,7 +35,7 @@ export enum PagesRoutes {
   /**
    * The home page for employees.
    */
-  Employee_Home = '/employe/accueil',
+  Employee_Home = '/employe',
 
   /**
    * The payslips page for employees.
@@ -45,7 +45,7 @@ export enum PagesRoutes {
   /**
    * The leave request page for employees.
    */
-  Employee_LeaveRequest = '/employe/conges/nouvelle-demande',
+  Employee_LeaveRequest = '/employe/conges',
 
   /**
    * The leave list page for employees.
@@ -55,7 +55,12 @@ export enum PagesRoutes {
   /**
    * The dashboard page for administrators.
    */
-  Admin_Dashboard = '/admin/tableau-de-bord',
+  Admin_Dashboard = '/admin',
+
+  /**
+   * The employees page for administrators.
+   */
+  Admin_Employees = '/admin/employes',
 
   /**
    * The settings page for administrators.
@@ -80,5 +85,5 @@ export enum PagesRoutes {
   /**
    * The page listing all payslips for administrators.
    */
-  Admin_AllPayslips = '/admin/fiches-de-paie/toutes',
+  Admin_AllPayslips = '/admin/fiches-de-paie',
 }

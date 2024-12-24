@@ -4,7 +4,7 @@ import Image from 'next/legacy/image';
 import { SupportForm } from '@/components/interfaces/support/supportForm';
 
 export const metadata: Metadata = {
-  title: 'Support',
+  title: 'Assistance',
 };
 
 const SupportPage = () => (
@@ -14,7 +14,7 @@ const SupportPage = () => (
         <div className="flex flex-col  justify-start items-start sm:items-center gap-y-2">
           <div className="flex items-center space-x-3">
             <Image src={`/app/gerico-logo-icon.svg`} width={20} height={20} priority />
-            <h1 className="m-0 text-lg">Gérico support</h1>
+            <h1 className="m-0 text-lg">Assitance Gérico</h1>
           </div>
         </div>
 

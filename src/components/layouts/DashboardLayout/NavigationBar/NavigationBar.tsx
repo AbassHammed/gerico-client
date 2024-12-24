@@ -112,7 +112,9 @@ const NavigationBar = () => {
               className="absolute h-[40px] w-6 cursor-pointer rounded"
             />
           </Link>
-          <Link href="/dashboard" className="hidden md:flex mx-2 items-center h-[40px]">
+          <Link
+            href={PagesRoutes.Admin_Dashboard}
+            className="hidden md:flex mx-2 items-center h-[40px]">
             <Image
               src="/app/gerico-logo-wordmark.svg"
               alt="Gérico Logo"
@@ -127,16 +129,16 @@ const NavigationBar = () => {
             <NavigationIconLink
               key={route.key}
               route={route}
-              isActive={activeRoute.includes(route.link!)}
+              isActive={activeRoute === route.link}
             />
           ))}
           <NavigationIconLink
-            isActive={activeRoute === '/dashboard'}
+            isActive={activeRoute === PagesRoutes.Admin_Dashboard}
             route={{
               key: 'HOME',
               label: 'Home',
               icon: <Home size={ICON_SIZE} strokeWidth={ICON_STROKE_WIDTH} />,
-              link: `/dashboard`,
+              link: PagesRoutes.Admin_Dashboard,
             }}
           />
           <Separator className="my-1 bg-border-muted" />
@@ -144,7 +146,7 @@ const NavigationBar = () => {
             <NavigationIconLink
               key={route.key}
               route={route}
-              isActive={activeRoute.includes(route.link!)}
+              isActive={activeRoute === route.link}
             />
           ))}
           <Separator className="my-1 bg-border-muted" />
@@ -155,7 +157,7 @@ const NavigationBar = () => {
             <NavigationIconLink
               key={route.key}
               route={route}
-              isActive={activeRoute.includes(route.link!)}
+              isActive={activeRoute === route.link}
             />
           ))}
 

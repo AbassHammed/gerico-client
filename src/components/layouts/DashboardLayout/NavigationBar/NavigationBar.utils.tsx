@@ -1,4 +1,5 @@
 import { CalendarDateIcon } from '@/components/ui';
+import { PagesRoutes } from '@/lib/constants';
 import { IRoute } from '@/types';
 import { ArrowLeft, FilePen, Files, Plus, Settings, Users } from 'lucide-react';
 
@@ -33,25 +34,25 @@ export const generateToolRoutes = (): IRoute[] => [
     key: 'new:user',
     label: 'Create new employee',
     icon: <Plus size={ICON_SIZE} strokeWidth={ICON_STROKE_WIDTH} />,
-    link: '/dashboard/new-user',
+    link: PagesRoutes.Admin_CreateEmployee,
   },
   {
     key: 'all:employees',
     label: 'All employees',
     icon: <Users size={ICON_SIZE} strokeWidth={ICON_STROKE_WIDTH} />,
-    link: '/dashboard/employees',
+    link: PagesRoutes.Admin_Employees,
   },
   {
     key: 'create:payslip',
     label: 'Create payslip',
     icon: <FilePen size={ICON_SIZE} strokeWidth={ICON_STROKE_WIDTH} />,
-    link: '/dashboard/create-payslip',
+    link: PagesRoutes.Admin_CreatePayslip,
   },
   {
     key: 'all:payslip',
     label: 'Payslip list',
     icon: <Files size={ICON_SIZE} strokeWidth={ICON_STROKE_WIDTH} />,
-    link: '/dashboard/payslips',
+    link: PagesRoutes.Admin_AllPayslips,
   },
 ];
 
@@ -60,12 +61,12 @@ export const generateSettingsRoutes = (): IRoute[] => [
     key: 'homepage',
     label: 'Homepage',
     icon: <ArrowLeft size={ICON_SIZE} strokeWidth={ICON_STROKE_WIDTH} />,
-    link: `/home`,
+    link: PagesRoutes.Employee_Home,
   },
   {
     key: 'settings',
     label: 'Org Settings',
     icon: <Settings size={ICON_SIZE} strokeWidth={ICON_STROKE_WIDTH} />,
-    link: `/dashboard/settings`,
+    link: PagesRoutes.Admin_Settings,
   },
 ];

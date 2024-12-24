@@ -13,6 +13,7 @@ import {
 } from '@/components/ui';
 import { FormItemLayout } from '@/components/ui/form/FormItemLayout';
 import useChangeDefaultPassword from '@/hooks/useChangePassword';
+import { PagesRoutes } from '@/lib/constants';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff } from 'lucide-react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -54,7 +55,7 @@ export const ChangeDefaultPasswordForm = () => {
   const onSubmit: SubmitHandler<z.infer<typeof FormSchema>> = async values => {
     try {
       await change(values);
-      router.push('/dashboard');
+      router.push(PagesRoutes.Admin_Dashboard);
     } catch (error: any) {
       toast.error('Erreur inconnue', {
         description: error.message,

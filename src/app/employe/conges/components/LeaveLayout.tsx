@@ -10,6 +10,7 @@ import {
   ScaffoldHeader,
   ScaffoldTitle,
 } from '@/components/ui';
+import { PagesRoutes } from '@/lib/constants';
 
 const LeaveLayout = () => {
   const pathname = usePathname();
@@ -17,11 +18,11 @@ const LeaveLayout = () => {
   const navMenuItems = [
     {
       label: 'Demandes de congé',
-      href: `/home/leave`,
+      href: PagesRoutes.Employee_LeaveRequest,
     },
     {
       label: 'Listes de congé',
-      href: `/home/leave/list`,
+      href: PagesRoutes.Employee_LeaveList,
     },
   ];
   return (
