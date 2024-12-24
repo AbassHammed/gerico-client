@@ -22,7 +22,6 @@ import {
 } from '@/components/ui/shadcn/ui/form';
 import { GenericSkeletonLoaderList } from '@/components/ui/ShimmeringLoader';
 import { useCompanyInfo } from '@/hooks/company-mutations';
-import { useCalculations } from '@/hooks/payslip/useCalculations';
 import { useGetDeductions, useGetThresholds } from '@/hooks/useHooks';
 import { useCreatePayslip } from '@/hooks/usePayslips';
 import { ICreatePayslip, IUser } from '@/types';
@@ -34,8 +33,8 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 
 import PaySlipPDF from '../PayslipPDF/PayslipPDF';
-import { calculateTotals } from '../PayslipPDF/utils/misc';
 import { DatePickerField } from './FormDatePicker';
+import { calculateGrossSalary, calculateTotals, generatePaySlipData } from './Payslip.utils';
 import UserSelect from './UserSelect';
 
 const FILE_TYPE = 'application/pdf';
@@ -53,8 +52,6 @@ const PayslipSchema = z.object({
   end_period: z.string(),
   time_entries: z.array(timeEntrySchema),
   employee: z.string(),
-  gross_salary: z.coerce.number(),
-  net_salary: z.coerce.number(),
 });
 
 type FormValues = z.infer<typeof PayslipSchema>;
@@ -64,7 +61,6 @@ const PayslipForm = () => {
   const { companyInfo, loading: companyInfoLoading, error: companyInfoError } = useCompanyInfo();
   const { deductions, isLoading: isDeductionsLoading, error: deductionsError } = useGetDeductions();
   const { thresholds, isLoading: isThresholdsLoading, error: thresholdsError } = useGetThresholds();
-  const { generatePaySlipData, deductionsConfig } = useCalculations(thresholds!, deductions!);
   const [seletedUser, setUser] = React.useState<IUser | undefined>(undefined);
   const { createPayslip, loading: payslipLoading } = useCreatePayslip();
   const [loading, setLoading] = React.useState<boolean>(false);
@@ -77,17 +73,12 @@ const PayslipForm = () => {
     end_period: '',
     time_entries: [{ week: 1, worked_hours: 0, overtime: 0 }],
     employee: '',
-    gross_salary: 0,
-    net_salary: 0,
   };
 
   const form = useForm<FormValues>({
     resolver: zodResolver(PayslipSchema),
     defaultValues: initialValues,
   });
-
-  const handleGrossSalaryChange = () => form.setValue('gross_salary', calculateGrossSalary());
-  const handleNetSalaryChange = (x: number) => form.setValue('net_salary', x);
 
   const computeSHA256 = async (blob: Blob) => {
     const buffer = await blob.arrayBuffer();
@@ -97,16 +88,18 @@ const PayslipForm = () => {
     return hashHex;
   };
 
-  const handlePayslipGeneration = async (): Promise<Blob> => {
+  const handlePayslipGeneration = async () => {
     toast.loading('Generating Payslip...', { id: toastId! });
     if (!thresholds || !deductions || !seletedUser || !companyInfo) {
       throw new Error('Failed to load deductions, thresholds, user or company info');
     }
 
-    const grossSalary = calculateGrossSalary();
-    const paySlipData = generatePaySlipData(grossSalary, deductionsConfig);
+    const grossSalary = calculateGrossSalary(
+      form.getValues().time_entries,
+      form.getValues().hourly_rate,
+    );
+    const paySlipData = generatePaySlipData(grossSalary, deductions, thresholds);
     const totals = calculateTotals(paySlipData);
-    handleNetSalaryChange(grossSalary - Number(totals.totalSalarial));
 
     const blob = await pdf(
       <PaySlipPDF
@@ -121,11 +114,17 @@ const PayslipForm = () => {
 
     toast.info('Payslip generated successfully', { id: toastId! });
 
-    return blob;
+    const returnData = {
+      blob,
+      grossSalary,
+      netSalary: grossSalary - Number(totals.totalSalarial),
+    };
+
+    return returnData;
   };
 
-  const handleFileUpload = async (): Promise<string> => {
-    const blob = await handlePayslipGeneration();
+  const handleFileUpload = async () => {
+    const { blob, grossSalary, netSalary } = await handlePayslipGeneration();
     toast.info('Uploading Payslip...', { id: toastId! });
     const signedURLResult = await getSignedURL({
       fileSize: blob.size,
@@ -145,26 +144,8 @@ const PayslipForm = () => {
     });
     toast.success('Payslip uploaded successfully', { id: toastId! });
 
-    return fileUrl;
+    return { fileUrl, grossSalary, netSalary };
   };
-
-  function calculateGrossSalary(): number {
-    const hourlyRate = Math.max(form.getValues().hourly_rate, 0);
-    const adjustedHours = 151.67;
-    const baseSalary = hourlyRate * adjustedHours;
-    let totalOvertimePay = 0;
-    form.getValues().time_entries.forEach(week => {
-      const overtime = week.overtime;
-      if (overtime > 0) {
-        const overtime25 = Math.min(overtime, 8) * 1.25 * hourlyRate;
-        const overtime50 = Math.max(overtime - 8, 0) * 1.5 * hourlyRate;
-        totalOvertimePay += overtime25 + overtime50;
-      }
-    });
-
-    const grossSalary = baseSalary + totalOvertimePay;
-    return parseFloat(grossSalary.toFixed(2));
-  }
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
@@ -187,19 +168,20 @@ const PayslipForm = () => {
   }
 
   async function onSubmit(values: FormValues) {
-    setLoading(true);
-    toastId = toast.loading('Calculating Overtime...', { id: toastId! });
     try {
+      setLoading(true);
+      toastId = toast.loading('Creating Payslip...', { id: toastId! });
+      const { fileUrl, netSalary, grossSalary } = await handleFileUpload();
+
       const dataWithOvertime = {
         ...values,
+        gross_salary: grossSalary,
+        net_salary: netSalary,
         time_entries: values.time_entries.map(entry => ({
           ...entry,
           overtime: calculateOvertime(entry.worked_hours),
         })),
       };
-
-      toastId = toast.loading('Creating Payslip...', { id: toastId! });
-      const fileUrl = await handleFileUpload();
 
       const data: ICreatePayslip = {
         uid: dataWithOvertime.employee,
@@ -283,10 +265,6 @@ const PayslipForm = () => {
                           label="Hourly Rate"
                           placeholder="0.00"
                           {...field}
-                          onChange={e => {
-                            field.onChange(e);
-                            handleGrossSalaryChange();
-                          }}
                           size="small"
                           layout="vertical"
                           disabled={loading || payslipLoading}
@@ -434,52 +412,6 @@ const PayslipForm = () => {
                   </FormItem>
                 )}
               />
-            </FormSectionContent>
-          </FormSection>
-          <FormSection header={<FormSectionLabel>Salaries</FormSectionLabel>}>
-            <FormSectionContent loading={false} fullWidth className="!gap-2 space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                <FormField
-                  control={form.control}
-                  name="gross_salary"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          label="Salaire Brut"
-                          placeholder="0.00"
-                          {...field}
-                          size="small"
-                          layout="vertical"
-                          disabled
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="net_salary"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          label="Salaire Net"
-                          placeholder="0.00"
-                          {...field}
-                          size="small"
-                          layout="vertical"
-                          disabled
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
             </FormSectionContent>
           </FormSection>
         </FormPanel>

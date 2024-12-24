@@ -30,7 +30,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/shadcn/ui/select';
+import { useCreateLeaveRequest } from '@/hooks/useFetchLeave';
+import { useUser } from '@/hooks/useUser';
+import { ILeaveRequestInput } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { isAfter } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import Holidays from 'date-holidays';
 import { useForm } from 'react-hook-form';
@@ -46,7 +50,9 @@ const FormSchema = z.object({
 const formId = 'leaverequest-form';
 
 const LeaveRequest = () => {
+  const { user } = useUser();
   const [range, setRange] = useState<DateRange | undefined>(undefined);
+  const { createLeave, loading } = useCreateLeaveRequest();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const hd = new Holidays();
   hd.init('FR');
@@ -67,20 +73,31 @@ const LeaveRequest = () => {
     }`;
   }, [range]);
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
     try {
       setIsSubmitting(true);
-      if (!range?.from || !range?.to) {
+      if (!range?.from || !range?.to || !isAfter(range.to, range.from) || !user) {
         toast.error('La période de congé est invalide.');
         return;
       }
-      toast(JSON.stringify({ data, range }));
+      const inputs: ILeaveRequestInput = {
+        leave_type: data.leave_type,
+        reason: data.reason,
+        start_date: range.from,
+        end_date: range.to,
+        uid: user.uid,
+        request_status: 'waiting',
+      };
+      const message = await createLeave(inputs);
+      toast.success(message);
     } catch (error: any) {
       toast.error("Une erreur s'est produite lors de l'envoi de la demande.", {
         description: error.message,
       });
     } finally {
       setIsSubmitting(false);
+      form.reset();
+      setRange(undefined);
     }
   }
 
@@ -97,7 +114,7 @@ const LeaveRequest = () => {
                 <div className={['flex w-full items-center gap-2', 'justify-end'].join(' ')}>
                   <div className="flex items-center gap-2">
                     <Button
-                      disabled={isSubmitting}
+                      disabled={isSubmitting || loading}
                       type="default"
                       htmlType="reset"
                       onClick={() => {
@@ -110,8 +127,8 @@ const LeaveRequest = () => {
                       form={formId}
                       type="primary"
                       htmlType="submit"
-                      disabled={isSubmitting}
-                      loading={isSubmitting}>
+                      disabled={isSubmitting || loading}
+                      loading={isSubmitting || loading}>
                       Save
                     </Button>
                   </div>
@@ -177,7 +194,7 @@ const LeaveRequest = () => {
                       <FormControl_Shadcn>
                         <TextArea_Shadcn
                           {...field}
-                          disabled={isSubmitting}
+                          disabled={isSubmitting || loading}
                           rows={4}
                           maxLength={5000}
                           placeholder="Décrivez le problème rencontré, ainsi que toute information pertinente. Soyez aussi précis et spécifique que possible."

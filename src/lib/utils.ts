@@ -185,7 +185,9 @@ export function getWorkingDaysBetweenDates(startDate: Date, endDate: Date): numb
 
     let dayFraction = 1;
 
-    if (isStartDay) {
+    if (isStartDay && isEndDay) {
+      dayFraction = differenceInHours(endDateObj, startDateObj) / 24;
+    } else if (isStartDay) {
       dayFraction = (24 - differenceInHours(startOfDay(startDateObj), startDateObj)) / 24;
     } else if (isEndDay) {
       dayFraction = differenceInHours(endDateObj, startOfDay(endDateObj)) / 24;
