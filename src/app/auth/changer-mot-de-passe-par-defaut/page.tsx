@@ -3,6 +3,7 @@ import Link from 'next/link';
 
 import { ChangeDefaultPasswordForm } from '@/components/interfaces/Auth/ChangeDefaultPasswordForm';
 import AuthLayout from '@/components/layouts/authLayout';
+import { PagesRoutes } from '@/lib/constants';
 
 export const metadata: Metadata = {
   title: 'Changer le mot de passe par default',
@@ -17,7 +18,7 @@ const ChangeDefaultPassword = () => (
     </div>
 
     <div className="my-8 self-center text-sm">
-      <Link href="/auth/sign-in" className="underline hover:text-foreground-light">
+      <Link href={PagesRoutes.Auth_SignIn} className="underline hover:text-foreground-light">
         Annuler
       </Link>
     </div>

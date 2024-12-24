@@ -3,6 +3,7 @@ import Link from 'next/link';
 
 import ForgotPasswordForm from '@/components/interfaces/Auth/ForgotPasswordForm';
 import AuthLayout from '@/components/layouts/authLayout';
+import { PagesRoutes } from '@/lib/constants';
 
 export const metadata: Metadata = {
   title: 'Mot de pass oublié',
@@ -17,7 +18,7 @@ const ForgotPasswordPage = () => (
     </div>
 
     <div className="my-8 self-center text-sm">
-      <Link href="/auth/sign-in" className="underline hover:text-foreground-light">
+      <Link href={PagesRoutes.Auth_SignIn} className="underline hover:text-foreground-light">
         Annuler
       </Link>
     </div>

@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 import { useUser } from '@/hooks/useUser';
+import { PagesRoutes } from '@/lib/constants';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,7 +22,7 @@ export default function AvatarDropdown() {
 
   const handleLogout = () => {
     deleteCookie('auth_token');
-    router.push('/auth/sign-in');
+    router.push(PagesRoutes.Auth_SignIn);
   };
 
   return (

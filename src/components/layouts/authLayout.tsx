@@ -3,6 +3,8 @@ import { PropsWithChildren } from 'react';
 import Image from 'next/legacy/image';
 import Link from 'next/link';
 
+import { PagesRoutes } from '@/lib/constants';
+
 import { Button } from '../ui';
 
 type AuthLayoutProps = {
@@ -39,7 +41,7 @@ const AuthLayout = ({
 
         <div className="items-center hidden space-x-3 md:ml-10 md:flex md:pr-4">
           <Button asChild type={'default'}>
-            <Link href="/support">Support</Link>
+            <Link href={PagesRoutes.Support}>Support</Link>
           </Button>
         </div>
       </nav>

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 
+import { PagesRoutes } from '@/lib/constants';
 import { Button_Shadcn } from '@ui';
 import { HelpCircle } from 'lucide-react';
 
@@ -17,7 +18,7 @@ export function HomeLayoutHeader() {
           </div>
           <nav className="flex items-center gap-0.5">
             <Button_Shadcn variant="ghost" size="icon" className="h-8 w-8 px-0">
-              <Link href="/support" target="_blank" rel="noreferrer">
+              <Link href={PagesRoutes.Support} target="_blank" rel="noreferrer">
                 <HelpCircle className="h-4 w-4" />
                 <span className="sr-only">Support</span>
               </Link>

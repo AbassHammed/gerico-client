@@ -1,5 +1,6 @@
 import Link from 'next/link';
 
+import { PagesRoutes } from '@/lib/constants';
 import { Alert_Shadcn, AlertDescription_Shadcn, AlertTitle_Shadcn, Button, WarningIcon } from '@ui';
 
 export interface AlertErrorProps {
@@ -30,7 +31,7 @@ const AlertError = ({ subject, error, className }: AlertErrorProps) => {
         </div>
         <div>
           <Button asChild type="warning">
-            <Link href={'/support'}>Support</Link>
+            <Link href={PagesRoutes.Support}>Support</Link>
           </Button>
         </div>
       </AlertDescription_Shadcn>

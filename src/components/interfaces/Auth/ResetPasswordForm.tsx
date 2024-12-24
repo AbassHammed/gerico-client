@@ -16,6 +16,7 @@ import {
 } from '@/components/ui';
 import { FormItemLayout } from '@/components/ui/form/FormItemLayout';
 import { useResetPassword } from '@/hooks/useResetPassword';
+import { PagesRoutes } from '@/lib/constants';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { getCookie } from 'cookies-next';
 import { Eye, EyeOff } from 'lucide-react';
@@ -65,7 +66,7 @@ export const ResetPasswordForm = () => {
       const res = await resetPassword(inputs);
       if (res) {
         toast.success('Mot de passe réinitialisé avec succès');
-        router.push('/auth/sign-in');
+        router.push(PagesRoutes.Auth_SignIn);
         return;
       }
     } catch (error: any) {

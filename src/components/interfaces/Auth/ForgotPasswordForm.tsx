@@ -4,6 +4,7 @@
 import { useRouter } from 'next/navigation';
 
 import { useForgotPassword } from '@/hooks/useForgotPassword';
+import { PagesRoutes } from '@/lib/constants';
 import { Button, Form, Input } from '@ui';
 import { toast } from 'sonner';
 import { object, string } from 'yup';
@@ -22,7 +23,7 @@ const ForgotPasswordForm = () => {
       toast.success(
         `Si vous vous êtes inscrit avec votre email et mot de passe, vous recevrez un email de réinitialisation.`,
       );
-      router.push('/auth/reset-password');
+      router.push(PagesRoutes.Auth_ResetPassword);
     } catch (error: any) {
       toast.error('Opération invalide', {
         description: error.message,

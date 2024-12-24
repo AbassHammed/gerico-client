@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 
 import { useUser } from '@/hooks/useUser';
+import { PagesRoutes } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 import {
   Button,
@@ -44,7 +45,7 @@ const NavigationBar = () => {
 
   const onSignOut = async () => {
     deleteCookie('auth_token');
-    router.push('/auth/sign-in');
+    router.push(PagesRoutes.Auth_SignIn);
   };
 
   const UserAccountButton = (

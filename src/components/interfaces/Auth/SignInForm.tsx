@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import useLogin from '@/hooks/useLogin';
+import { PagesRoutes } from '@/lib/constants';
 import { Button, Form, Input } from '@ui';
 import { Eye, EyeOff } from 'lucide-react';
 import { toast } from 'sonner';
@@ -33,7 +34,7 @@ const SignInForm = () => {
           toast.success(`Vous utilisez un mot de passe par défaut, vous devez le changer`, {
             id: toastId,
           });
-          router.replace('/auth/change-password');
+          router.replace(PagesRoutes.Auth_ChangeDefaultPassword);
           return;
         }
       }
@@ -85,7 +86,7 @@ const SignInForm = () => {
             />
 
             <Link
-              href="/auth/forgot-password"
+              href={PagesRoutes.Auth_ForgotPassword}
               className="absolute top-0 right-0 text-sm text-foreground-lighter">
               Mot de passe oublié ?
             </Link>

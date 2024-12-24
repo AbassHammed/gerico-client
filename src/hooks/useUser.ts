@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 
 import { useRouter } from 'next/navigation';
 
+import { PagesRoutes } from '@/lib/constants';
 import type { IUser } from '@/types';
 
 import { useApiGet } from './useApi';
@@ -15,7 +16,7 @@ export function useUser() {
   useEffect(() => {
     if (error) {
       const currentPath = encodeURIComponent(window.location.pathname + window.location.search);
-      const signInUrl = `/auth/sign-in?redirect=${currentPath}`;
+      const signInUrl = `${PagesRoutes.Auth_SignIn}?redirect=${currentPath}`;
       router.push(signInUrl);
     }
   }, [error, router]);
