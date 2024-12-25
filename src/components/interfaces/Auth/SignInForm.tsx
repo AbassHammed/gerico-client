@@ -4,10 +4,11 @@
 import { useState } from 'react';
 
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 import useLogin from '@/hooks/useLogin';
 import { PagesRoutes } from '@/lib/constants';
+import { IUser } from '@/types';
 import { Button, Form, Input } from '@ui';
 import { Eye, EyeOff } from 'lucide-react';
 import { toast } from 'sonner';
@@ -20,30 +21,42 @@ const signInSchema = object({
 
 const SignInForm = () => {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const { login, loading } = useLogin();
   const [passwordHidden, setPasswordHidden] = useState(true);
+
+  const handleSuccessfulLogin = (user: IUser, code: string | null, toastId: string | number) => {
+    if (code === 'DEFAULTPASS') {
+      toast.warning(`Vous utilisez un mot de passe par défaut, vous devez le changer`, {
+        id: toastId,
+      });
+      router.replace(PagesRoutes.Auth_ChangeDefaultPassword);
+      return;
+    }
+
+    toast.success(`Connexion réussie !`, { id: toastId });
+    const redirectUrl = sessionStorage.getItem('redirectTo');
+    if (redirectUrl) {
+      sessionStorage.removeItem('redirectTo');
+      router.push(redirectUrl);
+    } else {
+      if (user.is_admin) {
+        router.push(PagesRoutes.Admin_Dashboard);
+      } else {
+        router.push(PagesRoutes.Employee_Home);
+      }
+    }
+  };
 
   const onSignIn = async ({ email, password }: { email: string; password: string }) => {
     const toastId = toast.loading('Connexion en cours...');
 
     try {
-      const { code } = await login({ email, password });
-      if (code) {
-        if (code === 'DEFAULTPASS') {
-          toast.success(`Vous utilisez un mot de passe par défaut, vous devez le changer`, {
-            id: toastId,
-          });
-          router.replace(PagesRoutes.Auth_ChangeDefaultPassword);
-          return;
-        }
+      const { code, user } = await login({ email, password });
+      if (user) {
+        handleSuccessfulLogin(user, code, toastId);
       }
-
-      toast.success(`Connexion réussie !`, { id: toastId });
-      const redirectTo = searchParams.get('redirect') || PagesRoutes.Admin_Dashboard;
-      router.push(decodeURIComponent(redirectTo));
     } catch (error: any) {
-      toast.error(`Échec de la connexion : ${error.message}`, { id: toastId });
+      toast.error(`Échec de la connexion`, { id: toastId, description: error.message });
     }
   };
 

@@ -92,7 +92,9 @@ const UserLeaveTable = () => {
           <>
             {leaves.length === 0 ? (
               <div className="bg-surface-100 border rounded p-4 flex items-center justify-center">
-                <p className="prose text-sm">You do not have any leave request available yet</p>
+                <p className="prose text-sm">
+                  Vous n'avez pas encore de demande de congé disponible
+                </p>
               </div>
             ) : leaves.length > 0 && sortedLeaves.length === 0 ? (
               <div className="bg-surface-100 border rounded p-4 flex items-center justify-center">
@@ -193,8 +195,8 @@ const UserLeaveTable = () => {
                         <div className="flex items-center justify-between">
                           <p className="text-sm opacity-50">
                             {pagination?.totalItems
-                              ? `Showing ${Math.min(offset + 1, pagination.totalItems)} to ${Math.min(offset + leaves.length, pagination.totalItems)} out of ${pagination.totalItems} payslips`
-                              : 'No payslips to display'}
+                              ? `Affichage de ${Math.min(offset + 1, pagination.totalItems)} à ${Math.min(offset + leaves.length, pagination.totalItems)} sur ${pagination.totalItems} demandes de congé`
+                              : 'Aucune demande de congé à afficher'}
                           </p>
                           <div className="flex items-center space-x-6 lg:space-x-8">
                             <div className="flex items-center space-x-2">

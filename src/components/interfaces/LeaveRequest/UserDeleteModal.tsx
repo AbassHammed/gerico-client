@@ -39,7 +39,7 @@ const UserDeleteLeaveRequestModal: React.FC<
       disabled={loading}
       title="Confirmation d'archivage"
       confirmLabel="Archiver"
-      variant="warning"
+      variant="destructive"
       alert={{
         title: "Modification de l'état de la demande de congé",
         description: (

@@ -43,7 +43,7 @@ const NavigationBar = () => {
   const toolRoutes = generateToolRoutes();
   const settingsRoutes = generateSettingsRoutes();
 
-  const onSignOut = async () => {
+  const onSignOut = () => {
     deleteCookie('auth_token');
     router.push(PagesRoutes.Auth_SignIn);
   };

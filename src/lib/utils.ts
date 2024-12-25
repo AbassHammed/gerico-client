@@ -1,7 +1,14 @@
-import { ISSThreshold } from '@/types';
+import { ILeaveRequest, ISSThreshold } from '@/types';
 import * as chrono from 'chrono-node';
 import { clsx, type ClassValue } from 'clsx';
-import { differenceInHours, eachDayOfInterval, endOfDay, isWeekend, startOfDay } from 'date-fns';
+import {
+  differenceInHours,
+  eachDayOfInterval,
+  endOfDay,
+  isWeekend,
+  isWithinInterval,
+  startOfDay,
+} from 'date-fns';
 import Holidays from 'date-holidays';
 import { twMerge } from 'tailwind-merge';
 
@@ -197,4 +204,14 @@ export function getWorkingDaysBetweenDates(startDate: Date, endDate: Date): numb
   }, 0);
 
   return workingDays;
+}
+
+export function isUserOnLeave(leaveRequests: ILeaveRequest[]): boolean {
+  const now = new Date();
+  return leaveRequests.some(request =>
+    isWithinInterval(now, {
+      start: new Date(request.start_date),
+      end: new Date(request.end_date),
+    }),
+  );
 }

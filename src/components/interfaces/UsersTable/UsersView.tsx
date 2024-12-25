@@ -40,8 +40,12 @@ const UsersView = ({ searchString }: MembersViewProps) => {
 
   const filteredMembers = allMembers
     .filter(member => !searchString || matchesSearch(member, searchString))
-    .sort(sortByArchiveAndName);
-
+    .sort(sortByArchiveAndName)
+    .sort((a, b) =>
+      dateSortDesc
+        ? Number(new Date(b.hire_date)) - Number(new Date(a.hire_date))
+        : Number(new Date(a.hire_date)) - Number(new Date(b.hire_date)),
+    );
   return (
     <>
       {isLoadingMembers && <GenericSkeletonLoader />}
@@ -55,11 +59,11 @@ const UsersView = ({ searchString }: MembersViewProps) => {
           <Loading active={!filteredMembers}>
             <Table
               head={[
-                <Table.th key="header-user">User</Table.th>,
+                <Table.th key="header-user">Employé</Table.th>,
                 <Table.th key="header-status" className="w-24" />,
                 <Table.th key="header-hire-date">
                   <div className="flex items-center space-x-2">
-                    <p>Hire Date</p>
+                    <p>Date d'embauche</p>
 
                     <Tooltip.Root delayDuration={0}>
                       <Tooltip.Trigger asChild>
@@ -86,7 +90,9 @@ const UsersView = ({ searchString }: MembersViewProps) => {
                                 'border border-background',
                               ].join(' ')}>
                               <span className="text-xs text-foreground">
-                                {dateSortDesc ? 'Sort latest first' : 'Sort earliest first'}
+                                {dateSortDesc
+                                  ? 'Trier par date croissante'
+                                  : 'Trier par date décroissante'}
                               </span>
                             </div>
                           </Tooltip.Content>
@@ -97,7 +103,7 @@ const UsersView = ({ searchString }: MembersViewProps) => {
                 </Table.th>,
                 <Table.th key="header-role">
                   <div className="flex items-center space-x-2">
-                    <span>Role</span>
+                    <span>Poste</span>
                   </div>
                 </Table.th>,
                 <Table.th key="header-action" />,
@@ -111,7 +117,7 @@ const UsersView = ({ searchString }: MembersViewProps) => {
                           <div className="flex items-center space-x-3 opacity-75">
                             <AlertCircle size={16} strokeWidth={2} />
                             <p className="text-foreground-light">
-                              No users matched the search query "{searchString}"
+                              Aucun employé ne correspond à la requête de recherche "{searchString}"
                             </p>
                           </div>
                         </Table.td>
@@ -122,7 +128,7 @@ const UsersView = ({ searchString }: MembersViewProps) => {
                   <Table.td colSpan={12}>
                     <p className="text-foreground-light">
                       {searchString ? `${filteredMembers.length} of ` : ''}
-                      {allMembers.length || '0'} {allMembers.length === 1 ? 'user' : 'users'}
+                      {allMembers.length || '0'} {allMembers.length === 1 ? 'employé' : 'employés'}
                     </p>
                   </Table.td>
                 </Table.tr>,
