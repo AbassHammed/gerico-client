@@ -1,7 +1,7 @@
 import { CalendarDateIcon } from '@/components/ui';
 import { PagesRoutes } from '@/lib/constants';
 import { IRoute } from '@/types';
-import { ArrowLeft, FilePen, Files, Plus, Settings, Users } from 'lucide-react';
+import { ArrowLeft, CalendarArrowUp, FilePen, Files, Plus, Settings, Users } from 'lucide-react';
 
 export const ICON_SIZE = 20;
 export const ICON_STROKE_WIDTH = 1.5;
@@ -54,6 +54,12 @@ export const generateToolRoutes = (): IRoute[] => [
     label: 'Payslip list',
     icon: <Files size={ICON_SIZE} strokeWidth={ICON_STROKE_WIDTH} />,
     link: PagesRoutes.Admin_AllPayslips,
+  },
+  {
+    key: 'approve:leaves',
+    label: 'Approve leaves',
+    icon: <CalendarArrowUp size={ICON_SIZE} strokeWidth={ICON_STROKE_WIDTH} />,
+    link: PagesRoutes.Admin_ApproveLeaves,
   },
 ];
 

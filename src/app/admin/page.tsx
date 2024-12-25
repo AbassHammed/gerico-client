@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 
+import { EmployeePresence } from '@/components/interfaces/Auth/LeaveChart';
 import { generateToolRoutes } from '@/components/layouts/DashboardLayout/NavigationBar/NavigationBar.utils';
 import { Button } from '@/components/ui';
 import { siteConfig } from '@/config/site';
@@ -53,7 +54,7 @@ export default function dashboardPage() {
                     ))}
                   </div>
                 </div>
-                <div className="col-span-12 lg:col-span-5">{/* <GetStartedHero /> */}</div>
+                <div className="col-span-12 lg:col-span-5">{<EmployeePresence />}</div>
               </div>
             </div>
           </div>

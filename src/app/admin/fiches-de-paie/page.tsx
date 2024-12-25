@@ -1,12 +1,25 @@
 import { Suspense } from 'react';
 
-import DashboardPayslipList from '@/components/interfaces/Payslip/DashboardPayslipList';
-import { LoadingV2 } from '@/components/ui';
+import DashboardPayslipList from '@/components/interfaces/Payslip/AdminPayslipList';
+import {
+  LoadingV2,
+  ScaffoldContainer,
+  ScaffoldDivider,
+  ScaffoldHeader,
+  ScaffoldTitle,
+} from '@/components/ui';
 
-export default function DashboardPayslipPage() {
-  return (
-    <Suspense fallback={<LoadingV2 />}>
-      <DashboardPayslipList />
-    </Suspense>
-  );
-}
+const DashboardPayslipPage = () => (
+  <Suspense fallback={<LoadingV2 />}>
+    <ScaffoldHeader className="pb-0">
+      <ScaffoldContainer>
+        <ScaffoldTitle className="pb-3">Fiches de paie</ScaffoldTitle>
+      </ScaffoldContainer>
+    </ScaffoldHeader>
+
+    <ScaffoldDivider />
+    <DashboardPayslipList />
+  </Suspense>
+);
+
+export default DashboardPayslipPage;

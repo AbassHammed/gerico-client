@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from '@/components/ui/shadcn/ui/select';
 import { useLeaveRequestForUser } from '@/hooks/useFetchLeave';
+import { PAGE_LIMIT } from '@/lib/constants';
 import { getWorkingDaysBetweenDates } from '@/lib/utils';
 import { ILeaveRequest } from '@/types';
 import * as Tooltip from '@radix-ui/react-tooltip';
@@ -21,13 +22,11 @@ import { ArrowDown, ArrowUp, ChevronLeft, ChevronRight } from 'lucide-react';
 import LeaveStatusBadge, { LeaveStatusEnum } from './LeaveStatusBadge';
 import UserDeleteLeaveRequestModal from './UserDeleteModal';
 
-const LeaveStatus = [
+export const LeaveStatus = [
   { label: 'Pending', value: LeaveStatusEnum.WAITING },
   { label: 'Approved', value: LeaveStatusEnum.ACCEPTED },
   { label: 'Rejected', value: LeaveStatusEnum.REFUSED },
 ];
-
-const PAGE_LIMIT = 10;
 
 const UserLeaveTable = () => {
   const [dateSortDesc, setDateSortDesc] = useState(true);

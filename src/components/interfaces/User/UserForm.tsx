@@ -6,7 +6,6 @@ import {
   Form,
   FormActions,
   FormField,
-  FormHeader,
   FormPanel,
   FormSection,
   FormSectionContent,
@@ -47,13 +46,6 @@ const UserForm = ({ isUpdatePage = false, defaultUser, onSubmit, isSubmitting }:
 
         return (
           <>
-            <FormHeader
-              description={
-                isUpdatePage
-                  ? "Modifier les informations de l'employé"
-                  : "Formulaire de création d'un nouvel employé"
-              }
-            />
             <FormPanel
               footer={
                 <div className="flex py-4 px-8">

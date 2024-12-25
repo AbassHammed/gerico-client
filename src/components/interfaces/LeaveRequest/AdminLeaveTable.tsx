@@ -1,6 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+
+import Image from 'next/image';
 
 import { AlertError, Button, FilterPopover, ShimmeringLoader, Table } from '@/components/ui';
 import {
@@ -10,25 +12,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/shadcn/ui/select';
-import { useLeaveRequestForUser } from '@/hooks/useFetchLeave';
+import { useEmployees } from '@/hooks/useEmployees';
+import { useLeaveRequestQuery } from '@/hooks/useFetchLeave';
+import { PAGE_LIMIT } from '@/lib/constants';
 import { getWorkingDaysBetweenDates } from '@/lib/utils';
-import { ILeaveRequest } from '@/types';
+import { ILeaveRequest, IUser } from '@/types';
 import * as Tooltip from '@radix-ui/react-tooltip';
 import dayjs from 'dayjs';
 import { ArrowDown, ArrowUp, ChevronLeft, ChevronRight } from 'lucide-react';
 
 import LeaveStatusBadge, { LeaveStatusEnum } from './LeaveStatusBadge';
 import UserDeleteLeaveRequestModal from './UserDeleteModal';
+import { LeaveStatus } from './UserLeaveTable';
 
-const LeaveStatus = [
-  { label: 'Pending', value: LeaveStatusEnum.WAITING },
-  { label: 'Approved', value: LeaveStatusEnum.ACCEPTED },
-  { label: 'Rejected', value: LeaveStatusEnum.REFUSED },
-];
+type IUserAndILeaveRequest = ILeaveRequest & IUser;
 
-const PAGE_LIMIT = 10;
-
-const UserLeaveTable = () => {
+const AdminLeaveTable = () => {
+  const { employees, isLoading: employeesLoading, error: employeesError } = useEmployees();
   const [dateSortDesc, setDateSortDesc] = useState(true);
   const [selectedLeave, setSelectedLeave] = useState<ILeaveRequest>();
   const [filter, setFilter] = useState<string>();
@@ -44,9 +44,11 @@ const UserLeaveTable = () => {
     isLoading: leaveLoading,
     error: leaveError,
     isSuccess,
-  } = useLeaveRequestForUser({ page: page, limit: pageSize, offset });
+  } = useLeaveRequestQuery({ page: page, limit: pageSize, offset }, filter ?? '');
 
-  const leaves = data || [];
+  const leaves = data ?? [];
+  const users = employees ?? [];
+
   const sortedLeaves = leaves
     .sort((a, b) =>
       dateSortDesc
@@ -59,6 +61,24 @@ const UserLeaveTable = () => {
       }
       return leave.request_status === filter;
     });
+
+  const leavesWithUser: IUserAndILeaveRequest[] = useMemo(
+    () =>
+      sortedLeaves
+        .map(leave => {
+          const user = users.find(user => user.uid === leave.uid);
+          if (user) {
+            return {
+              // there is something tricky here, both the user and the leave object have a created_at field, but we only want the leave one
+              ...user,
+              ...leave,
+            };
+          }
+          return undefined;
+        })
+        .filter((payslip): payslip is IUserAndILeaveRequest => payslip !== undefined),
+    [sortedLeaves, users],
+  );
 
   return (
     <>
@@ -77,7 +97,7 @@ const UserLeaveTable = () => {
           </div>
         </div>
 
-        {leaveLoading && (
+        {(leaveLoading || employeesLoading) && (
           <div className="space-y-2">
             <ShimmeringLoader />
             <ShimmeringLoader className="w-3/4" />
@@ -85,7 +105,9 @@ const UserLeaveTable = () => {
           </div>
         )}
 
-        {leaveError && <AlertError error={leaveError} subject="Failed to retrieve leaves" />}
+        {(leaveError || employeesError) && (
+          <AlertError error={leaveError || employeesError} subject="Failed to retrieve leaves" />
+        )}
 
         {isSuccess && (
           <>
@@ -100,6 +122,9 @@ const UserLeaveTable = () => {
             ) : (
               <Table
                 head={[
+                  <Table.th key="user" className="py-2">
+                    Employé
+                  </Table.th>,
                   <Table.th key="created_at" className="py-2">
                     <div className="flex items-center space-x-2">
                       <p>Date Demande</p>
@@ -140,25 +165,16 @@ const UserLeaveTable = () => {
                       </Tooltip.Root>
                     </div>
                   </Table.th>,
-                  <Table.th key="start_date" className="py-2">
-                    Début Congé
-                  </Table.th>,
-                  <Table.th key="end_date" className="py-2">
-                    Fin Congé
-                  </Table.th>,
                   <Table.th key="days" className="py-2">
                     Nombre de jours
                   </Table.th>,
                   <Table.th key="status" className="py-2">
                     Statut
                   </Table.th>,
-                  <Table.th key="motif" className="py-2">
-                    Motif
-                  </Table.th>,
                 ]}
                 body={
                   <>
-                    {sortedLeaves.map(leave => (
+                    {leavesWithUser.map(leave => (
                       <Table.tr
                         key={leave.leave_request_id}
                         onClick={() => {
@@ -166,22 +182,27 @@ const UserLeaveTable = () => {
                           setIsModalOpen(true);
                         }}
                         className="cursor-pointer hover:!bg-alternative transition duration-100">
+                        <Table.td>
+                          <div className="flex items-center space-x-4">
+                            <div>
+                              <Image
+                                alt={leave.first_name}
+                                src={`https://avatar.vercel.sh/${leave.uid}.png?size=80`}
+                                width="40"
+                                height="40"
+                                className="border rounded-full"
+                              />
+                            </div>
+                            <div className="flex item-center gap-x-2">
+                              <p className="text-foreground-light truncate">{`${leave.last_name} ${leave.first_name}`}</p>
+                            </div>
+                          </div>
+                        </Table.td>
                         <Table.td>{dayjs(leave.created_at).format('DD MMM YYYY, HH:mm')}</Table.td>
-                        <Table.td>{dayjs(leave.start_date).format('DD MMM YYYY, HH:mm')}</Table.td>
-                        <Table.td>{dayjs(leave.end_date).format('DD MMM YYYY, HH:mm')}</Table.td>
                         <Table.td>{`${getWorkingDaysBetweenDates(leave.start_date, leave.end_date)} jours`}</Table.td>
                         <Table.td>
-                          <LeaveStatusBadge
-                            status={
-                              leave.request_status === 'approved'
-                                ? LeaveStatusEnum.ACCEPTED
-                                : leave.request_status === 'rejected'
-                                  ? LeaveStatusEnum.REFUSED
-                                  : LeaveStatusEnum.WAITING
-                            }
-                          />
+                          <LeaveStatusBadge status={leave.request_status as LeaveStatusEnum} />
                         </Table.td>
-                        <Table.td>{leave.leave_type}</Table.td>
                       </Table.tr>
                     ))}
 
@@ -249,4 +270,4 @@ const UserLeaveTable = () => {
   );
 };
 
-export default UserLeaveTable;
+export default AdminLeaveTable;

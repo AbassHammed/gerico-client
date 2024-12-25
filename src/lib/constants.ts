@@ -92,3 +92,5 @@ export enum PagesRoutes {
    */
   Admin_AllPayslips = '/admin/fiches-de-paie',
 }
+
+export const PAGE_LIMIT = 10;

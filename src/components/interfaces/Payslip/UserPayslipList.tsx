@@ -17,6 +17,7 @@ import {
 } from '@/components/ui';
 import { usePayslipsQueryForUser } from '@/hooks/usePayslips';
 import { useUser } from '@/hooks/useUser';
+import { PAGE_LIMIT } from '@/lib/constants';
 import { downloadFile } from '@/lib/utils';
 import { endOfDay, isAfter, startOfDay, subDays } from 'date-fns';
 import dayjs from 'dayjs';
@@ -26,8 +27,6 @@ import PayslipListHeader from './Header';
 import { filterPayslips } from './Payslip.utils';
 import PaySlipBadge, { PayslipStatus } from './PayslipBadge';
 import PdfViewerModal from './PayslipPDFModal';
-
-const PAGE_LIMIT = 10;
 
 const UserPayslipList = () => {
   const { user, isLoading: userLoading, error: userError } = useUser();

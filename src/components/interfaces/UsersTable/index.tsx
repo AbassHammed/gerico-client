@@ -15,7 +15,7 @@ const Users = () => {
       <ScaffoldHeader className="pb-0">
         <ScaffoldContainer id="billing-page-top">
           <ScaffoldTitle className="pb-3">
-            {companyInfo?.name ?? 'Organization'} Employees
+            Les employés de {companyInfo?.name ?? 'votre entreprise'}
           </ScaffoldTitle>
         </ScaffoldContainer>
       </ScaffoldHeader>

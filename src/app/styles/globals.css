@@ -53,6 +53,11 @@
     --chart-3: 216 92% 60%;
     --chart-4: 210 98% 78%;
     --chart-5: 212 97% 87%;
+    --color-present: hsl(var(--chart-1));
+    --color-absent: hsl(var(--chart-2));
+    --color-leave-1: hsl(var(--chart-3));
+    --color-leave-2: hsl(var(--chart-4));
+    --color-leave-3: hsl(var(--chart-5));
   }
 }
 

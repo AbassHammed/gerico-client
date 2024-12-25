@@ -7,7 +7,6 @@ import { useSearchParams } from 'next/navigation';
 import {
   AlertError,
   Button,
-  FormHeader,
   GenericSkeletonLoader,
   ScaffoldActionsContainer,
   ScaffoldContainerLegacy,
@@ -17,6 +16,7 @@ import {
 } from '@/components/ui';
 import { useEmployees } from '@/hooks/useEmployees';
 import { usePayslipsQuery } from '@/hooks/usePayslips';
+import { PAGE_LIMIT } from '@/lib/constants';
 import { downloadFile, formatLastName, shortenCivility } from '@/lib/utils';
 import { IPayslip } from '@/types';
 import { endOfDay, isAfter, startOfDay, subDays } from 'date-fns';
@@ -27,8 +27,6 @@ import PayslipListHeader from './Header';
 import { filterPayslips } from './Payslip.utils';
 import PaySlipBadge, { PayslipStatus } from './PayslipBadge';
 import PdfViewerModal from './PayslipPDFModal';
-
-const PAGE_LIMIT = 10;
 
 type PayslipWithUserInfo = IPayslip & {
   first_name: string;
@@ -107,10 +105,7 @@ const DashboardPayslipList = () => {
   );
 
   return (
-    <ScaffoldContainerLegacy className="gap-0">
-      <div className="flex items-center justify-between">
-        <FormHeader title="Fiches de paie" description="Retrouvez ici toutes les fiches de paie." />
-      </div>
+    <ScaffoldContainerLegacy>
       {(employeesLoading || payslipLoading) && <GenericSkeletonLoader />}
 
       {(employeesError || payslipError) && (
