@@ -40,6 +40,21 @@ export function useLeaveRequestQuery(params?: PaginationParams, status?: string)
   };
 }
 
+export function useUpcomingLeaveRequestsUser(uid: string) {
+  const { data, error, isLoading, success } = useApiGet<ILeaveRequest[]>(
+    `/leave-requests/upcoming/${uid}`,
+    undefined,
+    true,
+  );
+
+  return {
+    leaves: data,
+    error,
+    isLoading,
+    isSuccess: success,
+  };
+}
+
 export function useLeaveRequestForUser(params?: PaginationParams, status: string = '') {
   const { data, error, isLoading, success } = useApiGet<PaginatedResult<ILeaveRequest>>(
     `/leave-requests/me?page=${params?.page}&limit=${params?.limit}&offset=${params?.offset}&status=${status ?? ''}`,

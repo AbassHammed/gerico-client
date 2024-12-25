@@ -238,7 +238,7 @@ module.exports = {
         'bounce-dot1': 'bounce 1s infinite 0.1s',
         'bounce-dot2': 'bounce 1s infinite 0.2s',
         'bounce-dot3': 'bounce 1s infinite 0.3s',
-        flip: 'flip 1.5s ease-in-out infinite',
+        flip: 'flip 1s ease-in-out infinite',
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         'caret-blink': 'caret-blink 1.25s ease-out infinite',

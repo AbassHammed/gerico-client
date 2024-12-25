@@ -1,11 +1,11 @@
 'use client';
 
-import Loader, { LoaderProps } from './Loader';
+import LoaderV2 from './Loader';
 
-export default function Loading({ size, desktopSize, mobileSize, boxColors }: LoaderProps) {
+export default function LoadingV2() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
-      <Loader size={size} desktopSize={desktopSize} mobileSize={mobileSize} boxColors={boxColors} />
+      <LoaderV2 />
     </div>
   );
 }

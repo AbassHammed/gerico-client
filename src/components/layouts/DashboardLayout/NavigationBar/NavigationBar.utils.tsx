@@ -31,17 +31,18 @@ export const generateDateRoute = (): IRoute[] => {
 
 export const generateToolRoutes = (): IRoute[] => [
   {
-    key: 'new:user',
-    label: 'Create new employee',
-    icon: <Plus size={ICON_SIZE} strokeWidth={ICON_STROKE_WIDTH} />,
-    link: PagesRoutes.Admin_CreateEmployee,
-  },
-  {
     key: 'all:employees',
     label: 'All employees',
     icon: <Users size={ICON_SIZE} strokeWidth={ICON_STROKE_WIDTH} />,
     link: PagesRoutes.Admin_Employees,
   },
+  {
+    key: 'new:user',
+    label: 'Create new employee',
+    icon: <Plus size={ICON_SIZE} strokeWidth={ICON_STROKE_WIDTH} />,
+    link: PagesRoutes.Admin_CreateEmployee,
+  },
+
   {
     key: 'create:payslip',
     label: 'Create payslip',

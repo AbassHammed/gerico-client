@@ -1,48 +1,21 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import React from 'react';
 
-import styles from './Loader.module.css';
-
-export interface LoaderProps {
-  className?: string;
-  background?: string;
-  boxColors?: string[];
-  size?: string;
-  desktopSize?: string;
-  mobileSize?: string;
-}
-
-const Loader: React.FC<LoaderProps> = ({
-  className = '',
-  background = 'transparent',
-  boxColors = ['#333333', '#333333', '#333333'],
-  size = '64px',
-  desktopSize = '',
-  mobileSize = '',
-}) => {
-  const containerStyle = useMemo(() => {
-    const baseSize = parseInt(size);
-    const mobileWidth = mobileSize ? parseInt(mobileSize) : baseSize;
-    const desktopWidth = desktopSize ? parseInt(desktopSize) : baseSize * 2;
-
-    return {
-      '--xlvi-size-mobile': `${mobileWidth}px`,
-      '--xlvi-size-desktop': `${desktopWidth}px`,
-      '--xlvi-background': background,
-      '--xlvi-color-1': boxColors[0],
-      '--xlvi-color-2': boxColors[1] || boxColors[0],
-      '--xlvi-color-3': boxColors[2] || boxColors[0],
-    } as React.CSSProperties;
-  }, [size, mobileSize, desktopSize, background, boxColors]);
-
-  return (
-    <div className={`${styles.xlviLoader} ${className}`} style={containerStyle}>
-      <div className={`${styles.box} ${styles.box1}`} />
-      <div className={`${styles.box} ${styles.box2}`} />
-      <div className={`${styles.box} ${styles.box3}`} />
+const GericFlipFlopLoader: React.FC = () => (
+  <div className="flex items-center justify-center">
+    <span className="text-2xl font-bold text-brand-500">GERIC</span>
+    <div className="inline-block">
+      <div className="inset-0 flex items-center justify-center animate-flip">
+        <span className="text-2xl font-bold text-brand-500">O</span>
+      </div>
     </div>
-  );
-};
+    <div className="flex">
+      <span className="text-2xl font-bold text-brand-500 animate-bounce-dot1">.</span>
+      <span className="text-2xl font-bold text-brand-500 animate-bounce-dot2">.</span>
+      <span className="text-2xl font-bold text-brand-500 animate-bounce-dot3">.</span>
+    </div>
+  </div>
+);
 
-export default Loader;
+export default GericFlipFlopLoader;

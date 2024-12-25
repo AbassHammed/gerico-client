@@ -17,7 +17,6 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-  Home,
   Separator,
 } from '@ui';
 import { deleteCookie } from 'cookies-next';
@@ -26,10 +25,10 @@ import {
   generateDateRoute,
   generateSettingsRoutes,
   generateToolRoutes,
-  ICON_SIZE,
-  ICON_STROKE_WIDTH,
 } from './NavigationBar.utils';
 import NavigationIconLink from './NavigationIconLink';
+
+const UPDATE_LINK_REGEXP = /^\/admin\/employes\/[^/]+\/maj\/?$/;
 
 const NavigationBar = () => {
   const pathname = usePathname();
@@ -132,21 +131,16 @@ const NavigationBar = () => {
               isActive={activeRoute === route.link}
             />
           ))}
-          <NavigationIconLink
-            isActive={activeRoute === PagesRoutes.Admin_Dashboard}
-            route={{
-              key: 'HOME',
-              label: 'Home',
-              icon: <Home size={ICON_SIZE} strokeWidth={ICON_STROKE_WIDTH} />,
-              link: PagesRoutes.Admin_Dashboard,
-            }}
-          />
           <Separator className="my-1 bg-border-muted" />
           {toolRoutes.map(route => (
             <NavigationIconLink
               key={route.key}
               route={route}
-              isActive={activeRoute === route.link}
+              isActive={
+                UPDATE_LINK_REGEXP.test(activeRoute)
+                  ? route.link === PagesRoutes.Admin_Employees
+                  : activeRoute === route.link
+              }
             />
           ))}
           <Separator className="my-1 bg-border-muted" />

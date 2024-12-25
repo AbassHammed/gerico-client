@@ -3,10 +3,7 @@ import { Metadata } from 'next';
 import Settings from '@/components/interfaces/DashboardSettings';
 
 export const metadata: Metadata = {
-  title: {
-    default: 'Settings',
-    template: '%s ~ Gerico',
-  },
+  title: 'Paramètres',
 };
 
 const SettingsPage = () => <Settings />;
