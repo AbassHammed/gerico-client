@@ -5,7 +5,7 @@ import DLayout from '@/components/layouts/DashboardLayout/DashboardLayout';
 export const metadata: Metadata = {
   title: {
     template: '%s | Administrateur | Gerico ',
-    default: 'Admin ',
+    default: 'Tableau de bord',
   },
 };
 

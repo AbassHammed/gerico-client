@@ -17,6 +17,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  Home,
   Separator,
 } from '@ui';
 import { deleteCookie } from 'cookies-next';
@@ -25,6 +26,8 @@ import {
   generateDateRoute,
   generateSettingsRoutes,
   generateToolRoutes,
+  ICON_SIZE,
+  ICON_STROKE_WIDTH,
 } from './NavigationBar.utils';
 import NavigationIconLink from './NavigationIconLink';
 
@@ -131,6 +134,15 @@ const NavigationBar = () => {
               isActive={activeRoute === route.link}
             />
           ))}
+          <NavigationIconLink
+            route={{
+              key: 'dashboard',
+              link: PagesRoutes.Admin_Dashboard,
+              icon: <Home size={ICON_SIZE} strokeWidth={ICON_STROKE_WIDTH} />,
+              label: 'Tableau de bord',
+            }}
+            isActive={activeRoute === PagesRoutes.Admin_Dashboard}
+          />
           <Separator className="my-1 bg-border-muted" />
           {toolRoutes.map(route => (
             <NavigationIconLink

@@ -34,6 +34,7 @@ export * from './shadcn/ui/badge';
 export * from './shadcn/ui/input-otp';
 export * from './shadcn/ui/skeleton';
 export * from './shadcn/ui/textarea';
+export * from './shadcn/ui/card';
 
 export * from './shadcn/ui/dialog';
 export * from './shadcn/ui/checkbox';
