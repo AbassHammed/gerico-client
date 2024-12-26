@@ -16,7 +16,6 @@ import { PAGE_LIMIT } from '@/lib/constants';
 import { getWorkingDaysBetweenDates } from '@/lib/utils';
 import { ILeaveRequest } from '@/types';
 import * as Tooltip from '@radix-ui/react-tooltip';
-import { fr } from 'date-fns/locale';
 import { ArrowDown, ArrowUp, ChevronLeft, ChevronRight } from 'lucide-react';
 
 import LeaveStatusBadge, { LeaveStatusEnum } from './LeaveStatusBadge';
@@ -170,9 +169,9 @@ const UserLeaveTable = () => {
                           setIsModalOpen(true);
                         }}
                         className="cursor-pointer hover:!bg-alternative transition duration-100">
-                        <Table.td>{formatDate(leave.created_at, fr, true, true)}</Table.td>
-                        <Table.td>{formatDate(leave.start_date, fr, true, true)}</Table.td>
-                        <Table.td>{formatDate(leave.end_date, fr, true, true)}</Table.td>
+                        <Table.td>{formatDate(leave.created_at, true, true)}</Table.td>
+                        <Table.td>{formatDate(leave.start_date, true, true)}</Table.td>
+                        <Table.td>{formatDate(leave.end_date, true, true)}</Table.td>
                         <Table.td>{`${getWorkingDaysBetweenDates(leave.start_date, leave.end_date)} jours`}</Table.td>
                         <Table.td>
                           <LeaveStatusBadge

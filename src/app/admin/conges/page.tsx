@@ -1,12 +1,34 @@
 import { Suspense } from 'react';
 
+import { Metadata } from 'next';
+
 import AdminLeaveTable from '@/components/interfaces/LeaveRequest/AdminLeaveTable';
-import { LoadingV2 } from '@/components/ui';
+import {
+  LoadingV2,
+  ScaffoldContainer,
+  ScaffoldContainerLegacy,
+  ScaffoldDivider,
+  ScaffoldHeader,
+  ScaffoldTitle,
+} from '@/components/ui';
+
+export const metadata: Metadata = {
+  title: 'Demandes de congés',
+};
 
 export default function DashboardPayslipPage() {
   return (
     <Suspense fallback={<LoadingV2 />}>
-      <AdminLeaveTable />
+      <ScaffoldHeader className="pb-0">
+        <ScaffoldContainer id="billing-page-top">
+          <ScaffoldTitle className="pb-3">Les demandes de congés</ScaffoldTitle>
+        </ScaffoldContainer>
+      </ScaffoldHeader>
+
+      <ScaffoldDivider />
+      <ScaffoldContainerLegacy>
+        <AdminLeaveTable />
+      </ScaffoldContainerLegacy>
     </Suspense>
   );
 }

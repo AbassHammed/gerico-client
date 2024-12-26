@@ -15,6 +15,13 @@ import {
   ScaffoldSectionContent,
   Table,
 } from '@/components/ui';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/shadcn/ui/select';
 import { usePayslipsQueryForUser } from '@/hooks/usePayslips';
 import { useUser } from '@/hooks/useUser';
 import { PAGE_LIMIT } from '@/lib/constants';
@@ -31,13 +38,14 @@ import PdfViewerModal from './PayslipPDFModal';
 const UserPayslipList = () => {
   const { user, isLoading: userLoading, error: userError } = useUser();
   const [page, setPage] = useState(1);
+  const [pageLimit, setPageLimit] = useState(PAGE_LIMIT);
   const [pdfModal, setPdfModal] = useState<{
     isOpen: boolean;
     filePath: string;
     startPeriod: string | Date;
   }>({ isOpen: false, filePath: '', startPeriod: '' });
 
-  const offset = (page - 1) * PAGE_LIMIT;
+  const offset = (page - 1) * pageLimit;
 
   const {
     payslips: data,
@@ -45,7 +53,7 @@ const UserPayslipList = () => {
     isLoading: payslipLoading,
     error: payslipError,
     isSuccess,
-  } = usePayslipsQueryForUser(user?.uid!, { page, limit: PAGE_LIMIT, offset });
+  } = usePayslipsQueryForUser(user?.uid!, { page, limit: pageLimit, offset });
 
   const searchParams = useSearchParams();
 
@@ -163,24 +171,43 @@ const UserPayslipList = () => {
                         <div className="flex items-center justify-between">
                           <p className="text-sm opacity-50">
                             {pagination?.totalItems
-                              ? `Affichage de ${Math.min(offset + 1, pagination.totalItems)} à ${Math.min(offset + payslips.length, pagination.totalItems)} sur un total de ${pagination.totalItems} bulletins de paie`
+                              ? `Affichage de ${Math.min(offset + 1, pagination.totalItems)} à ${Math.min(offset + filteredPayslips.length, pagination.totalItems)} sur un total de ${pagination.totalItems} bulletins de paie`
                               : 'Aucun bulletin de paie à afficher'}
                           </p>
-                          <div className="flex items-center space-x-2">
-                            <Button
-                              icon={<ChevronLeft />}
-                              type="default"
-                              size="tiny"
-                              disabled={page === 1}
-                              onClick={async () => setPage(page - 1)}
-                            />
-                            <Button
-                              icon={<ChevronRight />}
-                              type="default"
-                              size="tiny"
-                              disabled={page * PAGE_LIMIT >= (pagination?.totalItems ?? 0)}
-                              onClick={async () => setPage(page + 1)}
-                            />
+                          <div className="flex items-center space-x-6 lg:space-x-8">
+                            <div className="flex items-center space-x-2">
+                              <p className="text-sm opacity-50">Lignes par page</p>
+                              <Select
+                                onValueChange={e => setPageLimit(Number(e))}
+                                value={pageLimit.toString()}>
+                                <SelectTrigger size="tiny" className="w-16">
+                                  <SelectValue placeholder={pageLimit.toString()} />
+                                </SelectTrigger>
+                                <SelectContent side="top">
+                                  {[10, 20, 50, 100].map(size => (
+                                    <SelectItem key={size} value={size.toString()}>
+                                      {size}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <Button
+                                icon={<ChevronLeft />}
+                                type="default"
+                                size="tiny"
+                                disabled={page === 1}
+                                onClick={async () => setPage(page - 1)}
+                              />
+                              <Button
+                                icon={<ChevronRight />}
+                                type="default"
+                                size="tiny"
+                                disabled={page * pageLimit >= (pagination?.totalItems ?? 0)}
+                                onClick={async () => setPage(page + 1)}
+                              />
+                            </div>
                           </div>
                         </div>
                       </Table.td>

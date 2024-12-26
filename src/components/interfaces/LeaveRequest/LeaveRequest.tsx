@@ -35,7 +35,6 @@ import { useUser } from '@/hooks/useUser';
 import { ILeaveRequestInput } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { isAfter } from 'date-fns';
-import { fr } from 'date-fns/locale';
 import Holidays from 'date-holidays';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -70,8 +69,8 @@ const LeaveRequest = () => {
       return '';
     }
 
-    return `${range.from ? formatDate(range.from, fr, true) : ''} - ${
-      range.to ? formatDate(range.to, fr, true) : ''
+    return `${range.from ? formatDate(range.from, true) : ''} - ${
+      range.to ? formatDate(range.to, true) : ''
     }`;
   }, [range]);
 

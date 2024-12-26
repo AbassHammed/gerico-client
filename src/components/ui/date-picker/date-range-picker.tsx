@@ -108,10 +108,8 @@ const DateRangePickerInner = ({
       return null;
     }
 
-    return `${range.from ? formatDate(range.from, locale) : ''} - ${
-      range.to ? formatDate(range.to, locale) : ''
-    }`;
-  }, [range, locale]);
+    return `${range.from ? formatDate(range.from) : ''} - ${range.to ? formatDate(range.to) : ''}`;
+  }, [range]);
 
   return (
     <DatePickerContext.Provider value={{ isOpen: open, setIsOpen: setOpen }}>

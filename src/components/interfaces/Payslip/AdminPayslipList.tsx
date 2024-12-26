@@ -14,6 +14,13 @@ import {
   ScaffoldSectionContent,
   Table,
 } from '@/components/ui';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/shadcn/ui/select';
 import { useEmployees } from '@/hooks/useEmployees';
 import { usePayslipsQuery } from '@/hooks/usePayslips';
 import { PAGE_LIMIT } from '@/lib/constants';
@@ -37,13 +44,14 @@ type PayslipWithUserInfo = IPayslip & {
 const DashboardPayslipList = () => {
   const { employees, isLoading: employeesLoading, error: employeesError } = useEmployees();
   const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(PAGE_LIMIT);
   const [pdfModal, setPdfModal] = useState<{
     isOpen: boolean;
     filePath: string;
     startPeriod: string | Date;
   }>({ isOpen: false, filePath: '', startPeriod: '' });
 
-  const offset = (page - 1) * PAGE_LIMIT;
+  const offset = (page - 1) * pageSize;
 
   const {
     payslips: data,
@@ -51,7 +59,7 @@ const DashboardPayslipList = () => {
     isLoading: payslipLoading,
     error: payslipError,
     isSuccess,
-  } = usePayslipsQuery({ page, limit: PAGE_LIMIT, offset });
+  } = usePayslipsQuery({ page, limit: pageSize, offset });
 
   const showPdf = useCallback(
     ({ filePath, startPeriod }: { filePath: string; startPeriod: string | Date }) => {
@@ -189,25 +197,44 @@ const DashboardPayslipList = () => {
                       <Table.td colSpan={6}>
                         <div className="flex items-center justify-between">
                           <p className="text-sm opacity-50">
-                            {`Showing ${offset + 1} to ${
-                              offset + payslips.length
-                            } out of ${pagination?.totalItems} payslips`}
+                            {pagination?.totalItems
+                              ? `Affichage de ${Math.min(offset + 1, pagination.totalItems)} à ${Math.min(offset + filteredPayslips.length, pagination.totalItems)} sur un total de ${pagination.totalItems} bulletins de paie`
+                              : 'Aucun bulletin de paie à afficher'}
                           </p>
-                          <div className="flex items-center space-x-2">
-                            <Button
-                              icon={<ChevronLeft />}
-                              type="default"
-                              size="tiny"
-                              disabled={page === 1}
-                              onClick={async () => setPage(page - 1)}
-                            />
-                            <Button
-                              icon={<ChevronRight />}
-                              type="default"
-                              size="tiny"
-                              disabled={page * PAGE_LIMIT >= (pagination?.totalItems ?? 0)}
-                              onClick={async () => setPage(page + 1)}
-                            />
+                          <div className="flex items-center space-x-6 lg:space-x-8">
+                            <div className="flex items-center space-x-2">
+                              <p className="text-sm opacity-50">Lignes par page</p>
+                              <Select
+                                onValueChange={e => setPageSize(Number(e))}
+                                value={pageSize.toString()}>
+                                <SelectTrigger size="tiny" className="w-16">
+                                  <SelectValue placeholder={pageSize.toString()} />
+                                </SelectTrigger>
+                                <SelectContent side="top">
+                                  {[10, 20, 50, 100].map(size => (
+                                    <SelectItem key={size} value={size.toString()}>
+                                      {size}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <Button
+                                icon={<ChevronLeft />}
+                                type="default"
+                                size="tiny"
+                                disabled={page === 1}
+                                onClick={async () => setPage(page - 1)}
+                              />
+                              <Button
+                                icon={<ChevronRight />}
+                                type="default"
+                                size="tiny"
+                                disabled={page * pageSize >= (pagination?.totalItems ?? 0)}
+                                onClick={async () => setPage(page + 1)}
+                              />
+                            </div>
                           </div>
                         </div>
                       </Table.td>

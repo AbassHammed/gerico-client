@@ -1,5 +1,7 @@
 import { Suspense } from 'react';
 
+import { Metadata } from 'next';
+
 import DashboardPayslipList from '@/components/interfaces/Payslip/AdminPayslipList';
 import {
   LoadingV2,
@@ -8,6 +10,10 @@ import {
   ScaffoldHeader,
   ScaffoldTitle,
 } from '@/components/ui';
+
+export const metadata: Metadata = {
+  title: 'Fiches de paie',
+};
 
 const DashboardPayslipPage = () => (
   <Suspense fallback={<LoadingV2 />}>

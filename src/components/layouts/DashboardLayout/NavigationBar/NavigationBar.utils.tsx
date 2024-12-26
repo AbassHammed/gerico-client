@@ -66,13 +66,13 @@ export const generateToolRoutes = (): IRoute[] => [
 export const generateSettingsRoutes = (): IRoute[] => [
   {
     key: 'homepage',
-    label: 'Homepage',
+    label: 'Accueil employé',
     icon: <ArrowLeft size={ICON_SIZE} strokeWidth={ICON_STROKE_WIDTH} />,
     link: PagesRoutes.Employee_Home,
   },
   {
     key: 'settings',
-    label: 'Org Settings',
+    label: 'Paramètres',
     icon: <Settings size={ICON_SIZE} strokeWidth={ICON_STROKE_WIDTH} />,
     link: PagesRoutes.Admin_Settings,
   },

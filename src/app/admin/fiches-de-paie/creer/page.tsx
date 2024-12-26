@@ -1,6 +1,6 @@
-'use client';
-
 import React, { Suspense } from 'react';
+
+import { Metadata } from 'next';
 
 import PayslipForm from '@/components/interfaces/Payslip/PayslipForm';
 import {
@@ -11,6 +11,10 @@ import {
   ScaffoldHeader,
   ScaffoldTitle,
 } from '@/components/ui';
+
+export const metadata: Metadata = {
+  title: 'Nouvelle fiche de paie',
+};
 
 const CreatePayslipPage = () => (
   <React.Fragment>

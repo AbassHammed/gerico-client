@@ -2,7 +2,9 @@
 
 import Image from 'next/image';
 
+import { useUpcomingLeaveRequestsUser } from '@/hooks/useFetchLeave';
 import { useUser } from '@/hooks/useUser';
+import { isUserOnLeave } from '@/lib/utils';
 import { IUser } from '@/types';
 import { Badge, Table } from '@ui';
 
@@ -10,6 +12,9 @@ import { UserActions } from './UserActions';
 
 export const UserRow = ({ member }: { member: IUser }) => {
   const { user } = useUser();
+  const { leaves: data } = useUpcomingLeaveRequestsUser(member.uid);
+  const leaves = data ?? [];
+  const onLeave = isUserOnLeave(leaves);
 
   return (
     <Table.tr>
@@ -37,7 +42,9 @@ export const UserRow = ({ member }: { member: IUser }) => {
       </Table.td>
 
       <Table.td>
-        <Badge variant={'warning'}>{'Invited'}</Badge>
+        <Badge className={!onLeave ? 'text-white' : ''} variant={onLeave ? 'warning' : 'brand'}>
+          {onLeave ? 'Absent' : 'Present'}
+        </Badge>
       </Table.td>
 
       <Table.td>

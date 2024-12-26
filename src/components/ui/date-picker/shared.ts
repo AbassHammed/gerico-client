@@ -2,7 +2,7 @@
 
 import { createContext, Dispatch, SetStateAction } from 'react';
 
-import { format, Locale } from 'date-fns';
+import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 
 import { DatePreset, DateRangePreset, PickerProps } from './types';
@@ -15,23 +15,18 @@ export const DatePickerContext = createContext<{
   setIsOpen: () => {},
 });
 
-export const formatDate = (
-  date: Date,
-  locale: Locale = fr,
-  includeTime = false,
-  differentFormat = false,
-): string => {
+export const formatDate = (date: Date, includeTime = false, differentFormat = false): string => {
   let dateString: string;
   const dateObj = new Date(date);
 
   if (includeTime) {
     if (differentFormat) {
-      dateString = format(dateObj, `d MMM, yyyy HH:mm`, { locale });
+      dateString = format(dateObj, `d MMM, yyyy HH:mm`, { locale: fr });
     } else {
-      dateString = format(dateObj, `d MMMM, yyyy HH:mm`, { locale });
+      dateString = format(dateObj, `d MMMM, yyyy HH:mm`, { locale: fr });
     }
   } else {
-    dateString = format(dateObj, `d MMM, yyyy`, { locale });
+    dateString = format(dateObj, `d MMM, yyyy`, { locale: fr });
   }
 
   return dateString;

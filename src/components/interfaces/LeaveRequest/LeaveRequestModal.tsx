@@ -10,7 +10,7 @@ import { toast } from 'sonner';
 
 import LeaveStatusBadge, { LeaveStatusEnum } from './LeaveStatusBadge';
 
-const UserDeleteLeaveRequestModal: React.FC<
+const LeaveRequestModal: React.FC<
   Partial<IConfirmationModalProps> & {
     leaveRequest: ILeaveRequest;
     isOpen: boolean;
@@ -72,4 +72,4 @@ const UserDeleteLeaveRequestModal: React.FC<
   );
 };
 
-export default UserDeleteLeaveRequestModal;
+export default LeaveRequestModal;
