@@ -238,7 +238,7 @@ const PayslipForm = () => {
                     type="default"
                     htmlType="reset"
                     onClick={() => form.reset()}>
-                    Cancel
+                    Annuler
                   </Button>
                   <Button
                     form={formId}
@@ -246,7 +246,7 @@ const PayslipForm = () => {
                     htmlType="submit"
                     disabled={loading || payslipLoading}
                     loading={payslipLoading}>
-                    Save
+                    Sauvegarder
                   </Button>
                 </div>
               </div>

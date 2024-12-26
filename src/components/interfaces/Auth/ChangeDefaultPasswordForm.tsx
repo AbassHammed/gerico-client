@@ -54,8 +54,15 @@ export const ChangeDefaultPasswordForm = () => {
 
   const onSubmit: SubmitHandler<z.infer<typeof FormSchema>> = async values => {
     try {
-      await change(values);
-      router.push(PagesRoutes.Admin_Dashboard);
+      const user = await change(values);
+      if (user) {
+        toast.success('Mot de passe changé avec succès');
+        if (user.is_admin) {
+          router.push(PagesRoutes.Admin_Dashboard);
+        } else {
+          router.push(PagesRoutes.Employee_Home);
+        }
+      }
     } catch (error: any) {
       toast.error('Erreur inconnue', {
         description: error.message,

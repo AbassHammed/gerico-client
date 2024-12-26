@@ -23,6 +23,7 @@ export interface IConfirmationModalProps {
   confirmLabel?: string;
   confirmLabelLoading?: string;
   cancelLabel?: string;
+  onCancelButtonClicked?: () => void;
   onConfirm: () => void;
   onCancel: () => void;
   disabled?: boolean;
@@ -45,6 +46,7 @@ const ConfirmationModal = forwardRef<
       visible,
       onCancel,
       onConfirm,
+      onCancelButtonClicked,
       cancelLabel = 'Cancel',
       confirmLabel = 'Submit',
       alert = undefined,
@@ -104,7 +106,10 @@ const ConfirmationModal = forwardRef<
               block
               type="default"
               disabled={loading}
-              onClick={() => onCancel()}>
+              onClick={() => {
+                onCancel();
+                onCancelButtonClicked?.();
+              }}>
               {cancelLabel}
             </Button>
 

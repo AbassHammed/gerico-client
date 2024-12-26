@@ -21,8 +21,8 @@ import * as Tooltip from '@radix-ui/react-tooltip';
 import dayjs from 'dayjs';
 import { ArrowDown, ArrowUp, ChevronLeft, ChevronRight } from 'lucide-react';
 
+import AdminHandleModal from './AdminHandleModal';
 import LeaveStatusBadge, { LeaveStatusEnum } from './LeaveStatusBadge';
-import UserDeleteLeaveRequestModal from './UserDeleteModal';
 import { LeaveStatus } from './UserLeaveTable';
 
 type IUserAndILeaveRequest = ILeaveRequest & IUser;
@@ -44,6 +44,7 @@ const AdminLeaveTable = () => {
     isLoading: leaveLoading,
     error: leaveError,
     isSuccess,
+    mutate,
   } = useLeaveRequestQuery({ page: page, limit: pageSize, offset }, filter ?? '');
 
   const leaves = data ?? [];
@@ -260,10 +261,12 @@ const AdminLeaveTable = () => {
         )}
       </div>
       {selectedLeave && (
-        <UserDeleteLeaveRequestModal
+        <AdminHandleModal
           leaveRequest={selectedLeave}
           isOpen={isModalOpen}
-          setIsDeleteModalOpen={setIsModalOpen}
+          setIsHandleModalOpen={setIsModalOpen}
+          onCancelButtonClicked={mutate}
+          onConfirm={mutate}
         />
       )}
     </>

@@ -1,8 +1,17 @@
+import { Metadata } from 'next';
+
 import { HomeLayoutHeader } from '@/components/layouts/HomeLayout/homeLayoutHeader';
 
 interface AppLayoutProps {
   children: React.ReactNode;
 }
+
+export const metadata: Metadata = {
+  title: {
+    template: '%s | Employé | Gerico',
+    default: 'Accueil | Employé ',
+  },
+};
 
 export default function AppLayout({ children }: AppLayoutProps) {
   return (

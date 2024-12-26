@@ -24,16 +24,15 @@ const SignInForm = () => {
   const { login, loading } = useLogin();
   const [passwordHidden, setPasswordHidden] = useState(true);
 
-  const handleSuccessfulLogin = (user: IUser, code: string | null, toastId: string | number) => {
+  const handleSuccessfulLogin = (user: IUser, code: string | null) => {
     if (code === 'DEFAULTPASS') {
-      toast.warning(`Vous utilisez un mot de passe par défaut, vous devez le changer`, {
-        id: toastId,
+      toast.warning('Mot de passe par defaut', {
+        description: 'Vous devez changer votre mot de passe par défaut pour continuer',
       });
       router.replace(PagesRoutes.Auth_ChangeDefaultPassword);
       return;
     }
 
-    toast.success(`Connexion réussie !`, { id: toastId });
     const redirectUrl = sessionStorage.getItem('redirectTo');
     if (redirectUrl) {
       sessionStorage.removeItem('redirectTo');
@@ -48,15 +47,13 @@ const SignInForm = () => {
   };
 
   const onSignIn = async ({ email, password }: { email: string; password: string }) => {
-    const toastId = toast.loading('Connexion en cours...');
-
     try {
       const { code, user } = await login({ email, password });
       if (user) {
-        handleSuccessfulLogin(user, code, toastId);
+        handleSuccessfulLogin(user, code);
       }
     } catch (error: any) {
-      toast.error(`Échec de la connexion`, { id: toastId, description: error.message });
+      toast.error(`Échec de la connexion`, { description: error.message });
     }
   };
 

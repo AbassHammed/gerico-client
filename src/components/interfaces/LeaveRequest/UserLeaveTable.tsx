@@ -165,8 +165,12 @@ const UserLeaveTable = () => {
                       <Table.tr
                         key={leave.leave_request_id}
                         onClick={() => {
-                          setSelectedLeave(leave);
-                          setIsModalOpen(true);
+                          if (
+                            (leave.request_status as LeaveStatusEnum) === LeaveStatusEnum.WAITING
+                          ) {
+                            setSelectedLeave(leave);
+                            setIsModalOpen(true);
+                          }
                         }}
                         className="cursor-pointer hover:!bg-alternative transition duration-100">
                         <Table.td>{formatDate(leave.created_at, true, true)}</Table.td>

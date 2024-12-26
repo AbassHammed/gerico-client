@@ -25,13 +25,14 @@ export function useCreateLeaveRequest() {
 }
 
 export function useLeaveRequestQuery(params?: PaginationParams, status?: string) {
-  const { data, error, isLoading, success } = useApiGet<PaginatedResult<ILeaveRequest>>(
+  const { data, error, isLoading, success, mutate } = useApiGet<PaginatedResult<ILeaveRequest>>(
     `/leave-requests/status?page=${params?.page}&limit=${params?.limit}&offset=${params?.offset}&status=${status}`,
     undefined,
     true,
   );
 
   return {
+    mutate,
     leaves: data?.data,
     pagination: data?.pagination,
     error,
@@ -41,13 +42,14 @@ export function useLeaveRequestQuery(params?: PaginationParams, status?: string)
 }
 
 export function useUpcomingLeaveRequestsUser(uid: string) {
-  const { data, error, isLoading, success } = useApiGet<ILeaveRequest[]>(
+  const { data, error, isLoading, success, mutate } = useApiGet<ILeaveRequest[]>(
     `/leave-requests/upcoming/${uid}`,
     undefined,
     true,
   );
 
   return {
+    mutate,
     leaves: data,
     error,
     isLoading,
