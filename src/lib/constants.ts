@@ -94,3 +94,5 @@ export enum PagesRoutes {
 }
 
 export const PAGE_LIMIT = 10;
+
+export const FILE_TYPE = 'application/pdf';

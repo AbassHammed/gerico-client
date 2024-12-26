@@ -1,8 +1,13 @@
 /* eslint-disable quotes */
-import { IDeduction, IPayslip, ISSThreshold } from '@/types';
+import { getSignedURL } from '@/app/actions';
+import { FILE_TYPE } from '@/lib/constants';
+import { computeSHA256 } from '@/lib/utils';
+import { ICompanyInfo, IDeduction, IPayslip, ISSThreshold, IUser } from '@/types';
+import { pdf } from '@react-pdf/renderer';
 import { isAfter, isBefore, isWithinInterval } from 'date-fns';
 
 import { PaySlipItem } from '../PayslipPDF/interface';
+import PaySlipPDF from '../PayslipPDF/PayslipPDF';
 
 export const INTERVAL_DISPLAYS = [
   {
@@ -110,7 +115,7 @@ function getAssiette(grossSalary: number, threshold: ISSThreshold): number {
   }
 }
 
-export function generatePaySlipData(
+function generatePaySlipData(
   grossSalary: number,
   deductions: IDeduction[],
   socialSecurityThresholds: ISSThreshold[],
@@ -164,7 +169,7 @@ export function generatePaySlipData(
   });
 }
 
-export function calculateTotals(data: PaySlipItem[]): {
+function calculateTotals(data: PaySlipItem[]): {
   totalSalarial: string;
   totalPatronal: string;
 } {
@@ -182,7 +187,7 @@ export function calculateTotals(data: PaySlipItem[]): {
   };
 }
 
-export function calculateGrossSalary(
+function calculateGrossSalary(
   total_hours_worked: {
     worked_hours: number;
     overtime: number;
@@ -204,3 +209,74 @@ export function calculateGrossSalary(
   const grossSalary = regularPay + overtimePay;
   return parseFloat(grossSalary.toFixed(2));
 }
+
+interface IGeneratePayslipParams {
+  thresholds: ISSThreshold[];
+  deductions: IDeduction[];
+  companyInfo: ICompanyInfo;
+  seletedUser: IUser;
+  total_hours_worked: {
+    worked_hours: number;
+    overtime: number;
+    week: number;
+  }[];
+  payslip: {
+    start_period: string;
+    end_period: string;
+    pay_date: string;
+  };
+  hourlyRate: number;
+}
+
+const handlePayslipGeneration = async (
+  params: IGeneratePayslipParams,
+): Promise<{
+  blob: Blob;
+  grossSalary: number;
+  netSalary: number;
+}> => {
+  const grossSalary = calculateGrossSalary(params.total_hours_worked, params.hourlyRate);
+  const paySlipData = generatePaySlipData(grossSalary, params.deductions, params.thresholds);
+  const totals = calculateTotals(paySlipData);
+
+  const blob = await pdf(
+    <PaySlipPDF
+      totals={totals}
+      paySlip={params.payslip}
+      user={params.seletedUser}
+      company={params.companyInfo}
+      payslipData={paySlipData}
+      grossSalary={grossSalary}
+    />,
+  ).toBlob();
+
+  const returnData = {
+    blob,
+    grossSalary,
+    netSalary: grossSalary - Number(totals.totalSalarial),
+  };
+
+  return returnData;
+};
+
+export const handleFileUpload = async (params: IGeneratePayslipParams) => {
+  const { blob, grossSalary, netSalary } = await handlePayslipGeneration(params);
+  const signedURLResult = await getSignedURL({
+    fileSize: blob.size,
+    fileType: FILE_TYPE,
+    checksum: await computeSHA256(blob),
+  });
+  if (signedURLResult.failure !== undefined) {
+    throw new Error(signedURLResult.failure);
+  }
+  const { signedUrl, fileUrl } = signedURLResult.success;
+  await fetch(signedUrl, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': FILE_TYPE,
+    },
+    body: blob,
+  });
+
+  return { fileUrl, grossSalary, netSalary };
+};

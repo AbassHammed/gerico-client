@@ -21,7 +21,13 @@ interface PaySlipPDFProps {
   company: ICompanyInfo;
   paySlip: Omit<
     PaySlip,
-    'pid' | 'uid' | 'path_to_pdf' | 'total_hours_worked' | 'gross_salary' | 'net_salary'
+    | 'pid'
+    | 'uid'
+    | 'path_to_pdf'
+    | 'total_hours_worked'
+    | 'gross_salary'
+    | 'net_salary'
+    | 'hourly_rate'
   >;
   payslipData: PaySlipItem[];
   grossSalary: number;

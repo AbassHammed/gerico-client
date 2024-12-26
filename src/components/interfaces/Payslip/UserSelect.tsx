@@ -15,9 +15,9 @@ import { IUser } from '@/types';
 import { AlertCircle, ChevronDown, X } from 'lucide-react';
 
 interface UserSelectProps {
-  onUsersChange: (users: string) => void;
-  setSelectedUser: Dispatch<SetStateAction<IUser | undefined>>;
-  selectedUser: IUser | undefined;
+  onUsersChange: (users: string[]) => void;
+  selectedUsers: IUser[] | undefined;
+  setSelectedUsers: Dispatch<SetStateAction<IUser[] | undefined>>;
   loading?: boolean;
 }
 
@@ -27,7 +27,7 @@ export function MyUser({
   loading,
 }: {
   user: IUser;
-  removeUser: () => void;
+  removeUser: (uid: string) => void;
   loading?: boolean;
 }) {
   return (
@@ -53,7 +53,7 @@ export function MyUser({
           size={'small'}
           type={'default'}
           disabled={loading}
-          onClick={() => removeUser()}
+          onClick={() => removeUser(user.uid)}
           aria-label={`Remove ${user.last_name}`}>
           <X className="h-4 w-4" />
         </Button>
@@ -64,22 +64,26 @@ export function MyUser({
 
 export default function UserSelect({
   onUsersChange,
-  selectedUser,
-  setSelectedUser,
+  selectedUsers,
+  setSelectedUsers,
   loading,
 }: UserSelectProps) {
   const { employees: members, isLoading: isLoadingMembers } = useEmployees();
   const [open, setOpen] = useState(false);
 
-  const removeUser = () => {
-    onUsersChange('');
-    setSelectedUser(undefined);
+  const removeUser = (uid: string) => {
+    const updatedUsers = selectedUsers?.filter(user => user.uid !== uid);
+    onUsersChange(updatedUsers?.map(user => user.uid) ?? []);
+    setSelectedUsers(updatedUsers);
   };
 
   const addUser = (user: IUser) => {
-    onUsersChange(user.uid);
-    setSelectedUser(user);
-    setOpen(false);
+    if (!selectedUsers?.some(selected => selected.uid === user.uid)) {
+      const updatedUsers = [...selectedUsers!, user];
+      onUsersChange(updatedUsers.map(user => user.uid));
+      setSelectedUsers(updatedUsers);
+      setOpen(false);
+    }
   };
 
   return (
@@ -90,7 +94,7 @@ export default function UserSelect({
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            disabled={selectedUser !== undefined || loading}
+            disabled={loading}
             className="w-full justify-between bg-alternative dark:bg-muted  hover:bg-selection
           border-strong hover:border-stronger">
             Search for a User to link to...
@@ -117,27 +121,27 @@ export default function UserSelect({
         <div className="rounded w-full">
           <Table
             head={[<Table.th key="header-user">User</Table.th>, <Table.th key="header-action" />]}
-            body={[
-              ...(selectedUser === undefined
+            body={
+              selectedUsers?.length === 0 || !selectedUsers
                 ? [
                     <Table.tr key="no-results" className="bg-panel-secondary-light">
                       <Table.td colSpan={12}>
                         <div className="flex items-center space-x-3 opacity-75">
                           <AlertCircle size={16} strokeWidth={2} />
-                          <p className="text-foreground-light">No users is selected</p>
+                          <p className="text-foreground-light">No users are selected</p>
                         </div>
                       </Table.td>
                     </Table.tr>,
                   ]
-                : [
+                : selectedUsers.map(user => (
                     <MyUser
-                      key={selectedUser.uid}
-                      user={selectedUser}
-                      removeUser={removeUser}
+                      key={user.uid}
+                      user={user}
+                      removeUser={() => removeUser(user.uid)}
                       loading={loading}
-                    />,
-                  ]),
-            ]}
+                    />
+                  ))
+            }
           />
         </div>
       </div>

@@ -1,8 +1,8 @@
+/* eslint-disable quotes */
 'use client';
 
 import React from 'react';
 
-import { getSignedURL } from '@/app/actions';
 import {
   AlertError,
   Button,
@@ -26,18 +26,14 @@ import { useGetDeductions, useGetThresholds } from '@/hooks/useHooks';
 import { useCreatePayslip } from '@/hooks/usePayslips';
 import { ICreatePayslip, IUser } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { pdf } from '@react-pdf/renderer';
 import { CircleMinus, CirclePlus } from 'lucide-react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
-import PaySlipPDF from '../PayslipPDF/PayslipPDF';
 import { DatePickerField } from './FormDatePicker';
-import { calculateGrossSalary, calculateTotals, generatePaySlipData } from './Payslip.utils';
+import { handleFileUpload } from './Payslip.utils';
 import UserSelect from './UserSelect';
-
-const FILE_TYPE = 'application/pdf';
 
 const timeEntrySchema = z.object({
   week: z.coerce.number(),
@@ -51,7 +47,7 @@ const PayslipSchema = z.object({
   start_period: z.string(),
   end_period: z.string(),
   time_entries: z.array(timeEntrySchema),
-  employee: z.string(),
+  employees: z.array(z.string()),
 });
 
 type FormValues = z.infer<typeof PayslipSchema>;
@@ -61,7 +57,7 @@ const PayslipForm = () => {
   const { companyInfo, loading: companyInfoLoading, error: companyInfoError } = useCompanyInfo();
   const { deductions, isLoading: isDeductionsLoading, error: deductionsError } = useGetDeductions();
   const { thresholds, isLoading: isThresholdsLoading, error: thresholdsError } = useGetThresholds();
-  const [seletedUser, setUser] = React.useState<IUser | undefined>(undefined);
+  const [selectedUsers, setUsers] = React.useState<IUser[] | undefined>([]);
   const { createPayslip, loading: payslipLoading } = useCreatePayslip();
   const [loading, setLoading] = React.useState<boolean>(false);
   let toastId: string | null | number = null;
@@ -72,80 +68,13 @@ const PayslipForm = () => {
     start_period: '',
     end_period: '',
     time_entries: [{ week: 1, worked_hours: 0, overtime: 0 }],
-    employee: '',
+    employees: [],
   };
 
   const form = useForm<FormValues>({
     resolver: zodResolver(PayslipSchema),
     defaultValues: initialValues,
   });
-
-  const computeSHA256 = async (blob: Blob) => {
-    const buffer = await blob.arrayBuffer();
-    const hashBuffer = await window.crypto.subtle.digest('SHA-256', buffer);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    return hashHex;
-  };
-
-  const handlePayslipGeneration = async () => {
-    toast.loading('Generating Payslip...', { id: toastId! });
-    if (!thresholds || !deductions || !seletedUser || !companyInfo) {
-      throw new Error('Failed to load deductions, thresholds, user or company info');
-    }
-
-    const grossSalary = calculateGrossSalary(
-      form.getValues().time_entries,
-      form.getValues().hourly_rate,
-    );
-    const paySlipData = generatePaySlipData(grossSalary, deductions, thresholds);
-    const totals = calculateTotals(paySlipData);
-
-    const blob = await pdf(
-      <PaySlipPDF
-        totals={totals}
-        paySlip={form.getValues()}
-        user={seletedUser}
-        company={companyInfo}
-        payslipData={paySlipData}
-        grossSalary={grossSalary}
-      />,
-    ).toBlob();
-
-    toast.info('Payslip generated successfully', { id: toastId! });
-
-    const returnData = {
-      blob,
-      grossSalary,
-      netSalary: grossSalary - Number(totals.totalSalarial),
-    };
-
-    return returnData;
-  };
-
-  const handleFileUpload = async () => {
-    const { blob, grossSalary, netSalary } = await handlePayslipGeneration();
-    toast.info('Uploading Payslip...', { id: toastId! });
-    const signedURLResult = await getSignedURL({
-      fileSize: blob.size,
-      fileType: FILE_TYPE,
-      checksum: await computeSHA256(blob),
-    });
-    if (signedURLResult.failure !== undefined) {
-      throw new Error(signedURLResult.failure);
-    }
-    const { signedUrl, fileUrl } = signedURLResult.success;
-    await fetch(signedUrl, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': FILE_TYPE,
-      },
-      body: blob,
-    });
-    toast.success('Payslip uploaded successfully', { id: toastId! });
-
-    return { fileUrl, grossSalary, netSalary };
-  };
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
@@ -169,36 +98,59 @@ const PayslipForm = () => {
 
   async function onSubmit(values: FormValues) {
     try {
+      toastId = toast.loading('En cours de ...', { id: toastId! });
       setLoading(true);
-      toastId = toast.loading('Creating Payslip...', { id: toastId! });
-      const { fileUrl, netSalary, grossSalary } = await handleFileUpload();
+      if (!selectedUsers || !deductions || !thresholds || !companyInfo) {
+        throw new Error("Une erreur s'est produite lors de la récupération des données");
+      }
 
-      const dataWithOvertime = {
-        ...values,
-        gross_salary: grossSalary,
-        net_salary: netSalary,
-        time_entries: values.time_entries.map(entry => ({
-          ...entry,
-          overtime: calculateOvertime(entry.worked_hours),
-        })),
-      };
+      for (const user of selectedUsers) {
+        try {
+          const { fileUrl, netSalary, grossSalary } = await handleFileUpload({
+            thresholds,
+            deductions,
+            companyInfo,
+            seletedUser: user,
+            total_hours_worked: values.time_entries,
+            payslip: values,
+            hourlyRate: values.hourly_rate,
+          });
 
-      const data: ICreatePayslip = {
-        uid: dataWithOvertime.employee,
-        gross_salary: dataWithOvertime.gross_salary,
-        net_salary: dataWithOvertime.net_salary,
-        start_period: new Date(dataWithOvertime.start_period),
-        end_period: new Date(dataWithOvertime.end_period),
-        pay_date: new Date(dataWithOvertime.pay_date),
-        hourly_rate: dataWithOvertime.hourly_rate,
-        total_hours_worked: JSON.stringify(dataWithOvertime.time_entries),
-        path_to_pdf: fileUrl,
-      };
+          const dataWithOvertime = {
+            ...values,
+            gross_salary: grossSalary,
+            net_salary: netSalary,
+            time_entries: values.time_entries.map(entry => ({
+              ...entry,
+              overtime: calculateOvertime(entry.worked_hours),
+            })),
+          };
 
-      const message = await createPayslip(data);
-      toast.success(message, { id: toastId! });
+          const data: ICreatePayslip = {
+            uid: user.uid,
+            gross_salary: dataWithOvertime.gross_salary,
+            net_salary: dataWithOvertime.net_salary,
+            start_period: new Date(dataWithOvertime.start_period),
+            end_period: new Date(dataWithOvertime.end_period),
+            pay_date: new Date(dataWithOvertime.pay_date),
+            hourly_rate: dataWithOvertime.hourly_rate,
+            total_hours_worked: JSON.stringify(dataWithOvertime.time_entries),
+            path_to_pdf: fileUrl,
+          };
+
+          await createPayslip(data);
+
+          toast.info(`Payslip for ${user.first_name} ${user.last_name} uploaded successfully.`);
+        } catch (error: any) {
+          toast.error(`Error generating/uploading payslip for ${user.first_name}:`, {
+            description: error.message,
+          });
+        }
+      }
+
+      toast.success('Payslips uploaded successfully');
       form.reset();
-      setUser(undefined);
+      setUsers([]);
     } catch (error: any) {
       toast.error(error.message, { id: toastId! });
     } finally {
@@ -397,14 +349,14 @@ const PayslipForm = () => {
             <FormSectionContent loading={false} fullWidth className="!gap-2 space-y-4">
               <FormField
                 control={form.control}
-                name="employee"
+                name="employees"
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
                       <UserSelect
                         onUsersChange={field.onChange}
-                        setSelectedUser={setUser}
-                        selectedUser={seletedUser}
+                        setSelectedUsers={setUsers}
+                        selectedUsers={selectedUsers}
                         loading={loading || payslipLoading}
                       />
                     </FormControl>
