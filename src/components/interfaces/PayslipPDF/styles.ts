@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    paddingBottom: 25,
+    paddingBottom: 10,
   },
   middleSectionContainer: {
     flexDirection: 'row',
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   // SALAIRE NET AVANT IMPOT SUR LE REVENU
   leaveRequestContainer1: {
     paddingTop: 15,
-    width: '70%',
+    width: '100%',
   },
   leaveRequestHeaderCell3: {
     flex: 4,
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   spaceBetween30: {
-    marginTop: 30,
+    marginTop: 15,
   },
   // pay slip
   paySlipContainer: {
@@ -135,14 +135,14 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     border: '0.1px solid black',
     width: '100%',
-    height: '64vh',
+    height: '38vh',
   },
   paySlipContainer2: {
     fontSize: 10,
     flexDirection: 'column',
     border: '0.1px solid black',
     width: '100%',
-    height: '8vh',
+    height: '4vh',
   },
 
   paySlipRow1: {
@@ -224,6 +224,40 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     padding: 0,
     margin: 0,
+  },
+  leaveRequestContainerTax: {
+    paddingTop: 10,
+    width: '100%',
+  },
+  leaveRequestRowTax: {
+    flexDirection: 'row',
+    border: '0.5px solid black',
+  },
+  leaveRequestCellTax: {
+    padding: 3,
+    textAlign: 'center',
+    fontSize: 8,
+    border: '0.6px solid black',
+    borderBottom: 'none',
+  },
+
+  footerContainer: {
+    position: 'absolute',
+    bottom: 10,
+    left: 10,
+    right: 30,
+    textAlign: 'center',
+    padding: 10,
+    fontSize: 10,
+    backgroundColor: '#f8f8f8',
+  },
+  footerText: {
+    marginBottom: 5,
+    color: '#333',
+  },
+  footerLink: {
+    color: '#1a73e8',
+    textDecoration: 'underline',
   },
 });
 

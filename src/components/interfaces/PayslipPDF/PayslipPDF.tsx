@@ -6,12 +6,15 @@ import { ICompanyInfo, IUser } from '@/types';
 import { Document, Page, View } from '@react-pdf/renderer';
 
 import EnterpriseAndUserInfo from './components/EnterpriseAndUserInfo';
+import FooterPaySlip from './components/FooterPaySlip';
 import GrossSalaryAndPayDate from './components/GrossSalaryAndPayDate';
 import NetSalaryRow from './components/NetSalaryRow';
+import NetSalaryRowAfterTaxes from './components/NetSalaryRowAfterTaxes';
 import RemainingLeaveRequest from './components/RemainingLeave';
 import { PaySlipRow } from './components/Row';
 import { PaySlipRowTotalDeduction } from './components/RowTotalDeduction';
 import PaySlipHeader from './components/TableHeader';
+import TaxTable from './components/TaxTable';
 import PaySlipTitleSection from './components/TitleSection';
 import { PaySlip, PaySlipItem } from './interface';
 import { styles } from './styles';
@@ -112,8 +115,29 @@ const PaySlipPDF: React.FC<PaySlipPDFProps> = ({
         {/* Affichage du salaire net */}
         <NetSalaryRow grossSalary={grossSalary} totalSalarial={Number(totals.totalSalarial)} />
 
+        {/* Affichage du tableau des taxes */}
+        <TaxTable
+          grossSalary={grossSalary}
+          totalSalarial={Number(totals.totalSalarial)}
+          // TO DO
+          // il faut récup le taux SUIVANT :
+          // taux={deductionsMap['csg/crds_imposable'].part_salarial}
+          taux={0.0} // placeholder
+        />
+        {/* Affichage du salaire net après impôt sur le revenu */}
+        <NetSalaryRowAfterTaxes
+          grossSalary={grossSalary}
+          totalSalarial={Number(totals.totalSalarial)}
+          // TO DO
+          // il faut récup le taux SUIVANT :
+          // taux={deductionsMap['csg/crds_imposable'].part_salarial}
+          taux={0.0} // placeholder
+        />
         {/* Affichage du solde des congés restants */}
         <RemainingLeaveRequest remainingLeave={user.remaining_leave_balance.toString()} />
+
+        {/* Affichage du footer de page */}
+        <FooterPaySlip />
       </Page>
     </Document>
   );
