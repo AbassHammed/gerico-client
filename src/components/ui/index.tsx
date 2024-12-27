@@ -24,6 +24,7 @@ export * from './date-picker';
 export * from './NavMenu';
 export * from './FilteredPopover';
 export { RadioGroup, RadioGroupItem, RadioGroupLargeItem } from './RadioGroup';
+export * from './Icons';
 
 // Shadcn
 export * from './shadcn/ui/dropdown-menu';

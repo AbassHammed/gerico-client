@@ -3,7 +3,7 @@
 import Link from 'next/link';
 
 import { EmployeePresence } from '@/components/interfaces/Auth/LeaveChart';
-import { generateToolRoutes } from '@/components/layouts/DashboardLayout/NavigationBar/NavigationBar.utils';
+import { generateToolRoutes } from '@/components/interfaces/layouts/DashboardLayout/NavigationBar/NavigationBar.utils';
 import { Button } from '@/components/ui';
 import { siteConfig } from '@/config/site';
 import { useCompanyInfo } from '@/hooks/company-mutations';

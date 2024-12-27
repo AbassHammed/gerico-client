@@ -43,13 +43,13 @@ export function MainNav() {
                 : null}
           </Link>
         )}
-        {user && user.is_admin && (
+        {user && user.is_admin ? (
           <Link
             href={PagesRoutes.Admin_Dashboard}
             className="transition-colors hover:text-foreground/80 text-foreground/80">
             Tableau de bord
           </Link>
-        )}
+        ) : null}
       </nav>
     </div>
   );

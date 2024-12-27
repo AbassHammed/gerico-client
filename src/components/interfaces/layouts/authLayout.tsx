@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 import { PagesRoutes } from '@/lib/constants';
 
-import { Button } from '../ui';
+import { Button } from '../../ui';
 
 type AuthLayoutProps = {
   heading: string;

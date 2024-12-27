@@ -7,7 +7,7 @@ import { Toaster } from 'sonner';
 import './styles/globals.css';
 import './styles/date-picker.css';
 
-import SWRLayout from '@/components/layouts/swr-layout';
+import SWRLayout from '@/components/interfaces/layouts/swr-layout';
 import { siteConfig } from '@/config/site';
 
 const inter = Inter({ subsets: ['latin'] });
