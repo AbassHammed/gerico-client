@@ -116,22 +116,11 @@ const PaySlipPDF: React.FC<PaySlipPDFProps> = ({
         <NetSalaryRow grossSalary={grossSalary} totalSalarial={Number(totals.totalSalarial)} />
 
         {/* Affichage du tableau des taxes */}
-        <TaxTable
-          grossSalary={grossSalary}
-          totalSalarial={Number(totals.totalSalarial)}
-          // TO DO
-          // il faut récup le taux SUIVANT :
-          // taux={deductionsMap['csg/crds_imposable'].part_salarial}
-          taux={0.0} // placeholder
-        />
+        <TaxTable grossSalary={grossSalary} totalSalarial={Number(totals.totalSalarial)} />
         {/* Affichage du salaire net après impôt sur le revenu */}
         <NetSalaryRowAfterTaxes
           grossSalary={grossSalary}
           totalSalarial={Number(totals.totalSalarial)}
-          // TO DO
-          // il faut récup le taux SUIVANT :
-          // taux={deductionsMap['csg/crds_imposable'].part_salarial}
-          taux={0.0} // placeholder
         />
         {/* Affichage du solde des congés restants */}
         <RemainingLeaveRequest remainingLeave={user.remaining_leave_balance.toString()} />

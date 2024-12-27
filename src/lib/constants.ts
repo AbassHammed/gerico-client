@@ -93,6 +93,13 @@ export enum PagesRoutes {
   Admin_AllPayslips = '/admin/fiches-de-paie',
 }
 
+export const API_URL = process.env.NEXT_PUBLIC_API_URL!;
+
 export const PAGE_LIMIT = 10;
 
 export const FILE_TYPE = 'application/pdf';
+
+// i wouldn't have done this in a real context
+export const CSG_CRDS_PERCENTAGE = 0.9825;
+export const CSG_CRDS_PERCENTAGE_TAX = 0.029;
+export const TAX_RATE = 0.031;

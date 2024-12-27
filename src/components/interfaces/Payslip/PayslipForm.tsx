@@ -60,7 +60,6 @@ const PayslipForm = () => {
   const [selectedUsers, setUsers] = React.useState<IUser[] | undefined>([]);
   const { createPayslip, loading: payslipLoading } = useCreatePayslip();
   const [loading, setLoading] = React.useState<boolean>(false);
-  let toastId: string | null | number = null;
 
   const initialValues: FormValues = {
     hourly_rate: 0,
@@ -98,7 +97,7 @@ const PayslipForm = () => {
 
   async function onSubmit(values: FormValues) {
     try {
-      toastId = toast.loading('En cours de ...', { id: toastId! });
+      toast.loading('Téléchargement des fiches de paie en cours...');
       setLoading(true);
       if (!selectedUsers || !deductions || !thresholds || !companyInfo) {
         throw new Error("Une erreur s'est produite lors de la récupération des données");
@@ -140,19 +139,24 @@ const PayslipForm = () => {
 
           await createPayslip(data);
 
-          toast.info(`Payslip for ${user.first_name} ${user.last_name} uploaded successfully.`);
+          toast.info(
+            `Fiche de paie pour ${user.first_name} ${user.last_name} téléchargée avec succès.`,
+          );
         } catch (error: any) {
-          toast.error(`Error generating/uploading payslip for ${user.first_name}:`, {
-            description: error.message,
-          });
+          toast.error(
+            `Erreur lors de la génération/téléchargement de la fiche de paie pour ${user.first_name} :`,
+            {
+              description: error.message,
+            },
+          );
         }
       }
 
-      toast.success('Payslips uploaded successfully');
+      toast.success('Fiches de paie téléchargées avec succès');
       form.reset();
       setUsers([]);
     } catch (error: any) {
-      toast.error(error.message, { id: toastId! });
+      toast.error(error.message);
     } finally {
       setLoading(false);
     }

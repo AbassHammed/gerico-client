@@ -4,7 +4,7 @@
 import { useState } from 'react';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import useLogin from '@/hooks/useLogin';
 import { PagesRoutes } from '@/lib/constants';
@@ -21,6 +21,7 @@ const signInSchema = object({
 
 const SignInForm = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { login, loading } = useLogin();
   const [passwordHidden, setPasswordHidden] = useState(true);
 
@@ -33,10 +34,9 @@ const SignInForm = () => {
       return;
     }
 
-    const redirectUrl = sessionStorage.getItem('redirectTo');
-    if (redirectUrl) {
-      sessionStorage.removeItem('redirectTo');
-      router.push(redirectUrl);
+    const redirectTo = searchParams.get('redirectTo');
+    if (redirectTo) {
+      router.push(redirectTo);
     } else {
       if (user.is_admin) {
         router.push(PagesRoutes.Admin_Dashboard);
