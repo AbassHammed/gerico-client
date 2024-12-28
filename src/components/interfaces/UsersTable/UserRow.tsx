@@ -42,8 +42,10 @@ export const UserRow = ({ member }: { member: IUser }) => {
       </Table.td>
 
       <Table.td>
-        <Badge className={!onLeave ? 'text-white' : ''} variant={onLeave ? 'warning' : 'brand'}>
-          {onLeave ? 'Absent' : 'Present'}
+        <Badge
+          className={!onLeave && !member.is_archived ? 'text-white' : ''}
+          variant={onLeave ? 'warning' : member.is_archived ? 'destructive' : 'brand'}>
+          {onLeave ? 'Absent' : member.is_archived ? 'Archivé' : 'Actif'}
         </Badge>
       </Table.td>
 

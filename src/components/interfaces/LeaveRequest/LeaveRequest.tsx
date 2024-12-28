@@ -81,6 +81,20 @@ const LeaveRequest = () => {
         toast.error('La période de congé est invalide.');
         return;
       }
+
+      if ([0, 6].includes(range.from.getDay()) || [0, 6].includes(range.to.getDay())) {
+        toast.error('La période de congé ne peut pas commencer ou se terminer par un week-end.');
+        return;
+      }
+
+      if (
+        (range.from && holidays.some(holiday => holiday.getTime() === range.from!.getTime())) ||
+        (range.to && holidays.some(holiday => holiday.getTime() === range.to!.getTime()))
+      ) {
+        toast.error('La période de congé ne peut pas commencer ou se terminer un jour férié.');
+        return;
+      }
+
       const inputs: ILeaveRequestInput = {
         leave_type: data.leave_type,
         reason: data.reason,
@@ -90,6 +104,8 @@ const LeaveRequest = () => {
         request_status: LeaveStatusEnum.WAITING,
       };
       const message = await createLeave(inputs);
+      form.reset();
+      setRange(undefined);
       toast.success(message);
     } catch (error: any) {
       toast.error("Une erreur s'est produite lors de l'envoi de la demande.", {
@@ -97,8 +113,6 @@ const LeaveRequest = () => {
       });
     } finally {
       setIsSubmitting(false);
-      form.reset();
-      setRange(undefined);
     }
   }
 
@@ -122,15 +136,16 @@ const LeaveRequest = () => {
                         form.reset();
                         setRange(undefined);
                       }}>
-                      Cancel
+                      Annuler
                     </Button>
                     <Button
                       form={formId}
                       type="primary"
                       htmlType="submit"
+                      className="text-white"
                       disabled={isSubmitting || loading}
                       loading={isSubmitting || loading}>
-                      Save
+                      Envoyer
                     </Button>
                   </div>
                 </div>
@@ -151,6 +166,7 @@ const LeaveRequest = () => {
                   <ScaffoldSectionContent className="w-full">
                     <LeavePicker
                       disabledDays={date =>
+                        date < new Date() ||
                         [0, 6].includes(date.getDay()) ||
                         holidays.some(holiday => holiday.getTime() === date.getTime())
                       }
@@ -171,13 +187,13 @@ const LeaveRequest = () => {
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl_Shadcn>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select a verified email to display" />
+                            <SelectValue placeholder="Veuillez sélectionner le type de congé" />
                           </SelectTrigger>
                         </FormControl_Shadcn>
                         <SelectContent>
-                          <SelectItem value="paid">Congés payé</SelectItem>
-                          <SelectItem value="unpaid">Congés non payé</SelectItem>
-                          <SelectItem value="sick">Arrêt maladie</SelectItem>
+                          <SelectItem value="Congés payé">Congés payé</SelectItem>
+                          <SelectItem value="Congés non payé">Congés non payé</SelectItem>
+                          <SelectItem value="Arrêt maladie">Arrêt maladie</SelectItem>
                         </SelectContent>
                       </Select>
                     </FormItemLayout>
@@ -198,7 +214,7 @@ const LeaveRequest = () => {
                           disabled={isSubmitting || loading}
                           rows={4}
                           maxLength={5000}
-                          placeholder="Décrivez le problème rencontré, ainsi que toute information pertinente. Soyez aussi précis et spécifique que possible."
+                          placeholder="Raison de la demande de congé ..."
                         />
                       </FormControl_Shadcn>
                     </FormItemLayout>

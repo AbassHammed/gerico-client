@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import Footer from '@/components/shared/Footer';
 import { Button } from '@ui';
 
 const Error404 = () => {
@@ -63,7 +62,6 @@ const Error404 = () => {
           </div>
         </div>
       </main>
-      <Footer />
     </>
   );
 };

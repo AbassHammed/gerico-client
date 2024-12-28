@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 
-import { HomeLayoutHeader } from '@/components/interfaces/layouts/HomeLayout/homeLayoutHeader';
+import { HomeLayoutHeader } from '@/components/layouts/HomeLayout/homeLayoutHeader';
 
 interface AppLayoutProps {
   children: React.ReactNode;

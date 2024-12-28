@@ -62,7 +62,11 @@ const UserDeleteLeaveRequestModal: React.FC<
         ),
       }}
       onCancel={() => props.setIsDeleteModalOpen(false)}
-      onConfirm={handleDelete}>
+      onConfirm={() => {
+        handleDelete();
+        props.onConfirm?.();
+        props.setIsDeleteModalOpen(false);
+      }}>
       <p className="text-sm text-foreground-light">
         Vous êtes sur le point de supprimer la demande de congé couvrant la période du{' '}
         <span className="text-foreground">{`${formatDate(leaveRequest.start_date, true)} au ${dayjs(leaveRequest.end_date).format('DD MMM YYYY, HH:mm')}`}</span>

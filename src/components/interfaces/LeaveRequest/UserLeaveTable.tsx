@@ -22,9 +22,9 @@ import LeaveStatusBadge, { LeaveStatusEnum } from './LeaveStatusBadge';
 import UserDeleteLeaveRequestModal from './UserDeleteModal';
 
 export const LeaveStatus = [
-  { label: 'Pending', value: LeaveStatusEnum.WAITING },
-  { label: 'Approved', value: LeaveStatusEnum.ACCEPTED },
-  { label: 'Rejected', value: LeaveStatusEnum.REFUSED },
+  { label: 'En attente', value: LeaveStatusEnum.WAITING },
+  { label: 'Accepté', value: LeaveStatusEnum.ACCEPTED },
+  { label: 'Refusé', value: LeaveStatusEnum.REFUSED },
 ];
 
 const UserLeaveTable = () => {
@@ -43,6 +43,7 @@ const UserLeaveTable = () => {
     isLoading: leaveLoading,
     error: leaveError,
     isSuccess,
+    mutate,
   } = useLeaveRequestForUser({ page: page, limit: pageSize, offset });
 
   const leaves = data || [];
@@ -247,6 +248,7 @@ const UserLeaveTable = () => {
       </div>
       {selectedLeave && (
         <UserDeleteLeaveRequestModal
+          onConfirm={mutate}
           leaveRequest={selectedLeave}
           isOpen={isModalOpen}
           setIsDeleteModalOpen={setIsModalOpen}

@@ -32,32 +32,32 @@ export const generateDateRoute = (): IRoute[] => {
 export const generateToolRoutes = (): IRoute[] => [
   {
     key: 'all:employees',
-    label: 'All employees',
+    label: 'Tous les employés',
     icon: <Users size={ICON_SIZE} strokeWidth={ICON_STROKE_WIDTH} />,
     link: PagesRoutes.Admin_Employees,
   },
   {
     key: 'new:user',
-    label: 'Create new employee',
+    label: 'Ajouter un employé',
     icon: <Plus size={ICON_SIZE} strokeWidth={ICON_STROKE_WIDTH} />,
     link: PagesRoutes.Admin_CreateEmployee,
   },
 
   {
     key: 'create:payslip',
-    label: 'Create payslip',
+    label: 'Créer un bulletin de paie',
     icon: <FilePen size={ICON_SIZE} strokeWidth={ICON_STROKE_WIDTH} />,
     link: PagesRoutes.Admin_CreatePayslip,
   },
   {
     key: 'all:payslip',
-    label: 'Payslip list',
+    label: 'Liste des bulletins de paie',
     icon: <Files size={ICON_SIZE} strokeWidth={ICON_STROKE_WIDTH} />,
     link: PagesRoutes.Admin_AllPayslips,
   },
   {
     key: 'approve:leaves',
-    label: 'Approve leaves',
+    label: 'Approuver les congés',
     icon: <CalendarArrowUp size={ICON_SIZE} strokeWidth={ICON_STROKE_WIDTH} />,
     link: PagesRoutes.Admin_ApproveLeaves,
   },

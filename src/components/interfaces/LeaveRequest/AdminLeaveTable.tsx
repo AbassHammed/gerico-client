@@ -86,7 +86,7 @@ const AdminLeaveTable = () => {
       <div className="space-y-4 flex flex-col">
         <div className="flex items-center justify-start">
           <div className="flex items-center space-x-2">
-            <p className="text-xs prose">Filter by</p>
+            <p className="text-xs prose">Filtrer par</p>
             <FilterPopover
               name="Statut"
               options={LeaveStatus}
@@ -212,8 +212,8 @@ const AdminLeaveTable = () => {
                         <div className="flex items-center justify-between">
                           <p className="text-sm opacity-50">
                             {pagination?.totalItems
-                              ? `Showing ${Math.min(offset + 1, pagination.totalItems)} to ${Math.min(offset + leaves.length, pagination.totalItems)} out of ${pagination.totalItems} payslips`
-                              : 'No payslips to display'}
+                              ? `Affichage de ${Math.min(offset + 1, pagination.totalItems)} à ${Math.min(offset + leaves.length, pagination.totalItems)} sur ${pagination.totalItems} demandes de congé`
+                              : 'Aucune demande de congé à afficher'}
                           </p>
                           <div className="flex items-center space-x-6 lg:space-x-8">
                             <div className="flex items-center space-x-2">

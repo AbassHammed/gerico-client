@@ -3,7 +3,7 @@ import { Suspense } from 'react';
 import { Metadata } from 'next';
 
 import SignInForm from '@/components/interfaces/Auth/SignInForm';
-import AuthLayout from '@/components/interfaces/layouts/authLayout';
+import AuthLayout from '@/components/layouts/authLayout';
 import { LoadingV2 } from '@/components/ui';
 
 export const metadata: Metadata = {

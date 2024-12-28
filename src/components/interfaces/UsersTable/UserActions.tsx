@@ -79,6 +79,9 @@ export const UserActions = ({ member }: { member: IUser }) => {
             <DropdownMenuItem
               className="space-x-2 items-start"
               onClick={() => {
+                if (member.is_archived) {
+                  return;
+                }
                 setIsDeleteModalOpen(true);
               }}>
               <Trash size={16} />

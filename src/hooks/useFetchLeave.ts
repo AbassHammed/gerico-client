@@ -73,7 +73,7 @@ export function useUpcomingLeaveRequests() {
 }
 
 export function useLeaveRequestForUser(params?: PaginationParams, status: string = '') {
-  const { data, error, isLoading, success } = useApiGet<PaginatedResult<ILeaveRequest>>(
+  const { data, error, isLoading, success, mutate } = useApiGet<PaginatedResult<ILeaveRequest>>(
     `/leave-requests/me?page=${params?.page}&limit=${params?.limit}&offset=${params?.offset}&status=${status ?? ''}`,
     undefined,
     true,
@@ -85,6 +85,7 @@ export function useLeaveRequestForUser(params?: PaginationParams, status: string
     error,
     isLoading,
     isSuccess: success,
+    mutate,
   };
 }
 
@@ -126,4 +127,24 @@ export function useDeleteLeaveRequest(leaveRequestId: string) {
   };
 
   return { deleteLeave, loading };
+}
+
+export function useRemindLeaveRequest() {
+  const { trigger, isMutating: loading } = useApiMutation<undefined, undefined>(
+    `/leave-requests/reminder`,
+    undefined,
+    'POST',
+    true,
+  );
+
+  const remindLeave = async () => {
+    try {
+      const res = await trigger(undefined);
+      return res?.message;
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  };
+
+  return { remindLeave, loading };
 }

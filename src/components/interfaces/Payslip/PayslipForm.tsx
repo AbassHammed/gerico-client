@@ -175,7 +175,7 @@ const PayslipForm = () => {
   if (deductionsError || thresholdsError || companyInfoError) {
     return (
       <AlertError
-        subject="Failed to load deductions and thresholds"
+        subject="Échec du chargement des déductions et des seuils"
         error={deductionsError || thresholdsError || companyInfoError}
       />
     );
@@ -218,7 +218,7 @@ const PayslipForm = () => {
                     <FormItem className="flex flex-col">
                       <FormControl>
                         <InputNumber
-                          label="Hourly Rate"
+                          label="Taux horaire"
                           placeholder="0.00"
                           {...field}
                           size="small"
@@ -231,26 +231,26 @@ const PayslipForm = () => {
                   )}
                 />
 
-                <DatePickerField name="pay_date" control={form.control} label="Pay Date" />
+                <DatePickerField name="pay_date" control={form.control} label="Date de paiement" />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 <DatePickerField
                   name="start_period"
                   control={form.control}
-                  label="Start Period"
+                  label="Début de la période"
                   disabled={loading || payslipLoading}
                 />
 
                 <DatePickerField
                   name="end_period"
                   control={form.control}
-                  label="End Period"
+                  label="Fin de la période"
                   disabled={loading || payslipLoading}
                 />
               </div>
             </FormSectionContent>
           </FormSection>
-          <FormSection header={<FormSectionLabel>Time Entries</FormSectionLabel>}>
+          <FormSection header={<FormSectionLabel>Entrées de Temps</FormSectionLabel>}>
             <FormSectionContent loading={false} fullWidth className="!gap-2 space-y-4">
               {fields.map((field, index) => (
                 <div key={index} className="grid grid-cols-[1fr_1fr_1fr_auto] gap-4 items-end">
@@ -262,7 +262,7 @@ const PayslipForm = () => {
                         <FormControl>
                           <InputNumber
                             type="number"
-                            label="Week"
+                            label="Semaine"
                             placeholder="1"
                             {...field}
                             size="small"
@@ -283,7 +283,7 @@ const PayslipForm = () => {
                         <FormControl>
                           <Input
                             type="number"
-                            label="Worked Hours"
+                            label="Heures travaillées"
                             placeholder="0.00"
                             {...field}
                             onChange={e => {
@@ -309,7 +309,7 @@ const PayslipForm = () => {
                           <Input
                             {...field}
                             type="number"
-                            label="Overtime"
+                            label="Heures supplémentaires"
                             value={calculateOvertime(
                               form.watch(`time_entries.${index}.worked_hours`),
                             )}
@@ -344,12 +344,12 @@ const PayslipForm = () => {
                   onClick={addTimeEntry}
                   disabled={loading || payslipLoading}
                   className="text-white">
-                  Add Time Entry
+                  Ajouter une entrée de temps
                 </Button>
               </div>
             </FormSectionContent>
           </FormSection>
-          <FormSection header={<FormSectionLabel>Linked Projects</FormSectionLabel>}>
+          <FormSection header={<FormSectionLabel>Employés liés</FormSectionLabel>}>
             <FormSectionContent loading={false} fullWidth className="!gap-2 space-y-4">
               <FormField
                 control={form.control}

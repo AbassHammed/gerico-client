@@ -97,14 +97,14 @@ export default function UserSelect({
             disabled={loading}
             className="w-full justify-between bg-alternative dark:bg-muted  hover:bg-selection
           border-strong hover:border-stronger">
-            Search for a User to link to...
+            Rechercher un emlployé
             <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button_Shadcn>
         </PopoverTrigger>
         <PopoverContent className="w-[calc(100vw-40rem)]  p-0">
           <Loading active={isLoadingMembers}>
             <Command>
-              <CommandInput placeholder="Search for a User to link to..." />
+              <CommandInput placeholder="Rechercer un employé" />
               <CommandList>
                 {members?.map(user => (
                   <CommandItem key={user.uid} onSelect={() => addUser(user)}>
@@ -120,7 +120,10 @@ export default function UserSelect({
       <div className="mt-4 table-container">
         <div className="rounded w-full">
           <Table
-            head={[<Table.th key="header-user">User</Table.th>, <Table.th key="header-action" />]}
+            head={[
+              <Table.th key="header-user">Employé</Table.th>,
+              <Table.th key="header-action" />,
+            ]}
             body={
               selectedUsers?.length === 0 || !selectedUsers
                 ? [
@@ -128,7 +131,7 @@ export default function UserSelect({
                       <Table.td colSpan={12}>
                         <div className="flex items-center space-x-3 opacity-75">
                           <AlertCircle size={16} strokeWidth={2} />
-                          <p className="text-foreground-light">No users are selected</p>
+                          <p className="text-foreground-light">Aucun employé sélectionné</p>
                         </div>
                       </Table.td>
                     </Table.tr>,
