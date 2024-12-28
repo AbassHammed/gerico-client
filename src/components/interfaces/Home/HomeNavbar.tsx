@@ -1,3 +1,5 @@
+'use  client';
+
 import React from 'react';
 
 import Image from 'next/image';
@@ -12,7 +14,7 @@ interface NavItemPropsType {
 function NavItem({ label }: NavItemPropsType) {
   return (
     <a href="#">
-      <Typography as="li" color="blue-gray" className="p-1 font-medium text-black">
+      <Typography as="li" color="blue-gray" className="p-1 font-medium text-black text-left">
         {label}
       </Typography>
     </a>
@@ -21,10 +23,10 @@ function NavItem({ label }: NavItemPropsType) {
 
 function NavList() {
   return (
-    <ul className="mb-4 mt-2 flex flex-col items-center justify-center gap-3 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-8 text-black">
-      <NavItem label="About Us" />
-      <NavItem label="Pricing" />
-      <NavItem label="Contact Us" />
+    <ul className="mb-4 mt-2 flex flex-col items-start justify-start gap-3 lg:mb-0 lg:mt-0 lg:flex-row lg:items-start lg:gap-8 text-black">
+      <NavItem label="À propos" />
+      <NavItem label="Nos services" />
+      <NavItem label="Nous contacter" />
     </ul>
   );
 }
@@ -46,14 +48,22 @@ export function HomeNavbar() {
           color="blue-gray"
           className="mr-4 cursor-pointer text-lg font-bold">
           <div style={{ maxWidth: '200px' }}>
-            <Image src="/Gerico2.svg" alt="Gerico Logo" layout="responsive" width={4} height={1} />
+            <a href="/">
+              <Image
+                src="/Gerico2.svg"
+                alt="Gerico Logo"
+                layout="responsive"
+                width={4}
+                height={1}
+              />
+            </a>
           </div>
         </Typography>
         <div className="hidden lg:block">
           <NavList />
         </div>
-        <Button color="gray" className="hidden lg:inline-block bg-brand-300">
-          Sign in
+        <Button color="gray" className="hidden lg:inline-block bg-brand-300 normal-case">
+          Se connecter
         </Button>
         <IconButton
           size="sm"
@@ -73,10 +83,10 @@ export function HomeNavbar() {
         <div
           className={`mt-2 py-2 px-4 ${open ? 'bg-transparent' : 'bg-transparent'} ${
             open ? 'rounded-none' : 'rounded-none'
-          } flex flex-col justify-center items-center`}>
+          } flex flex-col justify-start items-start`}>
           <NavList />
-          <Button className="mb-2 text-white bg-brand-300 flex justify-center items-center">
-            Sign in
+          <Button className="mb-2 text-white bg-brand-300 flex justify-start normal-case">
+            Se connecter
           </Button>
         </div>
       </Collapse>
