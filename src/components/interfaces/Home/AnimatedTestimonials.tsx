@@ -14,25 +14,28 @@ type Testimonial = {
   src: string;
 };
 
-const AnimatedTestimonials = ({ autoplay = false }: { autoplay?: boolean }) => {
+const AnimatedTestimonials = ({ autoplay = true }: { autoplay?: boolean }) => {
   // Témoignages définis en interne
   const testimonials: Testimonial[] = [
     {
-      quote: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      name: 'John Doe',
-      designation: 'CEO of Acme',
-      src: '/images/testimonial-1.svg', // Remplace par un chemin d'image valide
-    },
-    {
-      quote: 'Sed non risus. Suspendisse lectus tortor, dignissim sit amet.',
-      name: 'Jane Doe',
-      designation: 'CTO of Acme',
+      quote:
+        'Carrefour a grandement bénéficié de cette collaboration, améliorant ainsi la gestion de notre supply chain et réduisant les coûts opérationnels.',
+      name: 'Carrefour',
+      designation: '',
       src: '/images/testimonial-2.svg', // Remplace par un chemin d'image valide
     },
     {
-      quote: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      name: 'Bob Smith',
-      designation: 'Designer at DesignCo',
+      quote:
+        'Tom&Co a révolutionné notre gestion logistique, nous permettant d’optimiser nos processus et d’offrir un service encore plus rapide à nos clients.',
+      name: 'Tom&Co',
+      designation: '',
+      src: '/images/testimonial-1.svg', // Remplace par un chemin d'image valide
+    },
+    {
+      quote:
+        'IKEA a constaté une nette amélioration de l’efficacité de nos livraisons grâce à l’expertise de notre partenaire logistique.',
+      name: 'IKEA',
+      designation: '',
       src: '/images/testimonial-3.svg', // Remplace par un chemin d'image valide
     },
   ];
@@ -51,16 +54,16 @@ const AnimatedTestimonials = ({ autoplay = false }: { autoplay?: boolean }) => {
 
   useEffect(() => {
     if (autoplay) {
-      const interval = setInterval(handleNext, 5000);
+      const interval = setInterval(handleNext, 10000); // Intervalle de 10 secondes
       return () => clearInterval(interval);
     }
   }, [autoplay]);
 
-  const randomRotateY = () => Math.floor(Math.random() * 21) - 10;
+  const randomRotateY = () => Math.floor(Math.random() * 21) - 5;
 
   return (
     <div className="max-w-sm md:max-w-4xl mx-auto antialiased font-sans px-4 md:px-8 lg:px-12 py-20">
-      <div className="relative grid grid-cols-1 md:grid-cols-2  gap-20">
+      <div className="relative grid grid-cols-1 md:grid-cols-2 gap-20">
         <div>
           <div className="relative h-80 w-full">
             <AnimatePresence>
@@ -74,12 +77,12 @@ const AnimatedTestimonials = ({ autoplay = false }: { autoplay?: boolean }) => {
                     rotate: randomRotateY(),
                   }}
                   animate={{
-                    opacity: isActive(index) ? 1 : 0.7,
-                    scale: isActive(index) ? 1 : 0.95,
-                    z: isActive(index) ? 0 : -100,
+                    opacity: isActive(index) ? 1 : 0,
+                    scale: isActive(index) ? 1 : 0.9,
+                    z: isActive(index) ? 0 : 999,
                     rotate: isActive(index) ? 0 : randomRotateY(),
                     zIndex: isActive(index) ? 999 : testimonials.length + 2 - index,
-                    y: isActive(index) ? [0, -80, 0] : 0,
+                    y: isActive(index) ? [0, 0, 0] : 0,
                   }}
                   exit={{
                     opacity: 0,
@@ -121,7 +124,7 @@ const AnimatedTestimonials = ({ autoplay = false }: { autoplay?: boolean }) => {
               opacity: 0,
             }}
             transition={{
-              duration: 0.2,
+              duration: 0.4,
               ease: 'easeInOut',
             }}>
             <h3 className="text-2xl font-bold dark:text-white text-black">
@@ -145,7 +148,7 @@ const AnimatedTestimonials = ({ autoplay = false }: { autoplay?: boolean }) => {
                     y: 0,
                   }}
                   transition={{
-                    duration: 0.2,
+                    duration: 0.4,
                     ease: 'easeInOut',
                     delay: 0.02 * index,
                   }}

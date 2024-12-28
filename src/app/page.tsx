@@ -3,7 +3,7 @@
 import React from 'react';
 
 import AnimatedTestimonials from '@/components/interfaces/Home/AnimatedTestimonials';
-import CardDefault from '@/components/interfaces/Home/CardDefault';
+// import CardDefault from '@/components/interfaces/Home/CardDefault';
 import HeroSection from '@/components/interfaces/Home/HeroSection';
 import HomeFooter from '@/components/interfaces/Home/HomeFooter';
 import HomeNavbar from '@/components/interfaces/Home/HomeNavbar';
@@ -12,14 +12,14 @@ import PromoCardText from '@/components/interfaces/Home/PromoCardText';
 
 export default function Home() {
   return (
-    <>
+    <div className="">
       <HomeNavbar />
       <HeroSection />
-      <CardDefault />
+      {/* <CardDefault /> */}
       <PromoCardText />
       {/* <PromoCard /> */}
       <AnimatedTestimonials autoplay={true} />
       <HomeFooter />
-    </>
+    </div>
   );
 }
