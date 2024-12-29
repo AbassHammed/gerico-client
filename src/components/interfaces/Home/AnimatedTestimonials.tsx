@@ -15,46 +15,40 @@ type Testimonial = {
 };
 
 const AnimatedTestimonials = ({ autoplay = true }: { autoplay?: boolean }) => {
-  // Témoignages définis en interne
   const testimonials: Testimonial[] = [
     {
       quote:
-        'Carrefour a grandement bénéficié de cette collaboration, améliorant ainsi la gestion de notre supply chain et réduisant les coûts opérationnels.',
+        'Conforama a constaté une nette amélioration dans l’efficacité de nos livraisons grâce au professionnalisme et à la fiabilité de GERICO.',
+      name: 'Conforama',
+      designation: '',
+      src: '/images/testimonial-1.svg',
+    },
+    {
+      quote:
+        'Carrefour a grandement bénéficié de cette collaboration, améliorant notre supply chain et réduisant les coûts opérationnels.',
       name: 'Carrefour',
       designation: '',
-      src: '/images/testimonial-2.svg', // Remplace par un chemin d'image valide
+      src: '/images/testimonial-2.svg',
     },
     {
       quote:
-        'Tom&Co a révolutionné notre gestion logistique, nous permettant d’optimiser nos processus et d’offrir un service encore plus rapide à nos clients.',
-      name: 'Tom&Co',
-      designation: '',
-      src: '/images/testimonial-1.svg', // Remplace par un chemin d'image valide
-    },
-    {
-      quote:
-        'IKEA a constaté une nette amélioration de l’efficacité de nos livraisons grâce à l’expertise de notre partenaire logistique.',
+        'IKEA a renforcé sa logistique grâce à GERICO, nous permettant de respecter nos engagements envers nos clients avec une grande fiabilité.',
       name: 'IKEA',
       designation: '',
-      src: '/images/testimonial-3.svg', // Remplace par un chemin d'image valide
+      src: '/images/testimonial-3.svg',
     },
   ];
 
   const [active, setActive] = useState(0);
 
-  const handleNext = () => {
-    setActive(prev => (prev + 1) % testimonials.length);
-  };
-
-  const handlePrev = () => {
+  const handleNext = () => setActive(prev => (prev + 1) % testimonials.length);
+  const handlePrev = () =>
     setActive(prev => (prev - 1 + testimonials.length) % testimonials.length);
-  };
-
   const isActive = (index: number) => index === active;
 
   useEffect(() => {
     if (autoplay) {
-      const interval = setInterval(handleNext, 10000); // Intervalle de 10 secondes
+      const interval = setInterval(handleNext, 10000);
       return () => clearInterval(interval);
     }
   }, [autoplay]);
@@ -81,8 +75,6 @@ const AnimatedTestimonials = ({ autoplay = true }: { autoplay?: boolean }) => {
                     scale: isActive(index) ? 1 : 0.9,
                     z: isActive(index) ? 0 : 999,
                     rotate: isActive(index) ? 0 : randomRotateY(),
-                    zIndex: isActive(index) ? 999 : testimonials.length + 2 - index,
-                    y: isActive(index) ? [0, 0, 0] : 0,
                   }}
                   exit={{
                     opacity: 0,
@@ -91,7 +83,7 @@ const AnimatedTestimonials = ({ autoplay = true }: { autoplay?: boolean }) => {
                     rotate: randomRotateY(),
                   }}
                   transition={{
-                    duration: 0.4,
+                    duration: 0.2,
                     ease: 'easeInOut',
                   }}
                   className="absolute inset-0 origin-bottom">
@@ -111,63 +103,27 @@ const AnimatedTestimonials = ({ autoplay = true }: { autoplay?: boolean }) => {
         <div className="flex justify-between flex-col py-4">
           <motion.div
             key={active}
-            initial={{
-              y: 20,
-              opacity: 0,
-            }}
-            animate={{
-              y: 0,
-              opacity: 1,
-            }}
-            exit={{
-              y: -20,
-              opacity: 0,
-            }}
-            transition={{
-              duration: 0.4,
-              ease: 'easeInOut',
-            }}>
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -20, opacity: 0 }}
+            transition={{ duration: 0.2, ease: 'easeInOut' }}>
             <h3 className="text-2xl font-bold dark:text-white text-black">
               {testimonials[active].name}
             </h3>
-            <p className="text-sm text-gray-500 dark:text-neutral-500">
-              {testimonials[active].designation}
+            <p className="text-lg text-gray-500 mt-8 dark:text-neutral-300">
+              {testimonials[active].quote}
             </p>
-            <motion.p className="text-lg text-gray-500 mt-8 dark:text-neutral-300">
-              {testimonials[active].quote.split(' ').map((word, index) => (
-                <motion.span
-                  key={index}
-                  initial={{
-                    filter: 'blur(10px)',
-                    opacity: 0,
-                    y: 5,
-                  }}
-                  animate={{
-                    filter: 'blur(0px)',
-                    opacity: 1,
-                    y: 0,
-                  }}
-                  transition={{
-                    duration: 0.4,
-                    ease: 'easeInOut',
-                    delay: 0.02 * index,
-                  }}
-                  className="inline-block">
-                  {word}&nbsp;
-                </motion.span>
-              ))}
-            </motion.p>
           </motion.div>
           <div className="flex gap-4 pt-12 md:pt-0">
             <button
               onClick={handlePrev}
-              className="h-7 w-7 rounded-full bg-gray-100 dark:bg-neutral-800 flex items-center justify-center group/button">
-              <IconArrowLeft className="h-5 w-5 text-black dark:text-neutral-400 group-hover/button:rotate-12 transition-transform duration-300" />
+              className="h-7 w-7 rounded-full bg-gray-100 dark:bg-neutral-800 flex items-center justify-center group">
+              <IconArrowLeft className="h-5 w-5 text-black dark:text-neutral-400 group-hover:rotate-12 transition-transform duration-300" />
             </button>
             <button
               onClick={handleNext}
-              className="h-7 w-7 rounded-full bg-gray-100 dark:bg-neutral-800 flex items-center justify-center group/button">
-              <IconArrowRight className="h-5 w-5 text-black dark:text-neutral-400 group-hover/button:-rotate-12 transition-transform duration-300" />
+              className="h-7 w-7 rounded-full bg-gray-100 dark:bg-neutral-800 flex items-center justify-center group">
+              <IconArrowRight className="h-5 w-5 text-black dark:text-neutral-400 group-hover:-rotate-12 transition-transform duration-300" />
             </button>
           </div>
         </div>

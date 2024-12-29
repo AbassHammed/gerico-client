@@ -1,87 +1,57 @@
-import {
-  Button,
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  Typography,
-} from '@material-tailwind/react';
+import { Card, CardBody, CardFooter, CardHeader, Typography } from '@material-tailwind/react';
+
+const cardData = [
+  {
+    title: 'Logistique & E-commerce',
+    description:
+      "Découvrez nos solutions adaptées à l'industrie du e-commerce pour optimiser la gestion des livraisons et des flux logistiques.",
+    imageUrl: '/images/entrepot-2.svg',
+    link: '/',
+  },
+  {
+    title: 'Logistique industrielle',
+    description:
+      "Optimisez vos chaînes d'approvisionnement industrielles grâce à notre expertise en transport et gestion des flux.",
+    imageUrl: '/images/camion.svg',
+    link: '/',
+  },
+  {
+    title: 'Transport & Mobilité',
+    description:
+      'GERICO offre des solutions de transport innovantes et écologiques pour répondre à vos besoins en mobilité.',
+    imageUrl: '/images/siege.svg',
+    link: '/',
+  },
+];
 
 function CardDefault() {
   return (
-    <div className="flex flex-wrap justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4 lg:space-x-10 px-4 sm:px-8 lg:px-0">
-      {/* Première carte */}
-      <Card className="w-full sm:w-80 lg:w-80">
-        <CardHeader color="blue-gray" className="relative h-56">
-          <img
-            src="https://images.unsplash.com/photo-1540553016722-983e48a2cd10?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80"
-            alt="card-image"
-            className="w-full h-full object-cover"
-          />
-        </CardHeader>
-        <CardBody>
-          <Typography variant="h5" color="blue-gray" className="mb-2">
-            Expansion du réseau GERICO
-          </Typography>
-          <Typography>
-            Le groupe GERICO vient d'ouvrir une nouvelle plateforme logistique à Lyon, permettant
-            ainsi une gestion plus rapide des flux entre le nord et le sud de la France. Cette
-            expansion va également permettre de réduire les délais de livraison pour nos clients
-            dans la région.
-          </Typography>
-        </CardBody>
-        <CardFooter className="pt-0">
-          <Button>En savoir plus</Button>
-        </CardFooter>
-      </Card>
-
-      {/* Deuxième carte */}
-      <Card className="w-full sm:w-80 lg:w-80">
-        <CardHeader color="blue-gray" className="relative h-56">
-          <img
-            src="https://images.unsplash.com/photo-1540553016722-983e48a2cd10?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80"
-            alt="card-image"
-            className="w-full h-full object-cover"
-          />
-        </CardHeader>
-        <CardBody>
-          <Typography variant="h5" color="blue-gray" className="mb-2">
-            Partenariat avec Carrefour
-          </Typography>
-          <Typography>
-            GERICO a signé un partenariat stratégique avec Carrefour pour optimiser les livraisons
-            dans toute la France. Ce partenariat va permettre d'améliorer les délais de
-            réapprovisionnement des magasins tout en réduisant les coûts opérationnels.
-          </Typography>
-        </CardBody>
-        <CardFooter className="pt-0">
-          <Button>En savoir plus</Button>
-        </CardFooter>
-      </Card>
-
-      {/* Troisième carte */}
-      <Card className="w-full sm:w-80 lg:w-80">
-        <CardHeader color="blue-gray" className="relative h-56">
-          <img
-            src="https://images.unsplash.com/photo-1540553016722-983e48a2cd10?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80"
-            alt="card-image"
-            className="w-full h-full object-cover"
-          />
-        </CardHeader>
-        <CardBody>
-          <Typography variant="h5" color="blue-gray" className="mb-2">
-            GERICO investit dans la technologie
-          </Typography>
-          <Typography>
-            Dans un effort pour rester à la pointe de l'innovation, GERICO a investi dans de
-            nouvelles technologies d'automatisation pour ses entrepôts. Ce projet vise à augmenter
-            l'efficacité et à réduire les erreurs humaines dans la gestion des stocks.
-          </Typography>
-        </CardBody>
-        <CardFooter className="pt-0">
-          <Button>En savoir plus</Button>
-        </CardFooter>
-      </Card>
+    <div className="flex flex-wrap justify-center gap-8 px-4 sm:px-8 lg:px-0 py-5">
+      {cardData.map((card, index) => (
+        <a
+          key={index}
+          href={card.link}
+          className="w-full sm:w-96 lg:w-80 flex flex-col hover:shadow-lg transition-shadow duration-300 no-underline">
+          <Card className="h-full flex flex-col">
+            <CardHeader color="blue-gray" className="relative h-56">
+              <img
+                src={card.imageUrl}
+                alt={`Image ${card.title}`}
+                className="w-full h-full object-cover rounded-lg"
+              />
+            </CardHeader>
+            <CardBody className="flex-grow min-h-[150px]">
+              <Typography variant="h5" color="blue-gray" className="mb-4">
+                {card.title}
+              </Typography>
+              <Typography className="text-gray-600">{card.description}</Typography>
+            </CardBody>
+            <CardFooter className="pt-4 flex justify-end items-center">
+              <span className="text-brand-300 text-lg font-bold">&#8594;</span>
+            </CardFooter>
+          </Card>
+        </a>
+      ))}
     </div>
   );
 }

@@ -3,10 +3,8 @@
 import React from 'react';
 
 const HeroSection = () => (
-  <div className="relative w-full h-[70vh] flex items-center justify-center overflow-hidden">
-    {/* Conteneur qui gère l'échelle pour éviter le décalage */}
+  <div className="relative w-full h-[70vh]  flex items-center justify-center overflow-hidden">
     <div className="w-full max-w-7xl mx-auto px-4">
-      {/* SVG en arrière-plan */}
       <svg
         className="absolute top-0 left-0 w-full h-full object-cover z-0"
         xmlns="http://www.w3.org/2000/svg"
@@ -15,7 +13,6 @@ const HeroSection = () => (
         <path d="M3333 0.5V3093.5L0 975V0.5H3333Z" fill="#E2EDF9" />
       </svg>
 
-      {/* Texte superposé avec une marge de 100px à gauche */}
       <div className="relative z-10 max-w-3xl text-left text-gray-800 pl-6 sm:pl-12 lg:pl-24">
         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
           Entreprise <span className="text-brand-300">logistique</span> et{' '}
