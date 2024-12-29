@@ -11,6 +11,7 @@ import {
   FormPanel,
   FormSection,
   FormSectionContent,
+  InformationBox,
   Input,
   ScaffoldActionsContainer,
   ScaffoldContainerLegacy,
@@ -36,10 +37,12 @@ import { ILeaveRequestInput } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { isAfter } from 'date-fns';
 import Holidays from 'date-holidays';
+import { AlertCircle } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
+import HelpLeaves from './HelpLeaves';
 import { LeaveStatusEnum } from './LeaveStatusBadge';
 
 const FormSchema = z.object({
@@ -173,6 +176,13 @@ const LeaveRequest = () => {
                       value={range}
                       onChange={setRange}
                     />
+                    <InformationBox
+                      icon={<AlertCircle size={18} strokeWidth={2} />}
+                      defaultVisibility={false}
+                      hideCollapse={false}
+                      title="Aide prise de congé"
+                      description={<HelpLeaves />}
+                    />
                   </ScaffoldSectionContent>
                 </ScaffoldFilterAndContent>
               </FormSectionContent>
@@ -183,7 +193,7 @@ const LeaveRequest = () => {
                   name="leave_type"
                   control={form.control}
                   render={({ field }) => (
-                    <FormItemLayout layout="vertical" label="Sujet">
+                    <FormItemLayout layout="vertical" label="Type de congé">
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl_Shadcn>
                           <SelectTrigger>
@@ -206,7 +216,7 @@ const LeaveRequest = () => {
                   render={({ field }) => (
                     <FormItemLayout
                       layout="vertical"
-                      label="Message"
+                      label="Raison"
                       labelOptional="Limite de 5000 caractères  ">
                       <FormControl_Shadcn>
                         <TextArea_Shadcn

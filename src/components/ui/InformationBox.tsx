@@ -69,7 +69,7 @@ const InformationBox = forwardRef<HTMLDivElement, InformationBoxProps>(
               className={`flex flex-col space-y-3 overflow-hidden transition-all ${
                 isExpanded ? 'mt-3' : ''
               }`}
-              style={{ maxHeight: isExpanded ? 500 : 0 }}>
+              style={{ maxHeight: isExpanded ? 1000 : 0 }}>
               <div className="text-foreground-light text-sm">{description}</div>
 
               {url && (

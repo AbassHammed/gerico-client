@@ -14,6 +14,7 @@ export default function useChangeDefaultPassword() {
     '/users/change-default-password',
     undefined,
     'POST',
+    true,
   );
 
   const change = async (inputs: IChangePasswordInput) => {

@@ -97,7 +97,7 @@ const PayslipForm = () => {
 
   async function onSubmit(values: FormValues) {
     try {
-      toast.loading('Téléchargement des fiches de paie en cours...');
+      const toastId = toast.loading('Téléchargement des fiches de paie en cours...');
       setLoading(true);
       if (!selectedUsers || !deductions || !thresholds || !companyInfo) {
         throw new Error("Une erreur s'est produite lors de la récupération des données");
@@ -152,7 +152,7 @@ const PayslipForm = () => {
         }
       }
 
-      toast.success('Fiches de paie téléchargées avec succès');
+      toast.success('Fiches de paie téléchargées avec succès', { id: toastId });
       form.reset();
       setUsers([]);
     } catch (error: any) {
@@ -197,6 +197,7 @@ const PayslipForm = () => {
                     Annuler
                   </Button>
                   <Button
+                    className="text-white"
                     form={formId}
                     type="primary"
                     htmlType="submit"

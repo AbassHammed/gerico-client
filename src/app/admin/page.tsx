@@ -16,7 +16,7 @@ export default function dashboardPage() {
     <div className="w-full mx-auto my-16 space-y-16 max-w-7xl">
       <div className="flex items-center justify-between mx-6 space-x-6">
         <div className="flex flex-row items-center gap-3">
-          <h1 className="text-3xl">{companyName}</h1>
+          <h1 className="text-3xl">{`Bienvenue sur le tableau de bord de ${companyName}`}</h1>
         </div>
       </div>
 
@@ -24,18 +24,6 @@ export default function dashboardPage() {
         <div className="grid grid-cols-12 gap-4 lg:gap-20">
           <div className="col-span-12">
             <div className="flex flex-col space-y-20">
-              <div className="flex h-full flex-col justify-between">
-                <div className="space-y-2">
-                  <h3 className="text-xl text-foreground">
-                    Bienvenue sur le tableau de bord Gerico Transport
-                  </h3>
-                  <p className="text-base text-foreground-light">
-                    Your project has been deployed on its own instance, with its own API all set up
-                    and ready to use.
-                  </p>
-                </div>
-              </div>
-
               <div className="grid grid-cols-12 gap-4">
                 <div className="col-span-12 flex flex-col justify-center space-y-8 lg:col-span-7">
                   <div className="space-y-2">
