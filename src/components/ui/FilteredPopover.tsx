@@ -44,7 +44,7 @@ export const FilterPopover = ({
   disabled,
   labelClass,
   maxHeightClass = 'h-[205px]',
-  clearButtonText = 'Clear',
+  clearButtonText = 'Effacer',
   onSaveFilter,
 }: FilterPopoverProps) => {
   const [open, setOpen] = useState(false);
@@ -80,10 +80,10 @@ export const FilterPopover = ({
           </div>
         </Button>
       </PopoverTrigger_Shadcn>
-      <PopoverContent_Shadcn className="p-0 w-44" align="start">
+      <PopoverContent_Shadcn className="p-0 w-46" align="start">
         <div className="border-b border-overlay bg-surface-200 rounded-t pb-1 px-3">
           <span className="text-xs text-foreground-light">
-            {title ?? `Select ${name.toLowerCase()}`}
+            {title ?? `Choisir ${name.toLowerCase()}`}
           </span>
         </div>
         <ScrollArea className={options.length > 7 ? maxHeightClass : ''}>
@@ -126,12 +126,13 @@ export const FilterPopover = ({
             {clearButtonText}
           </Button>
           <Button
+            className="text-white"
             type="primary"
             onClick={() => {
               onSaveFilter(selectedOption);
               setOpen(false);
             }}>
-            Save
+            Sauvegarder
           </Button>
         </div>
       </PopoverContent_Shadcn>

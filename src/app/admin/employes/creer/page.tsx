@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 'use client';
 
 import React from 'react';
@@ -11,19 +12,18 @@ import {
   ScaffoldHeader,
   ScaffoldTitle,
 } from '@/components/ui';
-import { GenericSkeletonLoaderList } from '@/components/ui/ShimmeringLoader';
 import { useCreateUser } from '@/hooks/useCreateUser';
 import { useUser } from '@/hooks/useUser';
 import { toast } from 'sonner';
 
 export default function EmployeeForm() {
-  const { user, isLoading } = useUser();
+  const { user } = useUser();
   const { createUser, loading } = useCreateUser();
 
   const onSubmit = async (inputs: UserSchemaType, { resetForm }: any) => {
     // this will probably never happen since the user is required to be connected to access this page
     if (!user) {
-      toast.error('You are not connected');
+      toast.error('Vous devez être connecté pour accéder à cette page');
       return;
     }
 
@@ -33,7 +33,9 @@ export default function EmployeeForm() {
       toast.success(message);
       resetForm();
     } catch (error: any) {
-      toast.error(`Failed to create user: ${error.message ? error.message : 'An error occurred'}`);
+      toast.error("Une erreur est survenue lors de la création de l'employé", {
+        description: error.message,
+      });
     }
   };
   return (
@@ -47,8 +49,7 @@ export default function EmployeeForm() {
       <ScaffoldDivider />
 
       <ScaffoldContainerLegacy>
-        {(isLoading || loading) && <GenericSkeletonLoaderList />}
-        {!isLoading && !loading && <UserForm onSubmit={onSubmit} isSubmitting={loading} />}
+        {<UserForm onSubmit={onSubmit} isSubmitting={loading} />}
       </ScaffoldContainerLegacy>
     </React.Fragment>
   );

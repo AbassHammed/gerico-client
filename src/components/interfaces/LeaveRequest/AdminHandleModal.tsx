@@ -70,7 +70,10 @@ const AdminHandleModal: React.FC<
               <li>Type de congé : {leaveRequest.leave_type}</li>
               <li>
                 Statut actuel :{' '}
-                <LeaveStatusBadge status={leaveRequest.request_status as LeaveStatusEnum} />
+                <LeaveStatusBadge
+                  status={leaveRequest.request_status as LeaveStatusEnum}
+                  isAdminPage
+                />
               </li>
             </ul>
             <p className="mt-4 text-foreground-lighter">

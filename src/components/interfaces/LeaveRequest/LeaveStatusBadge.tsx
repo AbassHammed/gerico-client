@@ -27,7 +27,13 @@ const leaveStatusMapping: Record<
   },
 };
 
-const LeaveStatusEnumBadge = ({ status }: { status: LeaveStatusEnum }) => {
+const LeaveStatusEnumBadge = ({
+  status,
+  isAdminPage,
+}: {
+  status: LeaveStatusEnum;
+  isAdminPage: boolean;
+}) => {
   const statusMapping = leaveStatusMapping[status];
 
   return (
@@ -50,15 +56,19 @@ const LeaveStatusEnumBadge = ({ status }: { status: LeaveStatusEnum }) => {
             ].join(' ')}>
             {status === LeaveStatusEnum.WAITING && (
               <p className="text-xs text-foreground">
-                Votre demande de congé est en attente d'approbation.
+                {isAdminPage ? 'La ' : 'Votre '} demande de congé est en attente d'approbation.
               </p>
             )}
 
             {status === LeaveStatusEnum.ACCEPTED && (
-              <p className="text-xs text-foreground">Votre demande de congé a été acceptée.</p>
+              <p className="text-xs text-foreground">
+                {isAdminPage ? 'La ' : 'Votre '} demande de congé a été acceptée.
+              </p>
             )}
             {status === LeaveStatusEnum.REFUSED && (
-              <p className="text-xs text-foreground">Votre demande de congé a été refusée.</p>
+              <p className="text-xs text-foreground">
+                {isAdminPage ? 'La ' : 'Votre '} demande de congé a été refusée.
+              </p>
             )}
           </div>
         </Tooltip.Content>

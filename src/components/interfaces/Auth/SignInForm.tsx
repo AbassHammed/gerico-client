@@ -25,7 +25,7 @@ const SignInForm = () => {
   const { login, loading } = useLogin();
   const [passwordHidden, setPasswordHidden] = useState(true);
 
-  const handleSuccessfulLogin = (user: IUser, code: string | null) => {
+  const handleSuccessfulLogin = (user: IUser | null, code: string | null) => {
     if (code === 'DEFAULTPASS') {
       toast.warning('Mot de passe par defaut', {
         description: 'Vous devez changer votre mot de passe par défaut pour continuer',
@@ -38,7 +38,7 @@ const SignInForm = () => {
     if (redirectTo) {
       router.push(redirectTo);
     } else {
-      if (user.is_admin) {
+      if (user?.is_admin) {
         router.push(PagesRoutes.Admin_Dashboard);
       } else {
         router.push(PagesRoutes.Employee_Home);
@@ -49,7 +49,7 @@ const SignInForm = () => {
   const onSignIn = async ({ email, password }: { email: string; password: string }) => {
     try {
       const { code, user } = await login({ email, password });
-      if (user) {
+      if (user || code) {
         handleSuccessfulLogin(user, code);
       }
     } catch (error: any) {

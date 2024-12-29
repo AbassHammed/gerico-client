@@ -91,9 +91,7 @@ const UserLeaveTable = () => {
           <>
             {leaves.length === 0 ? (
               <div className="bg-surface-100 border rounded p-4 flex items-center justify-center">
-                <p className="prose text-sm">
-                  Vous n'avez pas encore de demande de congé disponible
-                </p>
+                <p className="prose text-sm">Vous n'avez pas encore fait de demande de congé</p>
               </div>
             ) : leaves.length > 0 && sortedLeaves.length === 0 ? (
               <div className="bg-surface-100 border rounded p-4 flex items-center justify-center">
@@ -187,6 +185,7 @@ const UserLeaveTable = () => {
                                   ? LeaveStatusEnum.REFUSED
                                   : LeaveStatusEnum.WAITING
                             }
+                            isAdminPage={false}
                           />
                         </Table.td>
                         <Table.td>{leave.leave_type}</Table.td>

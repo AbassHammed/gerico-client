@@ -114,11 +114,13 @@ const AdminLeaveTable = () => {
           <>
             {leaves.length === 0 ? (
               <div className="bg-surface-100 border rounded p-4 flex items-center justify-center">
-                <p className="prose text-sm">You do not have any leave request available yet</p>
+                <p className="prose text-sm">Aucune demande de congé trouvée</p>
               </div>
             ) : leaves.length > 0 && sortedLeaves.length === 0 ? (
               <div className="bg-surface-100 border rounded p-4 flex items-center justify-center">
-                <p className="prose text-sm">No leave request found for the filter applied</p>
+                <p className="prose text-sm">
+                  Aucune demande de congé trouvée pour le statut sélectionné
+                </p>
               </div>
             ) : (
               <Table
@@ -202,7 +204,10 @@ const AdminLeaveTable = () => {
                         <Table.td>{dayjs(leave.created_at).format('DD MMM YYYY, HH:mm')}</Table.td>
                         <Table.td>{`${getWorkingDaysBetweenDates(leave.start_date, leave.end_date)} jours`}</Table.td>
                         <Table.td>
-                          <LeaveStatusBadge status={leave.request_status as LeaveStatusEnum} />
+                          <LeaveStatusBadge
+                            status={leave.request_status as LeaveStatusEnum}
+                            isAdminPage
+                          />
                         </Table.td>
                       </Table.tr>
                     ))}

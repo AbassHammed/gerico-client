@@ -28,21 +28,24 @@ type GetSignedURLParams = {
   fileType: string;
   fileSize: number;
   checksum: string;
+  dir: 'payslips' | 'documents';
 };
 
 export const getSignedURL = async ({
   fileType,
   fileSize,
   checksum,
+  dir = 'payslips',
 }: GetSignedURLParams): SignedURLResponse => {
   if (!allowedFileTypes.includes(fileType)) {
     return { failure: 'Invalid file type' };
   }
 
   const fileName = generateFileName();
+  const filePath = `${dir}/${fileName}`;
   const command = new PutObjectCommand({
     Bucket: process.env.NEXT_PUBLIC_DO_BUCKET_NAME!,
-    Key: fileName,
+    Key: filePath,
     ContentType: fileType,
     ContentLength: fileSize,
     ChecksumSHA256: checksum,

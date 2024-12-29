@@ -51,7 +51,10 @@ const UserDeleteLeaveRequestModal: React.FC<
               <li>Raison : {leaveRequest.reason ?? 'Non spécifiée'}</li>
               <li>
                 Statut :{' '}
-                <LeaveStatusBadge status={leaveRequest.request_status as LeaveStatusEnum} />
+                <LeaveStatusBadge
+                  status={leaveRequest.request_status as LeaveStatusEnum}
+                  isAdminPage={false}
+                />
               </li>
             </ul>
             <p className="mt-4 text-foreground-lighter">

@@ -183,7 +183,7 @@ const NavigationBar = () => {
                     <span
                       title={profile.last_name}
                       className="w-full text-left text-foreground truncate">
-                      {profile.last_name}
+                      {profile.civility} {profile.last_name} {profile.first_name}
                     </span>
                     <span
                       title={profile.email}
@@ -196,7 +196,7 @@ const NavigationBar = () => {
 
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
-                <DropdownMenuItem onSelect={onSignOut}>Log out</DropdownMenuItem>
+                <DropdownMenuItem onSelect={onSignOut}>Se déconnecter</DropdownMenuItem>
               </DropdownMenuGroup>
             </DropdownMenuContent>
           </DropdownMenu>

@@ -69,7 +69,7 @@ export function EmployeePresence() {
   };
 
   return (
-    <Card className="flex flex-col">
+    <Card className="hidden lg:flex lg:flex-col lg:mr-4">
       <CardHeader className="items-center pb-2">
         <CardDescription>Aperçu d'aujourd'hui</CardDescription>
       </CardHeader>

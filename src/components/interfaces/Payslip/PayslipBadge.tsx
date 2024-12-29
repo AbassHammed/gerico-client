@@ -22,7 +22,13 @@ const payslipStatusMapping: Record<
   },
 };
 
-const PaySlipBadge = ({ status }: { status: PayslipStatus }) => {
+const PaySlipBadge = ({
+  status,
+  isAdminPage = false,
+}: {
+  status: PayslipStatus;
+  isAdminPage: boolean;
+}) => {
   const statusMapping = payslipStatusMapping[status];
 
   return (
@@ -45,12 +51,14 @@ const PaySlipBadge = ({ status }: { status: PayslipStatus }) => {
             ].join(' ')}>
             {status === PayslipStatus.NOTPAID && (
               <p className="text-xs text-foreground">
-                Votre bulletin de paie est en cours de traitement.
+                {isAdminPage ? 'Le ' : 'Votre '} bulletin de paie est en cours de traitement.
               </p>
             )}
 
             {status === PayslipStatus.PAID && (
-              <p className="text-xs text-foreground">Votre bulletin de paie est disponible.</p>
+              <p className="text-xs text-foreground">
+                {isAdminPage ? 'Le ' : 'Votre '}bulletin de paie est disponible.
+              </p>
             )}
           </div>
         </Tooltip.Content>

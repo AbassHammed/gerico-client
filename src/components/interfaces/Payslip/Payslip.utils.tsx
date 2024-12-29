@@ -1,4 +1,5 @@
 /* eslint-disable quotes */
+
 import { getSignedURL } from '@/app/actions';
 import { FILE_TYPE } from '@/lib/constants';
 import { computeSHA256 } from '@/lib/utils';
@@ -265,6 +266,7 @@ export const handleFileUpload = async (params: IGeneratePayslipParams) => {
     fileSize: blob.size,
     fileType: FILE_TYPE,
     checksum: await computeSHA256(blob),
+    dir: 'payslips',
   });
   if (signedURLResult.failure !== undefined) {
     throw new Error(signedURLResult.failure);

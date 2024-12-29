@@ -143,6 +143,7 @@ const UserPayslipList = () => {
                                 ? PayslipStatus.NOTPAID
                                 : PayslipStatus.PAID
                             }
+                            isAdminPage={false}
                           />
                         </Table.td>
                         <Table.td className="align-right">

@@ -57,7 +57,7 @@ export default function dashboardPage() {
                     ))}
                   </div>
                 </div>
-                <div className="col-span-12 lg:col-span-5">{<EmployeePresence />}</div>
+                <div className="hidden lg:grid lg:col-span-5">{<EmployeePresence />}</div>
               </div>
             </div>
           </div>
