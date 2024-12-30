@@ -52,6 +52,7 @@ export function DatePickerField({
         <FormItem className={cn('flex flex-col', className)}>
           <FormControl>
             <Input
+              {...field}
               size="small"
               layout="vertical"
               id={name}

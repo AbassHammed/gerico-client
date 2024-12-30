@@ -1,8 +1,8 @@
 'use client';
 
+import { IPaySlipRow } from '@/types';
 import { Text, View } from '@react-pdf/renderer';
 
-import { PaySlipRow as IPaySlipRow } from '../interface';
 import { styles } from '../styles';
 
 const PaySlipRow: React.FC<IPaySlipRow> = ({

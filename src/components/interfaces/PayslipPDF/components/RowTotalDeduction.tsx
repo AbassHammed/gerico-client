@@ -1,11 +1,11 @@
 'use client';
 
+import { IPaySlipRow } from '@/types';
 import { Text, View } from '@react-pdf/renderer';
 
-import { PaySlipRow } from '../interface';
 import { styles } from '../styles';
 
-const PaySlipRowTotalDeduction: React.FC<PaySlipRow> = ({
+const PaySlipRowTotalDeduction: React.FC<IPaySlipRow> = ({
   isCotisationTitle,
   cotisation,
   partSalariale,

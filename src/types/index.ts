@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 export type ILoginInputs = {
   email: string;
@@ -165,7 +165,7 @@ export interface IGeneratePayslipParams {
   thresholds: ISSThreshold[];
   deductions: IDeduction[];
   companyInfo: ICompanyInfo;
-  seletedUser: IUser;
+  selectedUser: IUser;
   total_hours_worked: {
     worked_hours: number;
     overtime: number;
@@ -191,3 +191,30 @@ export type PaySlipItem = {
   partSalariale?: Part;
   partPatronale?: Part;
 };
+
+export interface TotalHoursWorked {
+  week: number;
+  worked_hours: number;
+  overtime: number;
+}
+
+export interface PaySlip {
+  pid: string;
+  uid: string;
+  gross_salary: number;
+  net_salary: number;
+  start_period: string;
+  end_period: string;
+  pay_date: string;
+  total_hours_worked: TotalHoursWorked[];
+  hourly_rate: number;
+  path_to_pdf: string;
+}
+
+export interface IPaySlipRow {
+  isCotisationTitle: boolean;
+  cotisation: string;
+  assiette: string | number;
+  partSalariale: Part;
+  partPatronale: Part;
+}

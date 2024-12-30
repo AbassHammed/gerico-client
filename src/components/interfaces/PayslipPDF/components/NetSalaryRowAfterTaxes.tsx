@@ -2,10 +2,13 @@
 
 import React from 'react';
 
-import { CSG_CRDS_PERCENTAGE, CSG_CRDS_PERCENTAGE_TAX, TAX_RATE } from '@/lib/constants';
 import { Text, View } from '@react-pdf/renderer';
 
 import { styles } from '../styles';
+
+const CSG_CRDS_PERCENTAGE = 0.9825;
+const CSG_CRDS_PERCENTAGE_TAX = 0.029;
+const TAX_RATE = 0.031;
 
 interface NetSalaryRowProps {
   grossSalary: number;
