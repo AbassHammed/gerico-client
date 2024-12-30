@@ -3,6 +3,7 @@
 
 import React from 'react';
 
+import { getSignedURL } from '@/app/actions';
 import {
   AlertError,
   Button,
@@ -24,15 +25,19 @@ import { GenericSkeletonLoaderList } from '@/components/ui/ShimmeringLoader';
 import { useCompanyInfo } from '@/hooks/company-mutations';
 import { useGetDeductions, useGetThresholds } from '@/hooks/useHooks';
 import { useCreatePayslip } from '@/hooks/usePayslips';
-import { ICreatePayslip, IUser } from '@/types';
+import { FILE_TYPE } from '@/lib/constants';
+import { computeSHA256 } from '@/lib/utils';
+import { ICreatePayslip, IGeneratePayslipParams, IUser } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { pdf } from '@react-pdf/renderer';
 import { CircleMinus, CirclePlus } from 'lucide-react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
+import PaySlipPDF from '../PayslipPDF/PayslipPDF';
 import { DatePickerField } from './FormDatePicker';
-import { handleFileUpload } from './Payslip.utils';
+import { calculateGrossSalary, calculateTotals, generatePaySlipData } from './Payslip.utils';
 import UserSelect from './UserSelect';
 
 const timeEntrySchema = z.object({
@@ -95,6 +100,62 @@ const PayslipForm = () => {
     return workedHours > 35 ? workedHours - 35 : 0;
   }
 
+  const handlePayslipGeneration = async (
+    params: IGeneratePayslipParams,
+  ): Promise<{
+    blob: Blob;
+    grossSalary: number;
+    netSalary: number;
+  }> => {
+    const grossSalary = calculateGrossSalary(params.total_hours_worked, params.hourlyRate);
+    const paySlipData = generatePaySlipData(grossSalary, params.deductions, params.thresholds);
+    const totals = calculateTotals(paySlipData);
+
+    const blob = (
+      <PaySlipPDF
+        totals={totals}
+        paySlip={params.payslip}
+        user={params.seletedUser}
+        company={params.companyInfo}
+        payslipData={paySlipData}
+        grossSalary={grossSalary}
+      />
+    );
+
+    const pdfBlob = await pdf(blob).toBlob();
+
+    const returnData = {
+      blob: pdfBlob,
+      grossSalary,
+      netSalary: grossSalary - Number(totals.totalSalarial),
+    };
+
+    return returnData;
+  };
+
+  const handleFileUpload = async (params: IGeneratePayslipParams) => {
+    const { blob, grossSalary, netSalary } = await handlePayslipGeneration(params);
+    const signedURLResult = await getSignedURL({
+      fileSize: blob.size,
+      fileType: FILE_TYPE,
+      checksum: await computeSHA256(blob),
+      dir: 'payslips',
+    });
+    if (signedURLResult.failure !== undefined) {
+      throw new Error(signedURLResult.failure);
+    }
+    const { signedUrl, fileUrl } = signedURLResult.success;
+    await fetch(signedUrl, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': FILE_TYPE,
+      },
+      body: blob,
+    });
+
+    return { fileUrl, grossSalary, netSalary };
+  };
+
   async function onSubmit(values: FormValues) {
     try {
       const toastId = toast.loading('Téléchargement des fiches de paie en cours...');
@@ -102,11 +163,10 @@ const PayslipForm = () => {
       if (!selectedUsers || !deductions || !thresholds || !companyInfo) {
         throw new Error("Une erreur s'est produite lors de la récupération des données");
       }
-
       for (const user of selectedUsers) {
         try {
           const { fileUrl, netSalary, grossSalary } = await handleFileUpload({
-            thresholds,
+            thresholds: thresholds,
             deductions,
             companyInfo,
             seletedUser: user,
@@ -114,7 +174,6 @@ const PayslipForm = () => {
             payslip: values,
             hourlyRate: values.hourly_rate,
           });
-
           const dataWithOvertime = {
             ...values,
             gross_salary: grossSalary,
@@ -124,7 +183,6 @@ const PayslipForm = () => {
               overtime: calculateOvertime(entry.worked_hours),
             })),
           };
-
           const data: ICreatePayslip = {
             uid: user.uid,
             gross_salary: dataWithOvertime.gross_salary,
@@ -136,9 +194,7 @@ const PayslipForm = () => {
             total_hours_worked: JSON.stringify(dataWithOvertime.time_entries),
             path_to_pdf: fileUrl,
           };
-
           await createPayslip(data);
-
           toast.info(
             `Fiche de paie pour ${user.first_name} ${user.last_name} téléchargée avec succès.`,
           );
@@ -151,7 +207,6 @@ const PayslipForm = () => {
           );
         }
       }
-
       toast.success('Fiches de paie téléchargées avec succès', { id: toastId });
       form.reset();
       setUsers([]);

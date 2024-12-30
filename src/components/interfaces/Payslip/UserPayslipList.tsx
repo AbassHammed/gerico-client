@@ -30,8 +30,8 @@ import { endOfDay, isAfter, startOfDay, subDays } from 'date-fns';
 import dayjs from 'dayjs';
 import { ChevronLeft, ChevronRight, Download, Eye, FileText } from 'lucide-react';
 
+import { filterPayslips } from './AdminPayslip/AdminPayslip.utils';
 import PayslipListHeader from './Header';
-import { filterPayslips } from './Payslip.utils';
 import PaySlipBadge, { PayslipStatus } from './PayslipBadge';
 import PdfViewerModal from './PayslipPDFModal';
 

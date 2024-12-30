@@ -28,7 +28,6 @@ export * from './Icons';
 
 // Shadcn
 export * from './shadcn/ui/dropdown-menu';
-export * from './sonner-progress';
 export * from './shadcn/ui/separator';
 export * from './shadcn/ui/sheet';
 export * from './shadcn/ui/badge';

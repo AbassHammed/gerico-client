@@ -4,7 +4,7 @@ import { DateRangePicker } from '@/components/ui';
 import { useRouterStuff } from '@/hooks/misc/use-router-stuff';
 import { cn } from '@/lib/utils';
 
-import { INTERVAL_DATA, INTERVAL_DISPLAYS } from './Payslip.utils';
+import { INTERVAL_DATA, INTERVAL_DISPLAYS } from './utils';
 
 interface PayslipListHeaderProps {
   startDate?: Date;
@@ -83,7 +83,7 @@ export default function PayslipListHeader({
           className={cn(
             'flex w-full flex-col-reverse items-center gap-2 min-[550px]:flex-row md:w-auto',
           )}>
-          {dateRangePicker}
+          {dateRangePicker && dateRangePicker}
         </div>
       </div>
     </div>

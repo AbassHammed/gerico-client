@@ -63,4 +63,4 @@ const PaySlipRow: React.FC<IPaySlipRow> = ({
   );
 };
 
-export { PaySlipRow };
+export default PaySlipRow;

@@ -160,3 +160,34 @@ export interface ILeaveRequest {
 }
 
 export type ILeaveRequestInput = Omit<ILeaveRequest, 'leave_request_id' | 'created_at'>;
+
+export interface IGeneratePayslipParams {
+  thresholds: ISSThreshold[];
+  deductions: IDeduction[];
+  companyInfo: ICompanyInfo;
+  seletedUser: IUser;
+  total_hours_worked: {
+    worked_hours: number;
+    overtime: number;
+    week: number;
+  }[];
+  payslip: {
+    start_period: string;
+    end_period: string;
+    pay_date: string;
+  };
+  hourlyRate: number;
+}
+
+export interface Part {
+  percentage: string | number;
+  amount: string | number;
+}
+
+export type PaySlipItem = {
+  isCotisationTitle: boolean;
+  cotisation: string;
+  assiette: string | number;
+  partSalariale?: Part;
+  partPatronale?: Part;
+};

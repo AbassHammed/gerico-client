@@ -3,11 +3,6 @@
  */
 export enum PagesRoutes {
   /**
-   * The main index page of the application.
-   */
-  Index = '/',
-
-  /**
    * The support or assistance page.
    */
   Support = '/assistance',
@@ -81,11 +76,6 @@ export enum PagesRoutes {
    * The approve leaves page for administrators.
    */
   Admin_ApproveLeaves = '/admin/conges',
-
-  /**
-   * The update employee page for administrators.
-   */
-  Admin_UpdateEmployee = '/admin/employes/[slug]/maj',
 
   /**
    * The page listing all payslips for administrators.

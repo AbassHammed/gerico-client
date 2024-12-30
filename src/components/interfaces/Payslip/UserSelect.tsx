@@ -5,7 +5,7 @@ import { Dispatch, SetStateAction, useState } from 'react';
 
 import Image from 'next/image';
 
-import { Loading, Table } from '@/components/ui';
+import { Table } from '@/components/ui';
 import { Button } from '@/components/ui/button';
 import { Button as Button_Shadcn } from '@/components/ui/shadcn/ui/button';
 import { Command, CommandInput, CommandItem, CommandList } from '@/components/ui/shadcn/ui/command';
@@ -21,7 +21,7 @@ interface UserSelectProps {
   loading?: boolean;
 }
 
-export function MyUser({
+function MyUser({
   user,
   removeUser,
   loading,
@@ -68,7 +68,7 @@ export default function UserSelect({
   setSelectedUsers,
   loading,
 }: UserSelectProps) {
-  const { employees: members, isLoading: isLoadingMembers } = useEmployees();
+  const { employees: members } = useEmployees();
   const [open, setOpen] = useState(false);
 
   const removeUser = (uid: string) => {
@@ -102,18 +102,16 @@ export default function UserSelect({
           </Button_Shadcn>
         </PopoverTrigger>
         <PopoverContent className="w-[calc(100vw-40rem)]  p-0">
-          <Loading active={isLoadingMembers}>
-            <Command>
-              <CommandInput placeholder="Rechercer un employé" />
-              <CommandList>
-                {members?.map(user => (
-                  <CommandItem key={user.uid} onSelect={() => addUser(user)}>
-                    {user.first_name} {user.last_name}
-                  </CommandItem>
-                ))}
-              </CommandList>
-            </Command>
-          </Loading>
+          <Command>
+            <CommandInput placeholder="Rechercer un employé" />
+            <CommandList>
+              {members?.map(user => (
+                <CommandItem key={user.uid} onSelect={() => addUser(user)}>
+                  {user.first_name} {user.last_name}
+                </CommandItem>
+              ))}
+            </CommandList>
+          </Command>
         </PopoverContent>
       </Popover>
 

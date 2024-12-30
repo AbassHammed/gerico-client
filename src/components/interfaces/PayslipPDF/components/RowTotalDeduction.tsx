@@ -38,4 +38,4 @@ const PaySlipRowTotalDeduction: React.FC<PaySlipRow> = ({
   </View>
 );
 
-export { PaySlipRowTotalDeduction };
+export default PaySlipRowTotalDeduction;

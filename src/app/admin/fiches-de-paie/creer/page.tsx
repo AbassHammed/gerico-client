@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 
 import PayslipForm from '@/components/interfaces/Payslip/PayslipForm';
 import {

@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import { ICompanyInfo, IUser } from '@/types';
+import { ICompanyInfo, IUser, PaySlipItem } from '@/types';
 import { Document, Page, View } from '@react-pdf/renderer';
 
 import EnterpriseAndUserInfo from './components/EnterpriseAndUserInfo';
@@ -11,12 +11,12 @@ import GrossSalaryAndPayDate from './components/GrossSalaryAndPayDate';
 import NetSalaryRow from './components/NetSalaryRow';
 import NetSalaryRowAfterTaxes from './components/NetSalaryRowAfterTaxes';
 import RemainingLeaveRequest from './components/RemainingLeave';
-import { PaySlipRow } from './components/Row';
-import { PaySlipRowTotalDeduction } from './components/RowTotalDeduction';
+import PaySlipRow from './components/Row';
+import PaySlipRowTotalDeduction from './components/RowTotalDeduction';
 import PaySlipHeader from './components/TableHeader';
 import TaxTable from './components/TaxTable';
 import PaySlipTitleSection from './components/TitleSection';
-import { PaySlip, PaySlipItem } from './interface';
+import { PaySlip } from './interface';
 import { styles } from './styles';
 
 interface PaySlipPDFProps {
