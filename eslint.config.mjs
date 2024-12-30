@@ -5,6 +5,7 @@ import { FlatCompat } from '@eslint/eslintrc';
 import js from '@eslint/js';
 import typescriptEslint from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
+import importPlugin from 'eslint-plugin-import';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -15,6 +16,7 @@ const compat = new FlatCompat({
 });
 
 const config = [
+  importPlugin.flatConfigs.recommended,
   ...compat.extends('eslint:recommended', 'plugin:@typescript-eslint/recommended'),
   {
     plugins: {
@@ -37,6 +39,9 @@ const config = [
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-non-null-asserted-optional-chain': 'off',
+      'import/no-dynamic-require': 'warn',
+      'import/no-unresolved': 'off',
+      'import/no-cycle': 'error',
 
       'no-console': [
         'error',

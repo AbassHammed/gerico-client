@@ -29,16 +29,15 @@ import { FILE_TYPE } from '@/lib/constants';
 import { computeSHA256 } from '@/lib/utils';
 import { ICreatePayslip, IGeneratePayslipParams, IUser } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Document, pdf } from '@react-pdf/renderer';
 import { CircleMinus, CirclePlus } from 'lucide-react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
-import { PayslipPDF } from '../PayslipPDF';
 import { DatePickerField } from './FormDatePicker';
 import { calculateGrossSalary, calculateTotals, generatePaySlipData } from './Payslip.utils';
 import UserSelect from './UserSelect';
+import { getPdfBuffer } from './utils';
 
 const timeEntrySchema = z.object({
   week: z.coerce.number(),
@@ -86,6 +85,9 @@ const PayslipForm = () => {
   });
 
   function addTimeEntry() {
+    if (fields.length >= 4) {
+      return;
+    }
     append({ week: fields.length + 1, worked_hours: 0, overtime: 0 });
   }
 
@@ -115,23 +117,14 @@ const PayslipForm = () => {
     const paySlipData = generatePaySlipData(grossSalary, params.deductions, params.thresholds);
     const totals = calculateTotals(paySlipData);
 
-    if (typeof window === 'undefined') {
-      throw new Error('PDF generation is only available in the browser');
-    }
-
-    const nonsense = pdf(<Document></Document>);
-    nonsense.updateContainer(
-      <PayslipPDF
-        user={params.selectedUser}
-        company={params.companyInfo}
-        paySlip={params.payslip}
-        payslipData={paySlipData}
-        totals={totals}
-        grossSalary={grossSalary}
-      />,
-    );
-
-    const pdfBlob = await nonsense.toBlob();
+    const pdfBlob = await getPdfBuffer({
+      company: params.companyInfo,
+      user: params.selectedUser,
+      payslip: params.payslip,
+      payslipData: paySlipData,
+      grossSalary,
+      totals,
+    });
 
     const returnData = {
       blob: pdfBlob,

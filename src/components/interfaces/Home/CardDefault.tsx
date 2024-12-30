@@ -1,3 +1,5 @@
+'use client';
+
 /* eslint-disable quotes */
 import Link from 'next/link';
 

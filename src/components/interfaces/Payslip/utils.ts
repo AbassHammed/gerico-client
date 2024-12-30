@@ -1,3 +1,5 @@
+import { ICompanyInfo, IUser } from '@/types';
+
 /* eslint-disable quotes */
 export const INTERVAL_DISPLAYS = [
   {
@@ -50,3 +52,27 @@ export const INTERVAL_DATA: Record<
     granularity: 'month',
   },
 };
+
+export async function getPdfBuffer(data: {
+  totals: any;
+  payslip: any;
+  user: IUser;
+  company: ICompanyInfo;
+  payslipData: any;
+  grossSalary: number;
+}): Promise<Blob> {
+  const response = await fetch('/api/generate-pdf', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error || 'Failed to generate PDF');
+  }
+
+  return await response.blob();
+}

@@ -9,6 +9,7 @@ import { useUser } from '@/hooks/useUser';
 import { PagesRoutes } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 import { Button } from '@ui';
+import { useWindowSize } from 'usehooks-ts';
 
 import {
   NavigationMenu,
@@ -16,6 +17,8 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
 } from '../ui/shadcn/ui/navigation-menu';
+import HamburgerButton from './HamburgerMenu';
+import MobileMenu from './MobileMenu';
 
 interface Props {
   hideNavbar: boolean;
@@ -24,12 +27,29 @@ interface Props {
 const Nav = (props: Props) => {
   const { user, isLoading: isUserLoading } = useUser();
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  const { width } = useWindowSize();
+  const [open, setOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    if (open) {
+      // Prevent scrolling on mount
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+  }, [open]);
 
   React.useEffect(() => {
     if (user) {
       setIsLoggedIn(true);
     }
   }, [user]);
+
+  React.useEffect(() => {
+    if (width >= 1024) {
+      setOpen(false);
+    }
+  }, [width]);
 
   if (props.hideNavbar) {
     return null;
@@ -54,7 +74,7 @@ const Nav = (props: Props) => {
               </div>
               <NavigationMenu
                 delayDuration={0}
-                className="pl-8 sm:space-x-4 flex h-16"
+                className="hidden pl-8 sm:space-x-4 lg:flex h-16"
                 viewportClassName="rounded-xl bg-background">
                 <NavigationMenuList>
                   {[
@@ -80,7 +100,7 @@ const Nav = (props: Props) => {
                 </NavigationMenuList>
               </NavigationMenu>
             </div>
-            <div className="flex items-center gap-2 animate-fade-in">
+            <div className="hidden lg:flex items-center gap-2 animate-fade-in">
               {!isUserLoading && (
                 <>
                   {isLoggedIn ? (
@@ -96,7 +116,24 @@ const Nav = (props: Props) => {
               )}
             </div>
           </div>
+          <HamburgerButton toggleFlyOut={() => setOpen(true)} />
         </div>
+        <MobileMenu
+          open={open}
+          setOpen={setOpen}
+          menu={{
+            primaryNav: [
+              {
+                title: 'A propos',
+                url: PagesRoutes.About,
+              },
+              {
+                title: 'Contact',
+                url: PagesRoutes.Contact,
+              },
+            ],
+          }}
+        />
       </nav>
     </div>
   );
