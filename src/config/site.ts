@@ -1,11 +1,11 @@
 import { ISiteConfig } from '@/types';
 
 export const siteConfig: ISiteConfig = {
-  name: 'Gerico',
+  name: 'Gerico Transport',
   description:
     'La société Gérico est une société de gestion de transport routier, dans laquelle 25 personnes sont embauchées. Cette société existe depuis 1999.',
-  url: 'http://localhost:3000',
-  ogImage: 'http://localhost:3000/og.png',
+  url: 'https://gericotransport.fr',
+  ogImage: 'https://gericotransport.fr/og.png',
   authors: [
     { name: 'Hammed Abass', url: 'https://hammedabass.com' },
     { name: 'Le Jonathan', url: 'https://github.com/jojorequiem' },
