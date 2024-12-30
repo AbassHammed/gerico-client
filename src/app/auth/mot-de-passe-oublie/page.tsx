@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 
 import ForgotPasswordForm from '@/components/interfaces/Auth/ForgotPasswordForm';
-import AuthLayout from '@/components/interfaces/layouts/authLayout';
+import AuthLayout from '@/components/layouts/authLayout';
 import { PagesRoutes } from '@/lib/constants';
 
 export const metadata: Metadata = {

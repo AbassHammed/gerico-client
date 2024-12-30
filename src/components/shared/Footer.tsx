@@ -5,7 +5,8 @@ import Link from 'next/link';
 
 import footerData from '@/data/Footer';
 import { cn } from '@/lib/utils';
-import { IconDiscord, IconGitHubSolid, IconTwitterX, IconYoutubeSolid } from '@ui';
+import { IconTwitterX, IconYoutubeSolid } from '@ui';
+import { Facebook, Instagram } from 'lucide-react';
 
 interface Props {
   children: React.ReactNode;
@@ -13,7 +14,7 @@ interface Props {
   id?: string;
 }
 
-const SectionContainer = forwardRef(
+export const SectionContainer = forwardRef(
   ({ children, className, id }: Props, ref: Ref<HTMLDivElement>) => (
     <div
       ref={ref}
@@ -54,38 +55,9 @@ const Footer = (props: FooterProps) => {
                 priority
               />
             </Link>
-            <div className="flex space-x-5">
-              <a
-                href="https://twitter.com/supabase"
-                className="text-foreground-lighter hover:text-foreground transition">
-                <span className="sr-only">Twitter</span>
-                <IconTwitterX size={22} />
-              </a>
-
-              <a
-                href="https://github.com/supabase"
-                className="text-foreground-lighter hover:text-foreground transition">
-                <span className="sr-only">GitHub</span>
-                <IconGitHubSolid size={22} />
-              </a>
-
-              <a
-                href="https://discord.supabase.com/"
-                className="text-foreground-lighter hover:text-foreground transition">
-                <span className="sr-only">Discord</span>
-                <IconDiscord size={22} />
-              </a>
-
-              <a
-                href="https://youtube.com/c/supabase"
-                className="text-foreground-lighter hover:text-foreground transition">
-                <span className="sr-only">Youtube</span>
-                <IconYoutubeSolid size={22} />
-              </a>
-            </div>
           </div>
           <div className="mt-12 grid grid-cols-1 gap-8 xl:col-span-2 xl:mt-0">
-            <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
+            <div className="grid grid-cols-2 gap-8 ">
               {footerData.map(segment => (
                 <div key={`footer_${segment.title}`}>
                   <h6 className="text-foreground overwrite text-base">{segment.title}</h6>
@@ -120,8 +92,38 @@ const Footer = (props: FooterProps) => {
           </div>
         </div>
         <div className="border-default mt-32 flex justify-between border-t pt-8">
-          <small className="small">&copy; Supabase Inc</small>
-          <div></div>
+          <small className="small">&copy; Gérico Transport</small>
+          <div>
+            <div className="flex space-x-5">
+              <a
+                href="https://twitter.com"
+                className="text-foreground-lighter hover:text-foreground transition">
+                <span className="sr-only">Twitter</span>
+                <IconTwitterX size={22} />
+              </a>
+
+              <a
+                href="https://facebook.com"
+                className="text-foreground-lighter hover:text-foreground transition">
+                <span className="sr-only">Facebook</span>
+                <Facebook size={22} />
+              </a>
+
+              <a
+                href="https://instagram.com/"
+                className="text-foreground-lighter hover:text-foreground transition">
+                <span className="sr-only">Instagram</span>
+                <Instagram size={22} />
+              </a>
+
+              <a
+                href="https://youtube.com/c/supabase"
+                className="text-foreground-lighter hover:text-foreground transition">
+                <span className="sr-only">Youtube</span>
+                <IconYoutubeSolid size={22} />
+              </a>
+            </div>
+          </div>
         </div>
       </SectionContainer>
     </footer>

@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 
-import DLayout from '@/components/interfaces/layouts/DashboardLayout/DashboardLayout';
+import DLayout from '@/components/layouts/DashboardLayout/DashboardLayout';
 
 export const metadata: Metadata = {
   title: {

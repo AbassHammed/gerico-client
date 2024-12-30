@@ -1,40 +1,39 @@
-'use client';
+import Link from 'next/link';
 
-import React from 'react';
+import { SectionContainer } from '@/components/shared/Footer';
+import { Button } from '@ui';
 
-const HeroSection = () => (
-  <div className="relative w-full h-[70vh]  flex items-center justify-center overflow-hidden">
-    <div className="w-full max-w-7xl mx-auto px-4">
-      <svg
-        className="absolute top-0 left-0 w-full h-full object-cover z-0"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 3333 3094"
-        preserveAspectRatio="none">
-        <path d="M3333 0.5V3093.5L0 975V0.5H3333Z" fill="#E2EDF9" />
-      </svg>
-
-      <div className="relative z-10 max-w-3xl text-left text-gray-800 pl-6 sm:pl-12 lg:pl-24">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
-          Entreprise <span className="text-brand-300">logistique</span> et{' '}
-          <span className="text-brand-300">transport routier</span>
-        </h1>
-        <p className="text-lg sm:text-xl md:text-xl font-bold mb-6">
-          Spécialisés dans le transport routier de marchandises depuis{' '}
-          <span className="text-brand-300">1999</span>, nous offrons des solutions adaptées aux
-          besoins de chaque client.
-        </p>
-        <p className="text-base sm:text-lg md:text-xl mb-6">
-          Optimisez votre chaîne d'approvisionnement grâce à des solutions sur mesure. Faites
-          confiance à notre savoir-faire pour vos projets de transport et de logistique.
-        </p>
-        <a
-          href="#"
-          className="mt-4 inline-block px-6 py-3 bg-brand-300 text-white text-lg font-medium rounded-md shadow-md hover:bg-brand-400">
-          Contactez-nous
-        </a>
+const Hero = () => (
+  <div className="relative -mt-[65px]">
+    <SectionContainer className="pt-8 pb-10 md:pt-16 overflow-hidden">
+      <div className="relative">
+        <div className="mx-auto">
+          <div className="mx-auto max-w-2xl lg:col-span-6 lg:flex lg:items-center justify-center text-center">
+            <div className="relative z-10 lg:h-auto pt-[90px] lg:pt-[90px] lg:min-h-[300px] flex flex-col items-center justify-center sm:mx-auto md:w-3/4 lg:mx-0 lg:w-full gap-4 lg:gap-8">
+              <div className="flex flex-col items-center">
+                <h1 className="text-foreground text-3xl sm:text-5xl sm:leading-none lg:text-5xl">
+                  <span className="block text-foreground">Entreprise logistique</span>
+                  <span className="text-brand block md:ml-0">et transport routier</span>
+                </h1>
+                <p className="pt-2 text-foreground my-3 text-sm sm:mt-5 lg:mb-0 sm:text-base lg:text-lg">
+                  Spécialisés dans le transport routier de marchandises depuis{' '}
+                  <span className="text-brand-300">1999</span>, nous offrons des solutions adaptées
+                  aux besoins de chaque client.
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button asChild size="medium" className="text-white">
+                  <Link href="/contact" as="/contact">
+                    Demander un devis
+                  </Link>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </SectionContainer>
   </div>
 );
 
-export default HeroSection;
+export default Hero;

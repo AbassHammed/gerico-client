@@ -35,13 +35,14 @@ const DiscordSrc = (
 function Icon({ src }: { src: JSX.Element }) {
   return (
     // custom SVG file
-    <div className="relative" style={{ width: '20px', height: '20px' }}>
+    <div className="relative" style={{ width: '22px', height: '22px' }}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 16 16"
         color={'currentColor'}
+        className="sbui-icon"
         fill={'none'}
-        stroke={'currentColor'}
+        stroke={'none'}
         width="100%"
         height="100%"
         strokeWidth={undefined}>
