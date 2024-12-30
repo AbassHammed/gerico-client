@@ -3,7 +3,6 @@
 
 import React from 'react';
 
-import { getSignedURL } from '@/app/actions';
 import {
   AlertError,
   Button,
@@ -25,19 +24,14 @@ import { GenericSkeletonLoaderList } from '@/components/ui/ShimmeringLoader';
 import { useCompanyInfo } from '@/hooks/company-mutations';
 import { useGetDeductions, useGetThresholds } from '@/hooks/useHooks';
 import { useCreatePayslip } from '@/hooks/usePayslips';
-import { FILE_TYPE } from '@/lib/constants';
-import { computeSHA256 } from '@/lib/utils';
-import { ICreatePayslip, IGeneratePayslipParams, IUser } from '@/types';
+import { ICreatePayslip, IUser } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { pdf } from '@react-pdf/renderer';
 import { CircleMinus, CirclePlus } from 'lucide-react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
-import PaySlipPDF from '../PayslipPDF/PayslipPDF';
 import { DatePickerField } from './FormDatePicker';
-import { calculateGrossSalary, calculateTotals, generatePaySlipData } from './Payslip.utils';
 import UserSelect from './UserSelect';
 
 const timeEntrySchema = z.object({
@@ -100,61 +94,61 @@ const PayslipForm = () => {
     return workedHours > 35 ? workedHours - 35 : 0;
   }
 
-  const handlePayslipGeneration = async (
-    params: IGeneratePayslipParams,
-  ): Promise<{
-    blob: Blob;
-    grossSalary: number;
-    netSalary: number;
-  }> => {
-    const grossSalary = calculateGrossSalary(params.total_hours_worked, params.hourlyRate);
-    const paySlipData = generatePaySlipData(grossSalary, params.deductions, params.thresholds);
-    const totals = calculateTotals(paySlipData);
+  // const handlePayslipGeneration = async (
+  //   params: IGeneratePayslipParams,
+  // ): Promise<{
+  //   blob: Blob;
+  //   grossSalary: number;
+  //   netSalary: number;
+  // }> => {
+  //   const grossSalary = calculateGrossSalary(params.total_hours_worked, params.hourlyRate);
+  //   const paySlipData = generatePaySlipData(grossSalary, params.deductions, params.thresholds);
+  //   const totals = calculateTotals(paySlipData);
 
-    const blob = (
-      <PaySlipPDF
-        totals={totals}
-        paySlip={params.payslip}
-        user={params.seletedUser}
-        company={params.companyInfo}
-        payslipData={paySlipData}
-        grossSalary={grossSalary}
-      />
-    );
+  //   const blob = (
+  //     <PaySlipPDF
+  //       totals={totals}
+  //       paySlip={params.payslip}
+  //       user={params.seletedUser}
+  //       company={params.companyInfo}
+  //       payslipData={paySlipData}
+  //       grossSalary={grossSalary}
+  //     />
+  //   );
 
-    const pdfBlob = await pdf(blob).toBlob();
+  //   const pdfBlob = await pdf(blob).toBlob();
 
-    const returnData = {
-      blob: pdfBlob,
-      grossSalary,
-      netSalary: grossSalary - Number(totals.totalSalarial),
-    };
+  //   const returnData = {
+  //     blob: pdfBlob,
+  //     grossSalary,
+  //     netSalary: grossSalary - Number(totals.totalSalarial),
+  //   };
 
-    return returnData;
-  };
+  //   return returnData;
+  // };
 
-  const handleFileUpload = async (params: IGeneratePayslipParams) => {
-    const { blob, grossSalary, netSalary } = await handlePayslipGeneration(params);
-    const signedURLResult = await getSignedURL({
-      fileSize: blob.size,
-      fileType: FILE_TYPE,
-      checksum: await computeSHA256(blob),
-      dir: 'payslips',
-    });
-    if (signedURLResult.failure !== undefined) {
-      throw new Error(signedURLResult.failure);
-    }
-    const { signedUrl, fileUrl } = signedURLResult.success;
-    await fetch(signedUrl, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': FILE_TYPE,
-      },
-      body: blob,
-    });
+  // const handleFileUpload = async (params: IGeneratePayslipParams) => {
+  //   const { blob, grossSalary, netSalary } = await handlePayslipGeneration(params);
+  //   const signedURLResult = await getSignedURL({
+  //     fileSize: blob.size,
+  //     fileType: FILE_TYPE,
+  //     checksum: await computeSHA256(blob),
+  //     dir: 'payslips',
+  //   });
+  //   if (signedURLResult.failure !== undefined) {
+  //     throw new Error(signedURLResult.failure);
+  //   }
+  //   const { signedUrl, fileUrl } = signedURLResult.success;
+  //   await fetch(signedUrl, {
+  //     method: 'PUT',
+  //     headers: {
+  //       'Content-Type': FILE_TYPE,
+  //     },
+  //     body: blob,
+  //   });
 
-    return { fileUrl, grossSalary, netSalary };
-  };
+  //   return { fileUrl, grossSalary, netSalary };
+  // };
 
   async function onSubmit(values: FormValues) {
     try {
@@ -165,15 +159,7 @@ const PayslipForm = () => {
       }
       for (const user of selectedUsers) {
         try {
-          const { fileUrl, netSalary, grossSalary } = await handleFileUpload({
-            thresholds: thresholds,
-            deductions,
-            companyInfo,
-            seletedUser: user,
-            total_hours_worked: values.time_entries,
-            payslip: values,
-            hourlyRate: values.hourly_rate,
-          });
+          const { fileUrl, netSalary, grossSalary } = { fileUrl: '', netSalary: 0, grossSalary: 0 };
           const dataWithOvertime = {
             ...values,
             gross_salary: grossSalary,
