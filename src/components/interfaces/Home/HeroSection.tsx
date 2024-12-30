@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { SectionContainer } from '@/components/shared/Footer';
+import SectionContainer from '@/components/shared/SectionContainer';
 import { Button } from '@ui';
 
 const Hero = () => (

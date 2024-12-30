@@ -1,5 +1,13 @@
 import React from 'react';
 
-const page = () => <div>page</div>;
+import { Metadata } from 'next';
+
+import Contact from '@/components/interfaces/Contact';
+
+export const metadata: Metadata = {
+  title: 'Contact',
+};
+
+const page = () => <Contact />;
 
 export default page;

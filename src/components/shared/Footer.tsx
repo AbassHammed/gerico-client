@@ -1,5 +1,3 @@
-import { forwardRef, Ref } from 'react';
-
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -8,25 +6,7 @@ import { cn } from '@/lib/utils';
 import { IconTwitterX, IconYoutubeSolid } from '@ui';
 import { Facebook, Instagram } from 'lucide-react';
 
-interface Props {
-  children: React.ReactNode;
-  className?: string;
-  id?: string;
-}
-
-export const SectionContainer = forwardRef(
-  ({ children, className, id }: Props, ref: Ref<HTMLDivElement>) => (
-    <div
-      ref={ref}
-      id={id}
-      className={cn(
-        `sm:py-18 container relative mx-auto px-6 py-16 md:py-24 lg:px-16 lg:py-24 xl:px-20`,
-        className,
-      )}>
-      {children}
-    </div>
-  ),
-);
+import SectionContainer from './SectionContainer';
 
 interface FooterProps {
   className?: string;

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 
 import Image from 'next/image';
 import Link from 'next/link';
@@ -10,8 +10,12 @@ import { PagesRoutes } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 import { Button } from '@ui';
 
-import HamburgerButton from './HamburgerMenu';
-import MobileMenu from './MobileMenu';
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+} from '../ui/shadcn/ui/navigation-menu';
 
 interface Props {
   hideNavbar: boolean;
@@ -19,7 +23,6 @@ interface Props {
 
 const Nav = (props: Props) => {
   const { user, isLoading: isUserLoading } = useUser();
-  const [open, setOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
 
   React.useEffect(() => {
@@ -27,22 +30,6 @@ const Nav = (props: Props) => {
       setIsLoggedIn(true);
     }
   }, [user]);
-
-  React.useEffect(() => {
-    if (open) {
-      // Prevent scrolling on mount
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'auto';
-    }
-  }, [open]);
-
-  // Close mobile menu when desktop
-  React.useEffect(() => {
-    if (window.innerWidth >= 1024) {
-      setOpen(false);
-    }
-  }, [window.innerWidth]);
 
   if (props.hideNavbar) {
     return null;
@@ -79,17 +66,44 @@ const Nav = (props: Props) => {
                     />
                   </Link>
                 </div>
+                <NavigationMenu
+                  delayDuration={0}
+                  className="pl-8 sm:space-x-4 flex h-16"
+                  viewportClassName="rounded-xl bg-background">
+                  <NavigationMenuList>
+                    {[
+                      { title: 'A propos', url: PagesRoutes.About },
+                      { title: 'Contact', url: PagesRoutes.Contact },
+                    ].map((item, idx) => (
+                      <NavigationMenuItem className="text-sm font-medium" key={idx}>
+                        <NavigationMenuLink asChild>
+                          <Link
+                            href={item.url}
+                            className={cn(
+                              'group/menu-item flex items-center text-sm hover:text-foreground select-none gap-3 rounded-md p-2 leading-none no-underline outline-none focus-visible:ring-2 focus-visible:ring-foreground-lighter focus-visible:text-foreground group-hover:bg-transparent text-foreground focus-visible:text-brand-link',
+                            )}>
+                            <div className="flex flex-col justify-center">
+                              <div className="flex items-center gap-1">
+                                <p className={cn('leading-snug text-foreground')}>{item.title}</p>
+                              </div>
+                            </div>
+                          </Link>
+                        </NavigationMenuLink>
+                      </NavigationMenuItem>
+                    ))}
+                  </NavigationMenuList>
+                </NavigationMenu>
               </div>
               <div className="flex items-center gap-2 animate-fade-in !scale-100 delay-300">
                 {!isUserLoading && (
                   <>
                     {isLoggedIn ? (
-                      <Button asChild>
+                      <Button className="text-white" asChild>
                         <Link href={PagesRoutes.Admin_Dashboard}>Tableau de bord</Link>
                       </Button>
                     ) : (
                       <>
-                        <Button asChild>
+                        <Button className="text-white" asChild>
                           <Link href={PagesRoutes.Auth_SignIn}>Se connecter</Link>
                         </Button>
                       </>
@@ -98,9 +112,7 @@ const Nav = (props: Props) => {
                 )}
               </div>
             </div>
-            <HamburgerButton toggleFlyOut={() => setOpen(true)} />
           </div>
-          <MobileMenu open={open} setOpen={setOpen} />
         </nav>
       </div>
     </>
