@@ -49,9 +49,9 @@ const Error404 = () => {
               show404 ? 'opacity-100' : 'opacity-0'
             }`}>
             <div className="text-foreground flex w-[320px] flex-col items-center justify-center space-y-3">
-              <h1 className="m-2 text-2xl">Looking for something?</h1>
+              <h1 className="m-2 text-2xl text-center">Vous cherchez quelque chose ?</h1>
               <p className="text-center text-sm">
-                We couldn't find the page that you're looking for!
+                Nous n'avons pas pu trouver la page que vous recherchez !
               </p>
             </div>
             <div className="flex items-center space-x-4">

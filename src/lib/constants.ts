@@ -81,6 +81,10 @@ export enum PagesRoutes {
    * The page listing all payslips for administrators.
    */
   Admin_AllPayslips = '/admin/fiches-de-paie',
+
+  About = '/a-propos',
+
+  Contact = '/contact',
 }
 
 export const API_URL = process.env.NEXT_PUBLIC_API_URL!;

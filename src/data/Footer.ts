@@ -1,59 +1,47 @@
 const footerData = [
   {
-    title: 'Community',
+    title: 'Suivez-nous sur les réseaux ',
     links: [
       {
-        text: 'Discord',
-        url: 'https://discord.gg/supabase',
+        text: 'Instagram',
+        url: 'https://instagram.com',
         icon: 'discord',
       },
       {
-        text: 'GitHub',
-        url: 'https://github.com/AbassHammed',
+        text: 'Facebook',
+        url: 'https://facebook.com',
         icon: 'github',
       },
       {
         text: 'Twitter',
-        url: 'https://twitter.com/AbassHammed',
+        url: 'https://twitter.com',
         icon: 'twitter',
       },
       {
         text: 'YouTube',
-        url: 'https://youtube.com/c/supabase',
+        url: 'https://youtube.com',
         icon: 'youtube',
       },
     ],
   },
   {
-    title: 'Company',
+    title: 'Informations',
     links: [
       {
-        text: 'Customer Stories',
-        url: '/customers',
+        text: 'On recrute',
+        url: '#',
       },
       {
-        text: 'Careers',
-        url: '/careers',
+        text: 'Mentions légales',
+        url: '#',
       },
       {
-        text: 'Company',
-        url: '/company',
+        text: 'Politique de confidentialité',
+        url: '#',
       },
       {
-        text: 'Terms of Service',
-        url: '/terms',
-      },
-      {
-        text: 'Privacy Policy',
-        url: '/privacy',
-      },
-      {
-        text: 'Support Policy',
-        url: '/support-policy',
-      },
-      {
-        text: 'Service Level Agreement',
-        url: '/sla',
+        text: 'Données personnelles',
+        url: '#',
       },
       {
         text: 'Humans.txt',
