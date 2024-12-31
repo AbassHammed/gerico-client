@@ -16,7 +16,9 @@ import useChangeDefaultPassword from '@/hooks/useChangePassword';
 import { PagesRoutes } from '@/lib/constants';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff } from 'lucide-react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
+// eslint-disable-next-line no-duplicate-imports
+import type { SubmitHandler } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -151,6 +153,7 @@ export const ChangeDefaultPasswordForm = () => {
         )}
 
         <Button
+          className="text-white"
           block
           form="change-default-password-form"
           htmlType="submit"

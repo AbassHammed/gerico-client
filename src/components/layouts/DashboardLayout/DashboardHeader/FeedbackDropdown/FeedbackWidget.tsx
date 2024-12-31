@@ -47,7 +47,7 @@ const FeedbackWidget = ({ feedback, onClose, setFeedback }: FeedbackWidgetProps)
       <TextArea
         className="w-80 p-3"
         size="small"
-        placeholder="Ideas on how to improve this page.&#10;Use the Support Form for technical issues."
+        placeholder="Une question, un bug, une suggestion ?"
         rows={5}
         value={feedback}
         onChange={e => setFeedback(e.target.value)}
@@ -61,19 +61,25 @@ const FeedbackWidget = ({ feedback, onClose, setFeedback }: FeedbackWidgetProps)
               clearFeedback();
               onClose();
             }}>
-            Cancel
+            Fermer
           </Button>
           <div className="flex items-center space-x-2">
             <Button type="default" onClick={clearFeedback}>
-              Clear
+              Effacer
             </Button>
 
-            <Button disabled={isSending} loading={isSending} onClick={sendFeedback}>
-              Send feedback
+            <Button
+              className="text-white"
+              disabled={isSending}
+              loading={isSending}
+              onClick={sendFeedback}>
+              Envoyer
             </Button>
           </div>
         </div>
-        <p className="text-xs text-foreground-light">Have a technical issue? Contact the devs .</p>
+        <p className="text-xs text-foreground-light">
+          Ce formulaire vous permet de contacter directement les développeurs de l'application.
+        </p>
       </div>
     </div>
   );

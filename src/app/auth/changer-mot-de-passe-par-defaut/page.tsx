@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 const ChangeDefaultPassword = () => (
   <AuthLayout
     heading="Changer le mot de passe par default"
-    subheading="Saisissez votre mot de passe actuel et votre nouveau mot de passe">
+    subheading="Saisissez votre nouveau mot de passe">
     <div className="flex flex-col gap-4">
       <ChangeDefaultPasswordForm />
     </div>

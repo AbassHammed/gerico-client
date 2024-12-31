@@ -127,7 +127,7 @@ const UsersView = ({ searchString }: MembersViewProps) => {
                 <Table.tr key="footer" className="bg-panel-secondary-light">
                   <Table.td colSpan={12}>
                     <p className="text-foreground-light">
-                      {searchString ? `${filteredMembers.length} of ` : ''}
+                      {searchString ? `${filteredMembers.length} sur ` : ''}
                       {allMembers.length || '0'} {allMembers.length === 1 ? 'employé' : 'employés'}
                     </p>
                   </Table.td>

@@ -50,9 +50,11 @@ const userSchema = Yup.object({
     .required('Le pays est requis')
     .max(50, 'Le pays ne doit pas dépasser 50 caractères'),
   social_security_number: Yup.string()
+    .transform(value => value.replace(/\s/g, ''))
     .required('Le numéro de sécurité sociale est requis')
     .min(15, 'Le numéro de sécurité sociale doit contenir 15 caractères')
-    .max(15, 'Le numéro de sécurité sociale doit contenir 15 caractères'),
+    .max(15, 'Le numéro de sécurité sociale doit contenir 15 caractères')
+    .matches(/^\d+$/, 'Le numéro de sécurité sociale ne doit contenir que des chiffres'),
   contract_type: Yup.string().required('Le type de contrat est requis'),
   marital_status: Yup.string().required('La situation familiale est requise'),
   dependants: Yup.number()

@@ -16,7 +16,7 @@ export function useResendCode() {
       const uid = getCookie('t_uid');
       if (!uid) {
         throw new Error(
-          'An error occurred while sending info to the server, kindly retry the reset',
+          'Impossible de récupérer votre identifiant utilisateur. Veuillez réessayer plus tard.',
         );
       }
       const res = await trigger({ uid });

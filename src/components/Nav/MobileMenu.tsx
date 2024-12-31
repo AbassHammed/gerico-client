@@ -109,7 +109,7 @@ const MobileMenu = ({ open, setOpen, menu }: Props) => {
                 <>
                   {isLoggedIn ? (
                     <Link href={PagesRoutes.Admin_Dashboard} passHref legacyBehavior>
-                      <Button block asChild>
+                      <Button block asChild className="text-white">
                         <a type={undefined} className="h-10 py-4">
                           Tableau de bord
                         </a>
@@ -118,14 +118,14 @@ const MobileMenu = ({ open, setOpen, menu }: Props) => {
                   ) : (
                     <>
                       <Link href={PagesRoutes.Auth_SignIn} passHref legacyBehavior>
-                        <Button block type="default" asChild>
+                        <Button block type="default" asChild className="text-white">
                           <a type={undefined} className="h-10 py-4">
                             Se connecter
                           </a>
                         </Button>
                       </Link>
                       <Link href={PagesRoutes.Contact} passHref legacyBehavior>
-                        <Button block asChild>
+                        <Button block asChild className="text-white">
                           <a type={undefined} className="h-10 py-4">
                             Contacter Gérico
                           </a>

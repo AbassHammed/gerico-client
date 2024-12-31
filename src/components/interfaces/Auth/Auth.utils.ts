@@ -13,6 +13,6 @@ export const passwordSchema = z
   .refine(motDePasse => /[0-9]/.test(motDePasse), {
     message: 'Votre mot de passe doit contenir au moins un chiffre.',
   })
-  .refine(motDePasse => /[!@#$%^&*]/.test(motDePasse), {
+  .refine(motDePasse => /[!@#$%^&*()]/.test(motDePasse), {
     message: 'Votre mot de passe doit contenir au moins un caractère spécial.',
   });
