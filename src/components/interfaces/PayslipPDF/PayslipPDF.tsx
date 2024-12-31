@@ -1,8 +1,4 @@
-'use client';
-
-import React from 'react';
-
-import { ICompanyInfo, IUser, PaySlip, PaySlipItem } from '@/types';
+import { ICompanyInfo, IUser, PaySlipItem } from '@/types';
 import { Document, Page, View } from '@react-pdf/renderer';
 
 import EnterpriseAndUserInfo from './components/EnterpriseAndUserInfo';
@@ -21,16 +17,11 @@ import { styles } from './styles';
 interface PaySlipPDFProps {
   user: IUser;
   company: ICompanyInfo;
-  paySlip: Omit<
-    PaySlip,
-    | 'pid'
-    | 'uid'
-    | 'path_to_pdf'
-    | 'total_hours_worked'
-    | 'gross_salary'
-    | 'net_salary'
-    | 'hourly_rate'
-  >;
+  paySlip: {
+    start_period: string;
+    end_period: string;
+    pay_date: string;
+  };
   payslipData: PaySlipItem[];
   grossSalary: number;
   totals: {
@@ -63,6 +54,7 @@ const PaySlipPDF = ({
       },
     },
   ];
+
   return (
     <Document>
       <Page size="A4" style={styles.page}>

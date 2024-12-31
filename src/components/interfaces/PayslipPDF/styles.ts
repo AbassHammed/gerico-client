@@ -1,12 +1,13 @@
-'use client';
-
 import { Font, StyleSheet } from '@react-pdf/renderer';
 
 Font.register({
   family: 'Lato',
   fonts: [
-    { src: '/fonts/Lato-Regular.ttf', fontWeight: 'normal' },
-    { src: '/fonts/Lato-Bold.ttf', fontWeight: 'bold' },
+    { src: 'http://fonts.gstatic.com/s/lato/v13/v0SdcGFAl2aezM9Vq_aFTQ.ttf', fontWeight: 'normal' },
+    {
+      src: 'https://fonts.gstatic.com/s/lato/v24/S6u9w4BMUTPHh6UVSwaPGR_p.woff2',
+      fontWeight: 'bold',
+    },
   ],
 });
 

@@ -1,5 +1,3 @@
-'use client';
-
 import { Text, View } from '@react-pdf/renderer';
 import { format } from 'date-fns';
 

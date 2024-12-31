@@ -1,4 +1,4 @@
-import { ICompanyInfo, IUser } from '@/types';
+import { ICompanyInfo, IUser, PaySlipItem } from '@/types';
 
 /* eslint-disable quotes */
 export const INTERVAL_DISPLAYS = [
@@ -54,15 +54,22 @@ export const INTERVAL_DATA: Record<
 };
 
 export async function getPdfBuffer(data: {
-  totals: any;
-  payslip: any;
+  totals: {
+    totalSalarial: string;
+    totalPatronal: string;
+  };
+  payslip: {
+    start_period: string;
+    end_period: string;
+    pay_date: string;
+  };
   user: IUser;
   company: ICompanyInfo;
-  payslipData: any;
+  payslipData: PaySlipItem[];
   grossSalary: number;
 }): Promise<Blob> {
   const response = await fetch('/api/generate-pdf', {
-    method: 'POST',
+    method: 'GET',
     headers: {
       'Content-Type': 'application/json',
     },

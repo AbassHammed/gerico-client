@@ -5,12 +5,26 @@ import { useState } from 'react';
 import { DatePickerV2, Input } from '@/components/ui';
 import { FormControl, FormField, FormItem, FormMessage } from '@/components/ui/shadcn/ui/form';
 import { cn } from '@/lib/utils';
-import { Control } from 'react-hook-form';
+import type { Control } from 'react-hook-form';
 
 interface DatePickerFieldProps {
   label: string;
-  name: string;
-  control: Control<any>;
+  name: 'pay_date' | 'start_period' | 'end_period';
+  control: Control<
+    {
+      hourly_rate: number;
+      pay_date: string;
+      start_period: string;
+      end_period: string;
+      time_entries: {
+        week: number;
+        worked_hours: number;
+        overtime: number;
+      }[];
+      employees: string[];
+    },
+    any
+  >;
   className?: string;
   disabled?: boolean;
 }
