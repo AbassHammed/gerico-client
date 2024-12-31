@@ -35,7 +35,7 @@ import { useCreateLeaveRequest } from '@/hooks/useFetchLeave';
 import { useUser } from '@/hooks/useUser';
 import { ILeaveRequestInput } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { isAfter } from 'date-fns';
+import { differenceInBusinessDays, isAfter } from 'date-fns';
 import Holidays from 'date-holidays';
 import { AlertCircle } from 'lucide-react';
 import { useForm } from 'react-hook-form';
@@ -95,6 +95,12 @@ const LeaveRequest = () => {
         (range.to && holidays.some(holiday => holiday.getTime() === range.to!.getTime()))
       ) {
         toast.error('La période de congé ne peut pas commencer ou se terminer un jour férié.');
+        return;
+      }
+
+      const numberOfLeaveDays = differenceInBusinessDays(range.to, range.from) + 1;
+      if (numberOfLeaveDays > user.remaining_leave_balance) {
+        toast.error("Vous n'avez pas assez de jours de congé pour cette période.");
         return;
       }
 

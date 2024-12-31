@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
@@ -15,11 +15,13 @@ import {
   InputOTPSlot,
 } from '@/components/ui';
 import { FormItemLayout } from '@/components/ui/form/FormItemLayout';
+import { useResendCode } from '@/hooks/useResendCode';
 import { useResetPassword } from '@/hooks/useResetPassword';
 import { PagesRoutes } from '@/lib/constants';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { getCookie } from 'cookies-next';
 import { Eye, EyeOff } from 'lucide-react';
+// eslint-disable-next-line import/named
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -28,11 +30,15 @@ import { passwordSchema } from './Auth.utils';
 import PasswordConditionsHelper from './PasswordConditionsHelper';
 
 export const ResetPasswordForm = () => {
+  const { sendResetCode, loading: resendLoading } = useResendCode();
   const { resetPassword, loading } = useResetPassword();
   const [passwordHidden, setPasswordHidden] = useState(true);
   const [passwordHidden1, setPasswordHidden1] = useState(true);
   const [showConditions, setShowConditions] = useState<'password' | 'confirmPassword' | null>(null);
   const router = useRouter();
+  const [resendDisabled, setResendDisabled] = useState(false);
+  const [resendTimer, setResendTimer] = useState(0);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const FormSchema = z
     .object({
@@ -76,6 +82,77 @@ export const ResetPasswordForm = () => {
     }
   };
 
+  const startTimer = useCallback((duration: number) => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+    }
+
+    setResendTimer(duration);
+    setResendDisabled(true);
+    localStorage.setItem('resendTimer', duration.toString());
+    localStorage.setItem('resendTimestamp', Date.now().toString());
+
+    timerRef.current = setInterval(() => {
+      setResendTimer(prevTimer => {
+        const newTimer = prevTimer - 1;
+        if (newTimer <= 0) {
+          clearInterval(timerRef.current!);
+          setResendDisabled(false);
+          localStorage.removeItem('resendTimer');
+          localStorage.removeItem('resendTimestamp');
+          return 0;
+        }
+        localStorage.setItem('resendTimer', newTimer.toString());
+        return newTimer;
+      });
+    }, 1000);
+  }, []);
+
+  useEffect(() => {
+    const storedTimer = localStorage.getItem('resendTimer');
+    const storedTimestamp = localStorage.getItem('resendTimestamp');
+
+    if (storedTimer && storedTimestamp) {
+      const elapsedTime = Math.floor((Date.now() - parseInt(storedTimestamp, 10)) / 1000);
+      const remainingTime = Math.max(0, parseInt(storedTimer, 10) - elapsedTime);
+
+      if (remainingTime > 0) {
+        setResendTimer(remainingTime);
+        setResendDisabled(true);
+        startTimer(remainingTime);
+      } else {
+        localStorage.removeItem('resendTimer');
+        localStorage.removeItem('resendTimestamp');
+      }
+    }
+
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, []);
+
+  const handleResendCode = useCallback(() => {
+    try {
+      const uid = getCookie('t_uid');
+      if (!uid) {
+        throw new Error(
+          'Impossible de récupérer votre identifiant utilisateur. Veuillez réessayer plus tard.',
+        );
+      }
+      if (resendDisabled) {
+        toast.error(`Veuillez attendre ${resendTimer} secondes avant de renvoyer le code.`);
+        return;
+      }
+
+      sendResetCode();
+      startTimer(300); // 5 minutes in seconds
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  }, [resendDisabled, resendTimer, sendResetCode, startTimer]);
+
   return (
     <Form_Shadcn {...form}>
       <form
@@ -86,7 +163,19 @@ export const ResetPasswordForm = () => {
           name="reset_code"
           control={form.control}
           render={({ field }) => (
-            <FormItemLayout layout="vertical" label="Code">
+            <FormItemLayout
+              layout="vertical"
+              label="Code"
+              description="Un code de réinitialisation vous a été envoyé par email"
+              labelOptional={
+                <Button
+                  type="link"
+                  onClick={() => handleResendCode()}
+                  className="text-primary"
+                  disabled={resendDisabled || resendLoading}>
+                  {resendDisabled ? `Dans (${resendTimer}s)` : 'Renvoyer le code'}
+                </Button>
+              }>
               <FormControl_Shadcn>
                 <InputOTP
                   maxLength={6}
@@ -187,6 +276,7 @@ export const ResetPasswordForm = () => {
         <Button
           block
           form="change-default-password-form"
+          className="text-white"
           htmlType="submit"
           size={'large'}
           disabled={confirm_password.length === 0 || password.length === 0 || loading}>

@@ -292,3 +292,11 @@ input.form-control,
 .table-container--borderless tbody tr:last-child td {
   border-bottom: none;
 }
+
+#remaining_leave_balance::-webkit-inner-spin-button,
+#remaining_leave_balance::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  margin: 0;
+}

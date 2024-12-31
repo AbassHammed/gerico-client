@@ -54,6 +54,7 @@ const ForgotPasswordForm = () => {
             block
             form="forgot-password-form"
             htmlType="submit"
+            className="text-white"
             size="medium"
             disabled={loading}
             loading={loading}>

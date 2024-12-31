@@ -123,7 +123,7 @@ const ConfirmationModal = forwardRef<
               loading={loading}
               disabled={loading || disabled}
               onClick={onSubmit}
-              className="truncate">
+              className="truncate text-white">
               {confirmLabel}
             </Button>
           </div>

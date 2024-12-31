@@ -25,6 +25,7 @@ import {
   TextArea_Shadcn,
 } from '@ui';
 import { CheckCircle, Mail } from 'lucide-react';
+// eslint-disable-next-line import/named
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';

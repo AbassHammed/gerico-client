@@ -1,3 +1,4 @@
+/* eslint-disable import/named */
 /* eslint-disable indent */
 'use client';
 
