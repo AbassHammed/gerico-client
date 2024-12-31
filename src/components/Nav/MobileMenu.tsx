@@ -118,7 +118,7 @@ const MobileMenu = ({ open, setOpen, menu }: Props) => {
                   ) : (
                     <>
                       <Link href={PagesRoutes.Auth_SignIn} passHref legacyBehavior>
-                        <Button block type="default" asChild className="text-white">
+                        <Button block type="default" asChild>
                           <a type={undefined} className="h-10 py-4">
                             Se connecter
                           </a>
