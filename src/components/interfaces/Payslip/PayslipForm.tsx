@@ -1,7 +1,7 @@
 /* eslint-disable quotes */
 'use client';
 
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import {
   AlertError,
@@ -94,11 +94,12 @@ const PayslipForm = () => {
     remove(index);
   }
 
-  function calculateOvertime(workedHours: number) {
-    return workedHours > 35 ? workedHours - 35 : 0;
-  }
+  const calculateOvertime = useMemo(
+    () => (workedHours: number) => (workedHours > 35 ? workedHours - 35 : 0),
+    [],
+  );
 
-  const handleFileUpload = async (params: IGeneratePayslipParams) => {
+  const handleFileUpload = useCallback(async (params: IGeneratePayslipParams) => {
     const grossSalary = calculateGrossSalary(params.total_hours_worked, params.hourlyRate);
     const payslipData = generatePaySlipData(grossSalary, params.deductions, params.thresholds);
     const totals = calculateTotals(payslipData);
@@ -127,7 +128,7 @@ const PayslipForm = () => {
     const { fileUrl } = await response.json();
 
     return { fileUrl, grossSalary, netSalary: grossSalary - Number(totals.totalSalarial) };
-  };
+  }, []);
 
   async function onSubmit(values: FormValues) {
     try {
@@ -213,6 +214,8 @@ const PayslipForm = () => {
       />
     );
   }
+
+  const MemoizedUserSelect = React.memo(UserSelect);
 
   return (
     <Form {...form}>
@@ -391,7 +394,7 @@ const PayslipForm = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <UserSelect
+                      <MemoizedUserSelect
                         onUsersChange={field.onChange}
                         setSelectedUsers={setUsers}
                         selectedUsers={selectedUsers}

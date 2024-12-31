@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { DatePickerV2, Input } from '@/components/ui';
 import { FormControl, FormField, FormItem, FormMessage } from '@/components/ui/shadcn/ui/form';
@@ -62,41 +62,46 @@ export function DatePickerField({
     <FormField
       control={control}
       name={name}
-      render={({ field }) => (
-        <FormItem className={cn('flex flex-col', className)}>
-          <FormControl>
-            <Input
-              {...field}
-              size="small"
-              layout="vertical"
-              id={name}
-              name={name}
-              type="text"
-              value={dateAsText}
-              className={className}
-              readOnly
-              disabled={disabled}
-              label={label}
-              actions={
-                <DatePickerV2
-                  hideTime
-                  onChange={date => {
-                    if (date) {
-                      field.onChange(date.toISOString());
-                      updateDateDisplay(date.toISOString());
-                    } else {
-                      setDateAsText('');
-                      field.onChange('');
-                    }
-                  }}>
-                  <span>Pick</span>
-                </DatePickerV2>
-              }
-            />
-          </FormControl>
-          <FormMessage />
-        </FormItem>
-      )}
+      render={({ field }) => {
+        useEffect(() => {
+          updateDateDisplay(field.value);
+        }, [field.value]);
+        return (
+          <FormItem className={cn('flex flex-col', className)}>
+            <FormControl>
+              <Input
+                {...field}
+                size="small"
+                layout="vertical"
+                id={name}
+                name={name}
+                type="text"
+                value={dateAsText}
+                className={className}
+                readOnly
+                disabled={disabled}
+                label={label}
+                actions={
+                  <DatePickerV2
+                    hideTime
+                    onChange={date => {
+                      if (date) {
+                        field.onChange(date.toISOString());
+                        updateDateDisplay(date.toISOString());
+                      } else {
+                        setDateAsText('');
+                        field.onChange('');
+                      }
+                    }}>
+                    <span>Pick</span>
+                  </DatePickerV2>
+                }
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        );
+      }}
     />
   );
 }

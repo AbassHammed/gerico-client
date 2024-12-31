@@ -30,8 +30,7 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({ fileUrl });
-  } catch (error) {
-    console.error(error);
-    return NextResponse.error();
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

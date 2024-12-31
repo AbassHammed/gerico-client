@@ -78,7 +78,7 @@ export default function UserSelect({
   };
 
   const addUser = (user: IUser) => {
-    if (!selectedUsers?.some(selected => selected.uid === user.uid)) {
+    if (!selectedUsers?.some(selected => selected.uid === user.uid) && selectedUsers!.length < 5) {
       const updatedUsers = [...selectedUsers!, user];
       onUsersChange(updatedUsers.map(user => user.uid));
       setSelectedUsers(updatedUsers);
