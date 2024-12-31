@@ -42,12 +42,12 @@ const timeEntrySchema = z.object({
 });
 
 const PayslipSchema = z.object({
-  hourly_rate: z.coerce.number(),
-  pay_date: z.string(),
-  start_period: z.string(),
-  end_period: z.string(),
-  time_entries: z.array(timeEntrySchema),
-  employees: z.array(z.string()),
+  hourly_rate: z.coerce.number().min(1, 'Le taux horaire doit être supérieur à 0'),
+  pay_date: z.string().min(1, 'La date de paiement est requise'),
+  start_period: z.string().min(1, 'La date de début de période est requise'),
+  end_period: z.string().min(1, 'La date de fin de période est requise'),
+  time_entries: z.array(timeEntrySchema).min(1, 'Au moins une entrée de temps est requise'),
+  employees: z.array(z.string()).min(1, 'Veuillez sélectionner au moins un employé'),
 });
 
 type FormValues = z.infer<typeof PayslipSchema>;
