@@ -1,6 +1,7 @@
+/* eslint-disable quotes */
 'use client';
 
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import {
   AlertError,
@@ -23,7 +24,7 @@ import { GenericSkeletonLoaderList } from '@/components/ui/ShimmeringLoader';
 import { useCompanyInfo } from '@/hooks/company-mutations';
 import { useGetDeductions, useGetThresholds } from '@/hooks/useHooks';
 import { useCreatePayslip } from '@/hooks/usePayslips';
-import { IUser } from '@/types';
+import { ICreatePayslip, IGeneratePayslipParams, IUser } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CircleMinus, CirclePlus } from 'lucide-react';
 import { useFieldArray, useForm } from 'react-hook-form';
@@ -31,6 +32,7 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { DatePickerField } from './FormDatePicker';
+import { calculateGrossSalary, calculateTotals, generatePaySlipData } from './Payslip.utils';
 import UserSelect from './UserSelect';
 
 const timeEntrySchema = z.object({
@@ -40,24 +42,24 @@ const timeEntrySchema = z.object({
 });
 
 const PayslipSchema = z.object({
-  hourly_rate: z.coerce.number(),
-  pay_date: z.string(),
-  start_period: z.string(),
-  end_period: z.string(),
-  time_entries: z.array(timeEntrySchema),
-  employees: z.array(z.string()),
+  hourly_rate: z.coerce.number().min(1, 'Le taux horaire doit être supérieur à 0'),
+  pay_date: z.string().min(1, 'La date de paiement est requise'),
+  start_period: z.string().min(1, 'La date de début de période est requise'),
+  end_period: z.string().min(1, 'La date de fin de période est requise'),
+  time_entries: z.array(timeEntrySchema).min(1, 'Au moins une entrée de temps est requise'),
+  employees: z.array(z.string()).min(1, 'Veuillez sélectionner au moins un employé'),
 });
 
 type FormValues = z.infer<typeof PayslipSchema>;
 const formId = 'payslip-form';
 
 const PayslipForm = () => {
-  const { loading: companyInfoLoading, error: companyInfoError } = useCompanyInfo();
-  const { isLoading: isDeductionsLoading, error: deductionsError } = useGetDeductions();
-  const { isLoading: isThresholdsLoading, error: thresholdsError } = useGetThresholds();
+  const { companyInfo, loading: companyInfoLoading, error: companyInfoError } = useCompanyInfo();
+  const { deductions, isLoading: isDeductionsLoading, error: deductionsError } = useGetDeductions();
+  const { thresholds, isLoading: isThresholdsLoading, error: thresholdsError } = useGetThresholds();
   const [selectedUsers, setUsers] = React.useState<IUser[] | undefined>([]);
-  const { loading: payslipLoading } = useCreatePayslip();
-  const [loading] = React.useState<boolean>(false);
+  const { createPayslip, loading: payslipLoading } = useCreatePayslip();
+  const [loading, setLoading] = React.useState<boolean>(false);
 
   const initialValues: FormValues = {
     hourly_rate: 0,
@@ -92,126 +94,106 @@ const PayslipForm = () => {
     remove(index);
   }
 
-  function calculateOvertime(workedHours: number) {
-    return workedHours > 35 ? workedHours - 35 : 0;
-  }
+  const calculateOvertime = useMemo(
+    () => (workedHours: number) => (workedHours > 35 ? workedHours - 35 : 0),
+    [],
+  );
 
-  // const handlePayslipGeneration = async (
-  //   params: IGeneratePayslipParams,
-  // ): Promise<{
-  //   blob: Blob;
-  //   grossSalary: number;
-  //   netSalary: number;
-  // }> => {
-  //   if (!params) {
-  //     throw new Error('Invalid payslip generation parameters');
-  //   }
+  const handleFileUpload = useCallback(async (params: IGeneratePayslipParams) => {
+    const grossSalary = calculateGrossSalary(params.total_hours_worked, params.hourlyRate);
+    const payslipData = generatePaySlipData(grossSalary, params.deductions, params.thresholds);
+    const totals = calculateTotals(payslipData);
 
-  //   const grossSalary = calculateGrossSalary(params.total_hours_worked, params.hourlyRate);
-  //   const paySlipData = generatePaySlipData(grossSalary, params.deductions, params.thresholds);
-  //   const totals = calculateTotals(paySlipData);
+    const payslipProps = {
+      user: params.selectedUser,
+      company: params.companyInfo,
+      paySlip: params.payslip,
+      payslipData,
+      grossSalary,
+      totals,
+    };
 
-  //   const pdfBlob = await getPdfBuffer({
-  //     company: params.companyInfo,
-  //     user: params.selectedUser,
-  //     payslip: params.payslip,
-  //     payslipData: paySlipData,
-  //     grossSalary,
-  //     totals,
-  //   });
+    const response = await fetch('/api/generate-pdf', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payslipProps),
+    });
 
-  //   const returnData = {
-  //     blob: pdfBlob,
-  //     grossSalary,
-  //     netSalary: grossSalary - Number(totals.totalSalarial),
-  //   };
+    if (!response.ok) {
+      throw new Error("Une erreur s'est produite lors de la génération de la fiche de paie");
+    }
 
-  //   return returnData;
-  // };
+    const { fileUrl } = await response.json();
 
-  // const handleFileUpload = async (params: IGeneratePayslipParams) => {
-  //   const { blob, grossSalary, netSalary } = await handlePayslipGeneration(params);
-  //   const signedURLResult = await getSignedURL({
-  //     fileSize: blob.size,
-  //     fileType: FILE_TYPE,
-  //     checksum: await computeSHA256(blob),
-  //     dir: 'payslips',
-  //   });
-  //   if (signedURLResult.failure !== undefined) {
-  //     throw new Error(signedURLResult.failure);
-  //   }
-  //   const { signedUrl, fileUrl } = signedURLResult.success;
-  //   await fetch(signedUrl, {
-  //     method: 'PUT',
-  //     headers: {
-  //       'Content-Type': FILE_TYPE,
-  //     },
-  //     body: blob,
-  //   });
+    return { fileUrl, grossSalary, netSalary: grossSalary - Number(totals.totalSalarial) };
+  }, []);
 
-  //   return { fileUrl, grossSalary, netSalary };
-  // };
-
-  async function onSubmit() {
-    toast.info('Fonctionnalité désactivée pour le moment');
-    // try {
-    //   const toastId = toast.loading('Téléchargement des fiches de paie en cours...');
-    //   setLoading(true);
-    //   if (!selectedUsers || !deductions || !thresholds || !companyInfo) {
-    //     throw new Error("Une erreur s'est produite lors de la récupération des données");
-    //   }
-    //   for (const user of selectedUsers) {
-    //     try {
-    //       const { fileUrl, netSalary, grossSalary } = await handleFileUpload({
-    //         thresholds: thresholds,
-    //         deductions,
-    //         companyInfo,
-    //         selectedUser: user,
-    //         total_hours_worked: values.time_entries,
-    //         payslip: values,
-    //         hourlyRate: values.hourly_rate,
-    //       });
-    //       const dataWithOvertime = {
-    //         ...values,
-    //         gross_salary: grossSalary,
-    //         net_salary: netSalary,
-    //         time_entries: values.time_entries.map(entry => ({
-    //           ...entry,
-    //           overtime: calculateOvertime(entry.worked_hours),
-    //         })),
-    //       };
-    //       const data: ICreatePayslip = {
-    //         uid: user.uid,
-    //         gross_salary: dataWithOvertime.gross_salary,
-    //         net_salary: dataWithOvertime.net_salary,
-    //         start_period: new Date(dataWithOvertime.start_period),
-    //         end_period: new Date(dataWithOvertime.end_period),
-    //         pay_date: new Date(dataWithOvertime.pay_date),
-    //         hourly_rate: dataWithOvertime.hourly_rate,
-    //         total_hours_worked: JSON.stringify(dataWithOvertime.time_entries),
-    //         path_to_pdf: fileUrl,
-    //       };
-    //       await createPayslip(data);
-    //       toast.info(
-    //         `Fiche de paie pour ${user.first_name} ${user.last_name} téléchargée avec succès.`,
-    //       );
-    //     } catch (error: any) {
-    //       toast.error(
-    //         `Erreur lors de la génération/téléchargement de la fiche de paie pour ${user.first_name} :`,
-    //         {
-    //           description: error.message,
-    //         },
-    //       );
-    //     }
-    //   }
-    //   toast.success('Fiches de paie téléchargées avec succès', { id: toastId });
-    //   form.reset();
-    //   setUsers([]);
-    // } catch (error: any) {
-    //   toast.error(error.message);
-    // } finally {
-    //   setLoading(false);
-    // }
+  async function onSubmit(values: FormValues) {
+    try {
+      const toastId = toast.loading('Téléchargement des fiches de paie en cours...');
+      setLoading(true);
+      if (!selectedUsers || !deductions || !thresholds || !companyInfo) {
+        throw new Error("Une erreur s'est produite lors de la récupération des données");
+      }
+      for (const user of selectedUsers) {
+        try {
+          const handleFileuploadProps: IGeneratePayslipParams = {
+            thresholds,
+            deductions,
+            companyInfo,
+            selectedUser: user,
+            total_hours_worked: values.time_entries,
+            payslip: {
+              start_period: values.start_period,
+              end_period: values.end_period,
+              pay_date: values.pay_date,
+            },
+            hourlyRate: values.hourly_rate,
+          };
+          const { fileUrl, netSalary, grossSalary } = await handleFileUpload(handleFileuploadProps);
+          const dataWithOvertime = {
+            ...values,
+            gross_salary: grossSalary,
+            net_salary: netSalary,
+            time_entries: values.time_entries.map(entry => ({
+              ...entry,
+              overtime: calculateOvertime(entry.worked_hours),
+            })),
+          };
+          const data: ICreatePayslip = {
+            uid: user.uid,
+            gross_salary: dataWithOvertime.gross_salary,
+            net_salary: dataWithOvertime.net_salary,
+            start_period: new Date(dataWithOvertime.start_period),
+            end_period: new Date(dataWithOvertime.end_period),
+            pay_date: new Date(dataWithOvertime.pay_date),
+            hourly_rate: dataWithOvertime.hourly_rate,
+            total_hours_worked: JSON.stringify(dataWithOvertime.time_entries),
+            path_to_pdf: fileUrl,
+          };
+          await createPayslip(data);
+          toast.info(
+            `Fiche de paie pour ${user.first_name} ${user.last_name} téléchargée avec succès.`,
+          );
+        } catch (error: any) {
+          toast.error(
+            `Erreur lors de la génération/téléchargement de la fiche de paie pour ${user.first_name} :`,
+            {
+              description: error.message,
+            },
+          );
+        }
+      }
+      toast.success('Fiches de paie téléchargées avec succès', { id: toastId });
+      form.reset();
+      setUsers([]);
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
   }
 
   const handleOvertimeCalculation = (idx: number) =>
@@ -232,6 +214,8 @@ const PayslipForm = () => {
       />
     );
   }
+
+  const MemoizedUserSelect = React.memo(UserSelect);
 
   return (
     <Form {...form}>
@@ -410,7 +394,7 @@ const PayslipForm = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <UserSelect
+                      <MemoizedUserSelect
                         onUsersChange={field.onChange}
                         setSelectedUsers={setUsers}
                         selectedUsers={selectedUsers}

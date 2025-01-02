@@ -1,5 +1,3 @@
-'use client';
-
 import { IPaySlipRow } from '@/types';
 import { Text, View } from '@react-pdf/renderer';
 

@@ -3,12 +3,20 @@
 /* eslint-disable indent */
 import { useState } from 'react';
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/shadcn/ui/select';
 import { useEmployees } from '@/hooks/useEmployees';
 import { useUser } from '@/hooks/useUser';
+import { PAGE_LIMIT } from '@/lib/constants';
 import { IUser } from '@/types';
 import * as Tooltip from '@radix-ui/react-tooltip';
 import { AlertError, Button, GenericSkeletonLoader, Loading, Table } from '@ui';
-import { AlertCircle, ArrowDown, ArrowUp } from 'lucide-react';
+import { AlertCircle, ArrowDown, ArrowUp, ChevronLeft, ChevronRight } from 'lucide-react';
 
 import { UserRow } from './UserRow';
 
@@ -18,8 +26,18 @@ export interface MembersViewProps {
 
 const UsersView = ({ searchString }: MembersViewProps) => {
   const { user: profile } = useUser();
-  const { employees: members, error: membersError, isLoading: isLoadingMembers } = useEmployees();
   const [dateSortDesc, setDateSortDesc] = useState(true);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(PAGE_LIMIT);
+
+  const offset = (page - 1) * pageSize;
+
+  const {
+    employees: members,
+    error: membersError,
+    pagination,
+    isLoading: isLoadingMembers,
+  } = useEmployees({ page: page, limit: pageSize, offset });
 
   const allMembers = members ?? [];
   const sortByArchiveAndName = (a: IUser, b: IUser) => {
@@ -125,11 +143,49 @@ const UsersView = ({ searchString }: MembersViewProps) => {
                     ]
                   : []),
                 <Table.tr key="footer" className="bg-panel-secondary-light">
-                  <Table.td colSpan={12}>
-                    <p className="text-foreground-light">
-                      {searchString ? `${filteredMembers.length} sur ` : ''}
-                      {allMembers.length || '0'} {allMembers.length === 1 ? 'employé' : 'employés'}
-                    </p>
+                  <Table.td colSpan={6}>
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm opacity-50">
+                        {pagination?.totalItems
+                          ? `Affichage de ${Math.min(offset + 1, pagination.totalItems)} à ${Math.min(offset + filteredMembers.length, pagination.totalItems)} sur ${pagination.totalItems} employés`
+                          : 'Aucun employé trouvé'}
+                      </p>
+                      <div className="flex items-center space-x-6 lg:space-x-8">
+                        <div className="flex items-center space-x-2">
+                          <p className="text-sm opacity-50">Lignes par page</p>
+                          <Select
+                            onValueChange={e => setPageSize(Number(e))}
+                            value={pageSize.toString()}>
+                            <SelectTrigger size="tiny" className="w-16">
+                              <SelectValue placeholder={pageSize.toString()} />
+                            </SelectTrigger>
+                            <SelectContent side="top">
+                              {[10, 20, 50, 100].map(size => (
+                                <SelectItem key={size} value={size.toString()}>
+                                  {size}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Button
+                            icon={<ChevronLeft />}
+                            type="default"
+                            size="tiny"
+                            disabled={page === 1}
+                            onClick={async () => setPage(page - 1)}
+                          />
+                          <Button
+                            icon={<ChevronRight />}
+                            type="default"
+                            size="tiny"
+                            disabled={page * pageSize >= (pagination?.totalItems ?? 0)}
+                            onClick={async () => setPage(page + 1)}
+                          />
+                        </div>
+                      </div>
+                    </div>
                   </Table.td>
                 </Table.tr>,
               ]}

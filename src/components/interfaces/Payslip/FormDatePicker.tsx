@@ -1,16 +1,30 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { DatePickerV2, Input } from '@/components/ui';
 import { FormControl, FormField, FormItem, FormMessage } from '@/components/ui/shadcn/ui/form';
 import { cn } from '@/lib/utils';
-import { Control } from 'react-hook-form';
+import type { Control } from 'react-hook-form';
 
 interface DatePickerFieldProps {
   label: string;
-  name: string;
-  control: Control<any>;
+  name: 'pay_date' | 'start_period' | 'end_period';
+  control: Control<
+    {
+      hourly_rate: number;
+      pay_date: string;
+      start_period: string;
+      end_period: string;
+      time_entries: {
+        week: number;
+        worked_hours: number;
+        overtime: number;
+      }[];
+      employees: string[];
+    },
+    any
+  >;
   className?: string;
   disabled?: boolean;
 }
@@ -48,41 +62,46 @@ export function DatePickerField({
     <FormField
       control={control}
       name={name}
-      render={({ field }) => (
-        <FormItem className={cn('flex flex-col', className)}>
-          <FormControl>
-            <Input
-              {...field}
-              size="small"
-              layout="vertical"
-              id={name}
-              name={name}
-              type="text"
-              value={dateAsText}
-              className={className}
-              readOnly
-              disabled={disabled}
-              label={label}
-              actions={
-                <DatePickerV2
-                  hideTime
-                  onChange={date => {
-                    if (date) {
-                      field.onChange(date.toISOString());
-                      updateDateDisplay(date.toISOString());
-                    } else {
-                      setDateAsText('');
-                      field.onChange('');
-                    }
-                  }}>
-                  <span>Pick</span>
-                </DatePickerV2>
-              }
-            />
-          </FormControl>
-          <FormMessage />
-        </FormItem>
-      )}
+      render={({ field }) => {
+        useEffect(() => {
+          updateDateDisplay(field.value);
+        }, [field.value]);
+        return (
+          <FormItem className={cn('flex flex-col', className)}>
+            <FormControl>
+              <Input
+                {...field}
+                size="small"
+                layout="vertical"
+                id={name}
+                name={name}
+                type="text"
+                value={dateAsText}
+                className={className}
+                readOnly
+                disabled={disabled}
+                label={label}
+                actions={
+                  <DatePickerV2
+                    hideTime
+                    onChange={date => {
+                      if (date) {
+                        field.onChange(date.toISOString());
+                        updateDateDisplay(date.toISOString());
+                      } else {
+                        setDateAsText('');
+                        field.onChange('');
+                      }
+                    }}>
+                    <span>Pick</span>
+                  </DatePickerV2>
+                }
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        );
+      }}
     />
   );
 }

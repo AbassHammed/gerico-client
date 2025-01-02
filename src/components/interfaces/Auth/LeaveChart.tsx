@@ -13,7 +13,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui';
-import { useEmployees } from '@/hooks/useEmployees';
+import { useEmployeesAll } from '@/hooks/useEmployees';
 import { useUpcomingLeaveRequests } from '@/hooks/useFetchLeave';
 import { ILeaveRequest, IUser } from '@/types';
 import { isWithinInterval } from 'date-fns';
@@ -35,7 +35,7 @@ const isOnLeaveToday = (employee: IUser, leaveRequests: ILeaveRequest[]) => {
 };
 
 export function EmployeePresence() {
-  const { employees: data } = useEmployees();
+  const { employees: data } = useEmployeesAll();
   const { leaves } = useUpcomingLeaveRequests();
 
   const employees = data ?? [];
