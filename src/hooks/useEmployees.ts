@@ -19,3 +19,14 @@ export function useEmployees(params?: PaginationParams) {
     isSuccess: success,
   };
 }
+
+export function useEmployeesAll() {
+  const { data, error, isLoading, success } = useApiGet<IUser[]>(`/users/all`, undefined, true);
+
+  return {
+    employees: data,
+    error,
+    isLoading,
+    isSuccess: success,
+  };
+}
