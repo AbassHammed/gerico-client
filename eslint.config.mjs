@@ -1,3 +1,8 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Hammed Abass. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -19,9 +24,18 @@ const compat = new FlatCompat({
   allConfig: js.configs.all,
 });
 
+const ignores = fs
+  .readFileSync(path.join(__dirname, '.eslint-ignore'), 'utf-8')
+  .toString()
+  .split(/\r?\n/) // Correctly splits by newline characters (cross-platform)
+  .filter(line => line && !line.startsWith('#'));
+
 export default tseslint.config(
   (pluginHeader.rules.header.meta.schema = false),
   ...compat.extends('eslint:recommended', 'plugin:@typescript-eslint/recommended'),
+  {
+    ignores,
+  },
   {
     languageOptions: {
       parser: tseslint.parser,

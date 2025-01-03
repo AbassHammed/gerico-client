@@ -1,3 +1,7 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Hammed Abass. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
 export default function HelpLeaves() {
   return (
     <div className="max-w-2xl space-y-6 p-6 bg-muted/50 rounded-lg">

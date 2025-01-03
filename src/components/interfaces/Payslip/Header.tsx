@@ -1,4 +1,7 @@
-/* eslint-disable indent */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Hammed Abass. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
 
 import { DateRangePicker } from '@/components/ui';
 import { useRouterStuff } from '@/hooks/misc/use-router-stuff';

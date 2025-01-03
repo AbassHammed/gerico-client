@@ -1,3 +1,7 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Hammed Abass. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
 import { ICompanyInfo, IUser } from '@/types';
 import { Text, View } from '@react-pdf/renderer';
 import { format } from 'date-fns';

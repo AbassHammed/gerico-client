@@ -1,4 +1,8 @@
-// private components
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Hammed Abass. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
 export { Button, buttonVariants } from './button';
 export type { ButtonProps } from './button';
 export * from './form';

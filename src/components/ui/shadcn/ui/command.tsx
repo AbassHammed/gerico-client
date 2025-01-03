@@ -1,11 +1,15 @@
-/* eslint-disable func-call-spacing */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Hammed Abass. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
 /* eslint-disable indent */
 'use client';
 
 import * as React from 'react';
 
 import { cn } from '@/lib/utils';
-import { DialogProps } from '@radix-ui/react-dialog';
+import type { DialogProps } from '@radix-ui/react-dialog';
 import { Command as CommandPrimitive } from 'cmdk';
 import { X as RemoveIcon, Search } from 'lucide-react';
 

@@ -1,4 +1,8 @@
-/* eslint-disable space-before-function-paren */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Hammed Abass. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
 'use client';
 
 import React, { forwardRef, useEffect, useState } from 'react';

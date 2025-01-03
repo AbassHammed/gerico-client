@@ -1,4 +1,8 @@
-/** @type {import('postcss-load-config').Config} */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Hammed Abass. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
 const config = {
   plugins: {
     tailwindcss: {},
