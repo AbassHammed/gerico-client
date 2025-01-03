@@ -1,3 +1,7 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Hammed Abass. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
 import { ILeaveRequest } from '@/types';
 import * as chrono from 'chrono-node';
 import { clsx, type ClassValue } from 'clsx';
@@ -19,8 +23,8 @@ export function cn(...inputs: ClassValue[]) {
 /**
  * Converts string to KebabCase
  *
- * @param {string} string
- * @returns {string} A kebabized string
+ * @param string
+ * @returns A kebabized string
  */
 export const toKebabCase = (string: string): string =>
   string

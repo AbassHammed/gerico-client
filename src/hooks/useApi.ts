@@ -1,6 +1,10 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Hammed Abass. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
 import { getCookie } from 'cookies-next';
-import useSWR, { SWRConfiguration } from 'swr';
-import useSWRMutation, { SWRMutationConfiguration } from 'swr/mutation';
+import useSWR, { type SWRConfiguration } from 'swr';
+import useSWRMutation, { type SWRMutationConfiguration } from 'swr/mutation';
 
 interface ApiResponse<T> {
   success: boolean;

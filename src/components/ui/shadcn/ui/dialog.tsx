@@ -1,11 +1,15 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Hammed Abass. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
 'use client';
 
 import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
-import { DialogProps } from '@radix-ui/react-dialog';
-import { cva, VariantProps } from 'class-variance-authority';
+import type { DialogProps } from '@radix-ui/react-dialog';
+import { cva, type VariantProps } from 'class-variance-authority';
 import { X } from 'lucide-react';
 
 export const DIALOG_PADDING_Y_SMALL = 'py-4';

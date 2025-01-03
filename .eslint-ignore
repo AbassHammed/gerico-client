@@ -1,0 +1,10 @@
+.next
+.github
+.vscode
+node_modules
+public
+.husky
+.prettierignore
+.prettierrc
+package-lock.json
+tailwind.config.ts

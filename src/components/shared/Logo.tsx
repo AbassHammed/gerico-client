@@ -1,3 +1,7 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Hammed Abass. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
 type IconProps = React.HTMLAttributes<SVGElement>;
 
 export function Logo(props: IconProps) {

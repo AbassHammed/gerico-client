@@ -1,3 +1,7 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Hammed Abass. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
@@ -5,7 +9,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useMediaQuery } from '@/hooks/misc/use-media-query';
 import { cn } from '@/lib/utils';
 import { fr } from 'date-fns/locale';
-import { SelectRangeEventHandler } from 'react-day-picker';
+import type { SelectRangeEventHandler } from 'react-day-picker';
 
 import { Calendar as CalendarPrimitive } from './calendar';
 import { Popover } from './popover';

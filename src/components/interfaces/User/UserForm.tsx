@@ -1,4 +1,8 @@
-/* eslint-disable quotes */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Hammed Abass. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
 'use client';
 
 import { IUser } from '@/types';
@@ -113,7 +117,7 @@ const UserForm = ({ isUpdatePage = false, defaultUser, onSubmit, isSubmitting }:
                     name="social_security_number"
                     id="social_security_number"
                     label="Numéro de sécurité sociale"
-                    placeholder="1 85 12 75 108 222"
+                    placeholder="1 85 12 75 108 222 13"
                     disabled={isSubmitting || isUpdatePage}
                   />
                 </FormSectionContent>
@@ -247,7 +251,7 @@ const UserForm = ({ isUpdatePage = false, defaultUser, onSubmit, isSubmitting }:
                     name="hire_date"
                     properties={{
                       type: 'datetime',
-                      title: "Date d'embauche",
+                      title: `Date d'embauche`,
                     }}
                     formValues={values}
                     disabled={isSubmitting || isUpdatePage}

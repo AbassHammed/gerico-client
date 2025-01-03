@@ -1,9 +1,13 @@
-/* eslint-disable space-before-function-paren */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Hammed Abass. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
 'use client';
 
 import { useReducer } from 'react';
 
-import { FormikConfig, useFormik } from 'formik';
+import { useFormik, type FormikConfig } from 'formik';
 
 import { FormContextProvider } from './FormContext';
 

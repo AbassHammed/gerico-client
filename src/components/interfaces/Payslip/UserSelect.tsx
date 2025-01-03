@@ -1,4 +1,8 @@
-/* eslint-disable indent */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Hammed Abass. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
 'use client';
 
 import { Dispatch, SetStateAction, useState } from 'react';
@@ -97,7 +101,7 @@ export default function UserSelect({
             disabled={loading}
             className="w-full justify-between bg-alternative dark:bg-muted  hover:bg-selection
           border-strong hover:border-stronger">
-            Rechercher un emlployé
+            Rechercher un employé
             <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button_Shadcn>
         </PopoverTrigger>

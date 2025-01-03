@@ -1,7 +1,11 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Hammed Abass. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
 import { ReactNode } from 'react';
 
-import { Locale } from 'date-fns';
-import { Matcher } from 'react-day-picker';
+import type { Locale } from 'date-fns';
+import type { Matcher } from 'react-day-picker';
 
 import { PopoverProps } from './popover';
 
