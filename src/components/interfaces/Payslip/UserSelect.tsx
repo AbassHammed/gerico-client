@@ -101,7 +101,7 @@ export default function UserSelect({
             disabled={loading}
             className="w-full justify-between bg-alternative dark:bg-muted  hover:bg-selection
           border-strong hover:border-stronger">
-            Rechercher un emlployé
+            Rechercher un employé
             <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button_Shadcn>
         </PopoverTrigger>

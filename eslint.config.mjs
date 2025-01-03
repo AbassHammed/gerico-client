@@ -11,6 +11,7 @@ import js from '@eslint/js';
 import stylisticTs from '@stylistic/eslint-plugin-ts';
 import typescriptEslint from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
+import eslintConfigPrettier from 'eslint-config-prettier';
 import pluginHeader from 'eslint-plugin-header';
 import importPlugin from 'eslint-plugin-import';
 import pluginJsdoc from 'eslint-plugin-jsdoc';
@@ -214,4 +215,5 @@ export default tseslint.config(
       'prefer-template': 'error',
     },
   },
+  eslintConfigPrettier,
 );

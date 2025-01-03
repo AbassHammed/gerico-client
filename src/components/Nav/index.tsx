@@ -81,10 +81,7 @@ const Nav = (props: Props) => {
                 className="hidden pl-8 sm:space-x-4 lg:flex h-16"
                 viewportClassName="rounded-xl bg-background">
                 <NavigationMenuList>
-                  {[
-                    { title: 'A propos', url: PagesRoutes.About },
-                    { title: 'Contact', url: PagesRoutes.Contact },
-                  ].map((item, idx) => (
+                  {[{ title: 'Contact', url: PagesRoutes.Contact }].map((item, idx) => (
                     <NavigationMenuItem className="text-sm font-medium" key={idx}>
                       <NavigationMenuLink asChild>
                         <Link
@@ -127,10 +124,6 @@ const Nav = (props: Props) => {
           setOpen={setOpen}
           menu={{
             primaryNav: [
-              {
-                title: 'A propos',
-                url: PagesRoutes.About,
-              },
               {
                 title: 'Contact',
                 url: PagesRoutes.Contact,
