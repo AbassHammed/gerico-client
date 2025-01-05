@@ -17,15 +17,16 @@ import {
 import { useEmployees } from '@/hooks/useEmployees';
 import { usePayslipsQuery } from '@/hooks/usePayslips';
 import { PAGE_LIMIT } from '@/lib/constants';
-import { downloadFile, formatLastName, shortenCivility } from '@/lib/utils';
+import { formatLastName, shortenCivility } from '@/lib/utils';
 import { PayslipWithUserInfo } from '@/types';
 import { isAfter } from 'date-fns';
 import dayjs from 'dayjs';
-import { ChevronLeft, ChevronRight, Download, Eye, FileText } from 'lucide-react';
+import { ChevronLeft, ChevronRight, FileText } from 'lucide-react';
 
 import PaySlipBadge, { PayslipStatus } from '../PayslipBadge';
 import PdfViewerModal from '../PayslipPDFModal';
 import { filterPayslips } from './AdminPayslip.utils';
+import AdminPasyslipActions from './AdminPayslipActions';
 
 interface DashboardPayslipListProps {
   startDate?: Date;
@@ -75,10 +76,8 @@ const AdminPayslipList = ({ startDate, endDate, interval }: DashboardPayslipList
           const user = users.find(user => user.uid === payslip.uid);
           if (user) {
             return {
+              ...user,
               ...payslip,
-              first_name: user.first_name,
-              last_name: user.last_name,
-              civility: user.civility,
             };
           }
           return undefined;
@@ -145,23 +144,7 @@ const AdminPayslipList = ({ startDate, endDate, interval }: DashboardPayslipList
                         />
                       </Table.td>
                       <Table.td className="align-right">
-                        <div className="flex items-center justify-end space-x-2">
-                          <Button
-                            type="outline"
-                            icon={<Eye size={16} strokeWidth={1.5} />}
-                            onClick={() =>
-                              showPdf({
-                                filePath: payslip.path_to_pdf,
-                                startPeriod: payslip.start_period,
-                              })
-                            }
-                          />
-                          <Button
-                            type="outline"
-                            icon={<Download size={16} strokeWidth={1.5} />}
-                            onClick={() => downloadFile(payslip.path_to_pdf)}
-                          />
-                        </div>
+                        <AdminPasyslipActions payslip={payslip} showPdf={showPdf} />
                       </Table.td>
                     </Table.tr>
                   ))}

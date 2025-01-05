@@ -92,6 +92,7 @@ const AdminHandleModal: React.FC<
         props.onCancelButtonClicked?.();
         props.setIsHandleModalOpen(false);
       }}
+      confirmButtonClassName="text-white"
       onConfirm={() => {
         handleAccept();
         props.onConfirm?.();

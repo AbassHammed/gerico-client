@@ -111,7 +111,7 @@ const FormField = ({
                   setFieldValue(name, '');
                 }
               }}>
-              <span>Pick</span>
+              <span>Choisir</span>
             </DatePickerV2>
           }
         />

@@ -9,6 +9,7 @@ import * as React from 'react';
 import { cn } from '@/lib/utils';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import type { DialogProps } from '@radix-ui/react-dialog';
+import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { X } from 'lucide-react';
 
@@ -84,6 +85,30 @@ const DialogContentVariants = cva(
   },
 );
 
+const DialogTitle = React.forwardRef<
+  React.ElementRef<typeof DialogPrimitive.Title>,
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title>
+>(({ className, ...props }, ref) => (
+  <DialogPrimitive.Title
+    ref={ref}
+    className={cn('text-base leading-none font-normal', className)}
+    {...props}
+  />
+));
+DialogTitle.displayName = DialogPrimitive.Title.displayName;
+
+const DialogDescription = React.forwardRef<
+  React.ElementRef<typeof DialogPrimitive.Description>,
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description>
+>(({ className, ...props }, ref) => (
+  <DialogPrimitive.Description
+    ref={ref}
+    className={cn('text-sm text-foreground-lighter', className)}
+    {...props}
+  />
+));
+DialogDescription.displayName = DialogPrimitive.Description.displayName;
+
 const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> &
@@ -100,9 +125,15 @@ const DialogContent = React.forwardRef<
     <DialogPortal>
       <DialogOverlay centered={centered} {...dialogOverlayProps}>
         <DialogPrimitive.Content
+          aria-describedby={undefined}
           ref={ref}
           className={cn(DialogContentVariants({ size }), className)}
           {...props}>
+          <VisuallyHidden>
+            <DialogTitle>Dialog Content</DialogTitle>
+            <DialogDescription>This is a hidden description for screen readers.</DialogDescription>
+          </VisuallyHidden>
+
           {children}
           {!hideClose && (
             <DialogPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-20 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-foreground-muted">
@@ -151,30 +182,6 @@ const DialogFooter = React.forwardRef<
   </div>
 ));
 DialogFooter.displayName = 'DialogFooter';
-
-const DialogTitle = React.forwardRef<
-  React.ElementRef<typeof DialogPrimitive.Title>,
-  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title>
->(({ className, ...props }, ref) => (
-  <DialogPrimitive.Title
-    ref={ref}
-    className={cn('text-base leading-none font-normal', className)}
-    {...props}
-  />
-));
-DialogTitle.displayName = DialogPrimitive.Title.displayName;
-
-const DialogDescription = React.forwardRef<
-  React.ElementRef<typeof DialogPrimitive.Description>,
-  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description>
->(({ className, ...props }, ref) => (
-  <DialogPrimitive.Description
-    ref={ref}
-    className={cn('text-sm text-foreground-lighter', className)}
-    {...props}
-  />
-));
-DialogDescription.displayName = DialogPrimitive.Description.displayName;
 
 const DialogClose = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Close>,
