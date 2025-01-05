@@ -37,6 +37,7 @@ export interface IConfirmationModalProps {
     title?: string;
     description?: string | React.ReactNode;
   };
+  confirmButtonClassName?: string;
 }
 
 const ConfirmationModal = forwardRef<
@@ -127,7 +128,7 @@ const ConfirmationModal = forwardRef<
               loading={loading}
               disabled={loading || disabled}
               onClick={onSubmit}
-              className="truncate text-white">
+              className={cn('truncate', props.confirmButtonClassName)}>
               {confirmLabel}
             </Button>
           </div>

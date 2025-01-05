@@ -222,3 +222,5 @@ export interface IPaySlipRow {
   partSalariale: Part;
   partPatronale: Part;
 }
+
+export type PayslipWithUserInfo = IPayslip & IUser;

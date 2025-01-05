@@ -90,6 +90,8 @@ export default function UserSelect({
     }
   };
 
+  const filteredMembers = members?.filter(user => !selectedUsers?.includes(user!));
+
   return (
     <div className="w-full">
       <Popover open={open} onOpenChange={setOpen}>
@@ -109,7 +111,7 @@ export default function UserSelect({
           <Command>
             <CommandInput placeholder="Rechercer un employé" />
             <CommandList>
-              {members?.map(user => (
+              {filteredMembers?.map(user => (
                 <CommandItem key={user.uid} onSelect={() => addUser(user)}>
                   {user.first_name} {user.last_name}
                 </CommandItem>

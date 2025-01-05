@@ -97,7 +97,7 @@ export function DatePickerField({
                         field.onChange('');
                       }
                     }}>
-                    <span>Pick</span>
+                    <span>Choisir</span>
                   </DatePickerV2>
                 }
               />
