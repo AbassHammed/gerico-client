@@ -18,7 +18,7 @@ import { useEmployees } from '@/hooks/useEmployees';
 import { usePayslipsQuery } from '@/hooks/usePayslips';
 import { PAGE_LIMIT } from '@/lib/constants';
 import { downloadFile, formatLastName, shortenCivility } from '@/lib/utils';
-import { IPayslip } from '@/types';
+import { PayslipWithUserInfo } from '@/types';
 import { isAfter } from 'date-fns';
 import dayjs from 'dayjs';
 import { ChevronLeft, ChevronRight, Download, Eye, FileText } from 'lucide-react';
@@ -26,12 +26,6 @@ import { ChevronLeft, ChevronRight, Download, Eye, FileText } from 'lucide-react
 import PaySlipBadge, { PayslipStatus } from '../PayslipBadge';
 import PdfViewerModal from '../PayslipPDFModal';
 import { filterPayslips } from './AdminPayslip.utils';
-
-type PayslipWithUserInfo = IPayslip & {
-  first_name: string;
-  last_name: string;
-  civility: string;
-};
 
 interface DashboardPayslipListProps {
   startDate?: Date;

@@ -59,3 +59,23 @@ export function usePayslipsQueryForUser(uid: string, params?: PaginationParams) 
     isSuccess: success,
   };
 }
+
+export function useDeletePayslip(pid: string) {
+  const { trigger, isMutating: loading } = useApiMutation<undefined, undefined>(
+    `/payslip/${pid}`,
+    undefined,
+    'DELETE',
+    true,
+  );
+
+  const deletePayslip = async () => {
+    try {
+      const res = await trigger(undefined);
+      return res?.message;
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  };
+
+  return { deletePayslip, loading };
+}

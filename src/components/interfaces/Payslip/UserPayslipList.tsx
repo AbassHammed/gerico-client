@@ -85,9 +85,13 @@ const UserPayslipList = () => {
 
   const payslips = data || [];
 
+  const payedPayslips = payslips.filter(
+    payslip => !isAfter(new Date(payslip.pay_date), new Date()),
+  );
+
   const filteredPayslips = useMemo(
-    () => filterPayslips(payslips, start, end, interval),
-    [payslips, start, end, interval],
+    () => filterPayslips(payedPayslips, start, end, interval),
+    [payedPayslips, start, end, interval],
   );
 
   return (
