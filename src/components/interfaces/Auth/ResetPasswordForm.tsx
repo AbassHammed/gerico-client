@@ -44,6 +44,14 @@ export const ResetPasswordForm = () => {
   const [resendTimer, setResendTimer] = useState(0);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
+  useEffect(() => {
+    const authToken = getCookie('t_uid');
+    if (!authToken) {
+      toast.error("Vous n'avez pas fait de demande de réinitialisation de mot de passe");
+      router.push(PagesRoutes.Auth_SignIn);
+    }
+  }, []);
+
   const FormSchema = z
     .object({
       reset_code: z.string().min(6, { message: 'Le code doit contenir 6 caractères' }),
