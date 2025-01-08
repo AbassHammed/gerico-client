@@ -65,14 +65,15 @@ const AuthLayout = ({
         {showDisclaimer && (
           <div className="sm:text-center mt-8 flex items-center justify-center">
             <p className="text-xs text-foreground-lighter sm:mx-auto sm:max-w-sm text-center">
-              By continuing, you agree to Gérico's{' '}
+              En continuant, vous acceptez les{' '}
               <Link href="#" className="underline hover:text-foreground-light">
-                Terms of Service
+                Conditions d'utilisation
               </Link>{' '}
-              and{' '}
+              et la{' '}
               <Link href="#" className="underline hover:text-foreground-light">
-                Privacy Policy.
-              </Link>
+                Politique de confidentialité
+              </Link>{' '}
+              de Gérico.
             </p>
           </div>
         )}
