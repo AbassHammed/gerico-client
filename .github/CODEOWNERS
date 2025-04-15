@@ -1,5 +1,4 @@
-# Define ownership for the entire codebase
-* @AbassHammed
-
 # Define ownership for the CODEOWNERS file itself
 /.github/CODEOWNERS @AbassHammed
+
+/src/config/site.ts @AbassHammed
